@@ -1,0 +1,20 @@
+target:
+  file: target.yaml
+
+scenarios:
+  files:
+    - scenarios.yaml
+
+seeds:
+  files:
+    - seeds.yaml
+
+backend:
+  promptfoo:
+    targets:
+      - id: openai:gpt-4o
+        label: GPT-4o
+        config:
+          temperature: 0
+    output: artifacts/promptfoo.redteam.yaml
+    cases_output: artifacts/generated_cases.json
