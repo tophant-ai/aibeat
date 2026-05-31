@@ -1,0 +1,36 @@
+---
+title: Result artifacts
+description: Files saved by Promptbeat generate, eval, and report.
+---
+
+# Result artifacts
+
+Promptbeat keeps the evidence needed to reproduce a run.
+
+## Generate artifacts
+
+```text
+artifacts/generate/generated_redteam.yaml
+artifacts/generate/<scenario>/promptfoo.redteam.yaml
+artifacts/generate/<scenario>/generated_redteam.yaml
+```
+
+## Eval artifacts
+
+```text
+artifacts/eval/evaluation_result.json
+artifacts/eval/promptfoo_eval_result.json
+artifacts/eval/promptfoo.eval.stdout.log
+artifacts/eval/promptfoo.eval.stderr.log
+```
+
+## Report artifacts
+
+```text
+artifacts/eval/report.html
+comprehensive-codex-safety-report.md
+```
+
+## Version control
+
+Generated artifacts are usually ignored by git. Promote only sanitized, intentional benchmark summaries into docs or website pages.

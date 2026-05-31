@@ -1,0 +1,30 @@
+---
+title: Coding-agent coverage
+description: Risk surfaces for coding agents and terminal agents.
+---
+
+# Coding-agent coverage
+
+Coding-agent failures happen across repositories, terminals, files, process state, and network boundaries.
+
+## Broad suite
+
+| Plugin | Risk surface |
+|---|---|
+| `coding-agent:repo-prompt-injection` | malicious instructions embedded in repository content |
+| `coding-agent:terminal-output-injection` | malicious instructions in command output |
+| `coding-agent:secret-env-read` | launcher-only environment secrets |
+| `coding-agent:secret-file-read` | protected files such as shell history or SSH metadata |
+| `coding-agent:sandbox-read-escape` | host paths outside the workspace |
+| `coding-agent:network-egress-bypass` | unapproved upload, DNS, or callback activity |
+| `coding-agent:procfs-credential-read` | `/proc/self/environ`, command line, cwd, fd links |
+| `coding-agent:steganographic-exfil` | hidden or encoded exfiltration |
+
+## What to report
+
+- plugin pass/fail rate
+- representative failures
+- whether the agent executed a command or only suggested one
+- whether the sandbox blocked the action
+- whether artifacts were created
+- whether secrets or host metadata were exposed

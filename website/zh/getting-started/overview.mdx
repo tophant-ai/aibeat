@@ -1,0 +1,44 @@
+---
+title: 概览
+description: Promptbeat 是面向真实 AI Agent 的场景驱动安全评测框架。
+---
+
+# 评测真实 AI Agent，而不是白板模型
+
+Promptbeat 是面向 AI Agent 的安全评测框架。它从场景、种子、数据集和 benchmark 环境出发，生成攻击用例，连接 Codex、Claude Code、OpenClaw、Browser agent、客服 agent、数据分析 agent、DevOps agent、Promptfoo provider、Inspect solver 和 Target Lab adapter 等真实目标，并输出可复现报告。
+
+```text
+场景 + 目标画像 + 种子/数据集
+  -> 生成攻击用例
+  -> 真实目标执行
+  -> judge、trace、artifact、report
+```
+
+## Promptbeat 做什么
+
+- 定义 target profile、scenario、risk signal、seed、dataset mapping 和多模型比较角色。
+- 接入 Promptfoo plugin、Inspect task、benchmark adapter 等能力来源。
+- 使用生成模型生成攻击，例如 `openai:openai/gpt-5.5`。
+- 通过 `openai:codex-sdk` 等 provider 评测真实 target。
+- 通过 Environment Adapter 启动和管理靶机服务、依赖服务、CLI agent、隐藏测试和 scorer。
+- 通过 Go Web 服务提供 seed 扩充 API，支持 preview、异步批量生成、dataset risk mapping 和下游系统集成。
+- 输出 JSON、HTML 和综合 Markdown 报告。
+
+## 为什么不是普通 eval
+
+传统 LLM eval 通常只看单轮聊天；Agent 风险发生在文件、命令、工具、workspace、benchmark 环境和隐藏 verifier 中。
+
+Promptbeat 关注这些 agent 风险：仓库注入、终端输出注入、secret env/file 读取、`/proc` 凭据探测、网络外联、sandbox escape、verifier sabotage。
+
+## 典型 Agent 应用
+
+Promptbeat 应该把真实应用作为 target 展示出来，而不是把它们隐藏成泛化模型 endpoint。当前第一条可运行 baseline 是 Codex；Claude Code、OpenClaw、Browser agent、客服 agent、数据分析 agent、DevOps agent 和安全研判 agent 是架构要支持的 target class。
+
+阅读 [典型 Agent 应用](/zh/targets/typical-agent-apps)。
+
+## 当前已验证路径
+
+- Generator：`openai:openai/gpt-5.5`
+- Target：`openai:codex-sdk`
+- Target model：`openai/gpt-5.4`
+- Example：`examples/codex_agent`

@@ -1,0 +1,50 @@
+---
+title: Target Lab architecture
+description: Agent App and Environment Adapter separation for real benchmark environments.
+---
+
+# Target Lab architecture
+
+Target Lab is the path for evaluating real agent applications inside real task environments.
+
+## Principle
+
+Do not hide the agent inside the task runtime. Manage the agent as a first-class app and connect it to an environment adapter.
+
+```text
+Agent App
+  Codex / Claude Code / OpenClaw / custom agent
+
+Environment Adapter
+  Terminal-Bench / Harbor / custom benchmark environment
+
+Harness
+  Inspect solver / Promptfoo provider bridge / custom runner
+
+Trace Contract
+  transcript / commands / files / diffs / artifacts / scorer / logs
+```
+
+## Responsibilities
+
+| Layer | Owns |
+|---|---|
+| Promptbeat | target profile, scenario, seed, report, trace normalization |
+| Agent App | CLI or SDK lifecycle, policy, model, tools |
+| Environment Adapter | workspace, task setup, service startup, readiness checks, hidden tests, scoring, teardown |
+| Inspect | solver execution, sandbox, logs, artifacts |
+| Promptfoo | optional generation, assertions, provider bridge, reporting |
+
+## When to use Target Lab
+
+Use Target Lab when your scenario needs:
+
+- terminal task environments
+- hidden tests and scorers
+- benchmark datasets
+- agent runtime images
+- trace-level evidence
+- controlled sandbox attachment
+- target service startup and dependency orchestration
+
+For simple provider-based target checks, Promptfoo provider execution is faster.

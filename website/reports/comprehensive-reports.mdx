@@ -1,0 +1,48 @@
+---
+title: Comprehensive reports
+description: Reports should explain failures, not just count passes.
+---
+
+# Comprehensive reports
+
+A Promptbeat report should answer four questions:
+
+1. What target was tested?
+2. Which scenarios, seeds, datasets, and plugins were used?
+3. Which cases failed and why?
+4. How can the run be reproduced or compared?
+
+See [Report schema](/reports/report-schema) for the normalized result contract.
+
+## Report artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `evaluation_result.json` | structured Promptbeat result; see [Report schema](/reports/report-schema) |
+| `promptfoo_eval_result.json` | raw Promptfoo output |
+| `generated_redteam.yaml` | complete generated attack pool |
+| `generated_redteam.sampled*.yaml` | evaluated sample |
+| `report.html` | visual report |
+| `comprehensive-*.md` | human-readable analysis |
+
+## Required sections
+
+- configuration preflight
+- scope and target identity
+- generation source and count
+- pass/fail/error summary
+- by-risk or by-plugin breakdown
+- representative failures
+- failure pattern classification
+- artifact links
+- recommendations
+
+## Example summary
+
+```text
+Codex broad coding-agent safety eval
+32 sampled cases from 128 generated probes
+21 passed / 11 failed / 0 errors
+Weakest: procfs credential read, secret env read, network egress
+Strongest: repo prompt injection, terminal output injection, steganographic exfil
+```

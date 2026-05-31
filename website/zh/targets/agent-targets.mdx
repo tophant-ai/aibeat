@@ -1,0 +1,85 @@
+---
+title: Agent Targets
+description: 当前和规划中的 Agent target 集成。
+---
+
+# Agent Targets
+
+Promptbeat 面向真实 agent app，而不只是模型 endpoint。更多 target taxonomy 见 [典型 Agent 应用](/zh/targets/typical-agent-apps)，具体 provider file 见 [Agent 配置示例](/zh/targets/agent-configuration-examples)，不要只围绕当前 Codex baseline 表达。
+
+## 当前 baseline：Codex
+
+Codex 是当前第一条完整验证的 target path。
+
+| 能力 | 状态 |
+|---|---|
+| Provider | 已通过 `openai:codex-sdk` 验证 |
+| 真实 CLI target | 已验证 |
+| Promptbeat generate + eval | 已验证 |
+| Coding-agent broad suite | 已验证 |
+| Dataset-started HarmBench slice | 已验证 |
+| HTML / Markdown report | 已验证 |
+
+示例 provider：
+
+```yaml
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK target
+    config:
+      model: openai/gpt-5.4
+      working_dir: agent-workspace
+      sandbox_mode: read-only
+      approval_policy: never
+```
+
+## Claude Code
+
+Claude Code 是 programming-assistant 场景的主线目标之一。
+
+规划路径：
+
+- Inspect-managed Agent App in Target Lab
+- sandbox-local CLI runtime image
+- Terminal-Bench / Harbor environment adapters
+- Promptbeat report normalization
+
+## OpenClaw
+
+OpenClaw 是另一个用于横向比较的主线 coding-agent target。
+
+规划路径：
+
+- Inspect solver / CLI adapter
+- sandbox-local runtime image
+- shared coding-agent scenario coverage
+- 使用和 Codex 相同的 broad sample 做比较
+
+## 更广泛的 target class
+
+除了 coding agent，同一套 target 抽象覆盖 Browser agent、客服 agent、数据分析 agent、DevOps agent 和安全研判 agent。它们的工具和环境 adapter 不同，但仍然共享 scenario binding、seed mapping、trace capture 和 report normalization。
+
+## Custom agents
+
+企业自研 agent 可通过以下方式接入：
+
+- custom provider
+- script provider
+- Inspect solver
+- adapter-controlled environment
+- trace normalization into Promptbeat reports
+
+## 比较目标
+
+最终目标不是只跑一个 agent，而是在同一 scenario 和 generated case set 下比较多个 target：
+
+```text
+same scenario + same generated probes
+  -> Codex
+  -> Claude Code
+  -> OpenClaw
+  -> internal agent
+  -> per-plugin and per-risk comparison
+```
+
+当前官网措辞应保持准确：Codex 是已验证 baseline；Claude Code / OpenClaw 是 Target Lab / Inspect 路径下的主线规划目标。 

@@ -1,0 +1,69 @@
+---
+title: Scenario-driven evaluation
+description: Promptbeat starts from scenarios, then chooses the right attack sources and harness capabilities.
+---
+
+# Scenario-driven evaluation
+
+Promptbeat's core concept is **scenario-driven agent safety evaluation**.
+
+A scenario decides the evaluation plan:
+
+```text
+Scenario
+  -> risk surfaces
+  -> target capabilities
+  -> seed and dataset bindings
+  -> Promptfoo plugins or Inspect adapters
+  -> judges and report dimensions
+```
+
+Seed, dataset, Promptfoo plugin, Inspect task, Terminal-Bench task, and custom harness are capability sources. They are not the top-level abstraction.
+
+## Why scenarios come first
+
+The same request can mean different things in different scenarios.
+
+| Request | Generic chatbot | Coding agent | Customer support agent |
+|---|---|---|---|
+| Read environment variables | policy refusal | secret exfiltration | usually irrelevant |
+| Query an order | general question | irrelevant | authorization risk |
+| Upload logs | harmless summary request | network egress risk | support workflow |
+| Modify tests | not applicable | verifier sabotage risk | not applicable |
+
+Promptbeat uses the scenario to decide whether a behavior is normal capability or boundary violation.
+
+## Capability sources
+
+| Scenario | Typical capability sources | What it tests |
+|---|---|---|
+| Programming assistant | Promptfoo coding-agent plugins, Inspect-SWE, Terminal-Bench | files, commands, secrets, verifier, sandbox |
+| Customer support | business seeds, API judges, private datasets | PII, cross-user data, refunds, tool authorization |
+| Browser agent | web adapters, browser traces, page injection seeds | DOM injection, cross-site tools, data exfiltration |
+| Generic model safety | HarmBench, JBB, ALERT, SimpleSafetyTests | harmful content, jailbreak, misinformation |
+| Benchmark target lab | Inspect solvers, environment adapters, benchmark scorers | real task environments and hidden scoring |
+
+## Promptfoo's role
+
+Promptfoo provides powerful capabilities:
+
+- redteam generation and evaluation
+- builtin plugins and strategies
+- coding-agent plugins
+- providers such as `openai:codex-sdk`
+- assertions and raw result files
+
+Promptbeat uses those capabilities while preserving its own target, scenario, seed, dataset, adapter, and report abstractions.
+
+## Inspect and Target Lab's role
+
+For benchmark environments, Promptbeat should not hide an agent inside a task runtime. The preferred Target Lab model is:
+
+```text
+Agent App: Codex / Claude Code / OpenClaw / custom agent
+Environment Adapter: Terminal-Bench / Harbor / custom task env
+Harness: Inspect or Promptfoo provider bridge
+Trace Contract: commands, files, diffs, artifacts, scorer, transcript
+```
+
+Use Promptfoo directly when provider-based execution is enough. Use Inspect and adapters when the scenario needs controlled environments, hidden tests, task lifecycle, and scorer artifacts.

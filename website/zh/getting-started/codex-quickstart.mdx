@@ -1,0 +1,51 @@
+---
+title: Codex 快速开始
+description: 通过 Codex SDK provider 运行真实 Codex target。
+---
+
+# Codex 快速开始
+
+这个示例通过 `openai:codex-sdk` provider，把 Promptbeat 生成的攻击用例跑到真实 Codex CLI target 上。
+
+## 前置条件
+
+```bash
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+export OPENAI_API_KEY="sk-..."
+export CODEX_API_KEY="sk-..."
+export CODEX_HOME="$HOME/.codex"
+```
+
+不要提交真实 secret。本地 smoke 可以用 `inherit_process_env: true`，正式报告建议使用 allowlisted `cli_env`。
+
+## 校验
+
+```bash
+uv run promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## 生成攻击
+
+```bash
+uv run promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
+  --generator-provider openai:openai/gpt-5.5 \
+  --count 5 \
+  --output-dir examples/codex_agent/artifacts/generate
+```
+
+## 评测 Codex
+
+```bash
+uv run promptbeat eval \
+  --config examples/codex_agent/artifacts/generate/generated_redteam.yaml \
+  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
+  --output-dir examples/codex_agent/artifacts/eval
+```
+
+## 生成报告
+
+```bash
+uv run promptbeat report --eval-result examples/codex_agent/artifacts/eval/evaluation_result.json
+```

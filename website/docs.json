@@ -1,0 +1,201 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Promptbeat",
+  "theme": "mint",
+  "favicon": "/images/favicon.svg",
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#0F766E",
+    "dark": "#2DD4BF"
+  },
+  "logo": {
+    "light": "/images/logo-light.svg",
+    "dark": "/images/logo-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Docs",
+        "href": "/getting-started/overview"
+      },
+      {
+        "label": "中文",
+        "href": "/zh/getting-started/overview"
+      },
+      {
+        "label": "Examples",
+        "href": "/getting-started/codex-quickstart"
+      },
+      {
+        "label": "Architecture",
+        "href": "/target-lab/architecture"
+      },
+      {
+        "label": "Reports",
+        "href": "/reports/comprehensive-reports"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Start with Codex",
+      "href": "/getting-started/codex-quickstart"
+    }
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "getting-started/overview",
+              "getting-started/scenario-driven-evaluation",
+              "getting-started/codex-quickstart"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/target-scenario-seed",
+              "concepts/configuration-model",
+              "concepts/risk-taxonomy",
+              "concepts/multi-model-checks",
+              "concepts/capability-sources",
+              "concepts/preflight-checks"
+            ]
+          },
+          {
+            "group": "Targets",
+            "pages": [
+              "targets/agent-targets",
+              "targets/typical-agent-apps",
+              "targets/agent-configuration-examples",
+              "targets/codex-sdk",
+              "targets/provider-files"
+            ]
+          },
+          {
+            "group": "Datasets",
+            "pages": [
+              "datasets/overview",
+              "datasets/catalog",
+              "datasets/harmbench"
+            ]
+          },
+          {
+            "group": "Coding Agent Safety",
+            "pages": [
+              "coding-agent/coverage",
+              "coding-agent/attack-patterns",
+              "coding-agent/attack-examples",
+              "coding-agent/broad-codex-report"
+            ]
+          },
+          {
+            "group": "Target Lab",
+            "pages": [
+              "target-lab/architecture",
+              "target-lab/inspect-and-adapters"
+            ]
+          },
+          {
+            "group": "Reports",
+            "pages": [
+              "reports/comprehensive-reports",
+              "reports/report-schema",
+              "reports/result-artifacts"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/cli",
+              "reference/api-service",
+              "reference/yaml"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "zh",
+        "groups": [
+          {
+            "group": "快速开始",
+            "pages": [
+              "zh/getting-started/overview",
+              "zh/getting-started/scenario-driven-evaluation",
+              "zh/getting-started/codex-quickstart"
+            ]
+          },
+          {
+            "group": "核心概念",
+            "pages": [
+              "zh/concepts/target-scenario-seed",
+              "zh/concepts/configuration-model",
+              "zh/concepts/risk-taxonomy",
+              "zh/concepts/multi-model-checks",
+              "zh/concepts/capability-sources",
+              "zh/concepts/preflight-checks"
+            ]
+          },
+          {
+            "group": "目标",
+            "pages": [
+              "zh/targets/agent-targets",
+              "zh/targets/typical-agent-apps",
+              "zh/targets/agent-configuration-examples",
+              "zh/targets/codex-sdk",
+              "zh/targets/provider-files"
+            ]
+          },
+          {
+            "group": "数据集",
+            "pages": [
+              "zh/datasets/overview",
+              "zh/datasets/catalog",
+              "zh/datasets/harmbench"
+            ]
+          },
+          {
+            "group": "Coding Agent 安全",
+            "pages": [
+              "zh/coding-agent/coverage",
+              "zh/coding-agent/attack-patterns",
+              "zh/coding-agent/attack-examples",
+              "zh/coding-agent/broad-codex-report"
+            ]
+          },
+          {
+            "group": "Target Lab",
+            "pages": [
+              "zh/target-lab/architecture",
+              "zh/target-lab/inspect-and-adapters"
+            ]
+          },
+          {
+            "group": "报告",
+            "pages": [
+              "zh/reports/comprehensive-reports",
+              "zh/reports/report-schema",
+              "zh/reports/result-artifacts"
+            ]
+          },
+          {
+            "group": "参考",
+            "pages": [
+              "zh/reference/cli",
+              "zh/reference/api-service",
+              "zh/reference/yaml"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/tophant-ai/promptbeat"
+    }
+  }
+}

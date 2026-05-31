@@ -1,0 +1,77 @@
+---
+title: Dataset-started evaluation
+description: Use official and open datasets as scenario-bound seed pools.
+---
+
+# Dataset-started evaluation
+
+Datasets are seed pools. They are not complete evaluations by themselves.
+
+```text
+dataset record -> Seed -> Scenario binding -> generated or direct tests -> real target eval -> report
+```
+
+## Dataset flow
+
+1. Download raw datasets into `datasets/raw`.
+2. Define or use a `DatasetSpec`.
+3. Load records with `DatasetSeedLoader`.
+4. Bind seeds to scenario risk types.
+5. Generate or directly evaluate Promptfoo tests.
+6. Report by dataset, category, risk type, plugin, and provider.
+
+## Two modes
+
+| Mode | Flow | Use when |
+|---|---|---|
+| Direct dataset eval | dataset prompt -> tests -> eval | fast smoke and regression |
+| Dataset-steered generation | dataset seed -> plugin examples -> generated probes -> eval | stronger red-team exploration |
+
+## Dataset sources
+
+Promptbeat should document where each dataset comes from and how it is used. The dataset is a starting point; scenario mapping decides whether it is suitable for a target. See [Dataset catalog](/datasets/catalog) for field mappings, readiness levels, and initial risk mappings.
+
+| Dataset family | Source | Typical use | Promptbeat treatment |
+|---|---|---|---|
+| HarmBench | [Center for AI Safety HarmBench](https://github.com/centerforaisafety/HarmBench) | Harmful behavior and refusal smoke tests. | Direct eval or generation seeds mapped to harmful-content and tool-misuse risks. |
+| JailbreakBench / JBB Behaviors | [JailbreakBench](https://github.com/JailbreakBench/jailbreakbench) | Jailbreak behavior prompts and robustness checks. | Seed pool for jailbreak and policy-bypass scenarios. |
+| ALERT | [ALERT benchmark](https://github.com/Babelscape/ALERT) | Safety risk prompts across multiple categories. | Risk-mapped seed source for broader safety scenarios. |
+| SimpleSafetyTests | [SimpleSafetyTests](https://github.com/bertiev/SimpleSafetyTests) | Small direct safety regression set. | Lightweight smoke tests and baseline sanity checks. |
+| Forbidden Questions | Public forbidden-question style datasets | Direct refusal and policy compliance checks. | Requires taxonomy mapping before mixed reports. |
+| JADE-DB | Chinese jailbreak and safety seed collections | Chinese-language jailbreak and harmful-content coverage. | Useful for Chinese scenarios and downstream taxonomy mapping. |
+| BeaverTails | [BeaverTails](https://huggingface.co/datasets/PKU-Alignment/BeaverTails) | Harmlessness and harmfulness preference data. | Seed source after filtering and category mapping. |
+| SALAD-Bench | [SALAD-Bench](https://github.com/OpenSafetyLab/SALAD-BENCH) | Safety alignment benchmark categories. | Category-mapped source for broad safety reports. |
+| Business/private seeds | Internal datasets, policies, tickets, logs, support transcripts | Enterprise-specific risks. | Treated as scenario-bound seeds with stricter privacy controls. |
+
+Some datasets require HuggingFace or GitHub download access. Licenses, redistribution rules, and usage restrictions should be checked before packaging data into examples.
+
+## Initial dataset workflow
+
+1. Pick one seed source from the catalog.
+2. Confirm the raw file path and license/access constraints.
+3. Check the `DatasetSpec` field mapping.
+4. Define `DatasetRiskMapping` for the target scenario.
+5. Run a small direct slice before generated probes.
+6. Preserve source metadata in every seed and report row.
+
+## Source metadata to keep
+
+Every loaded seed should keep enough metadata for audit and reporting.
+
+```yaml
+metadata:
+  dataset: harmbench
+  dataset_version: local-snapshot-2026-05
+  source_url: https://github.com/centerforaisafety/HarmBench
+  source_category: cyber
+  original_id: hb-001
+  split: test
+```
+
+## Mapping into risk taxonomy
+
+```text
+raw category -> DatasetRiskMapping -> Promptbeat risk type -> scenario -> judge
+```
+
+A dataset category such as `cyber`, `privacy`, or `jailbreak` is not enough by itself. Promptbeat maps it into risk types such as `harmful_content`, `privacy_pii`, `authorization`, `tool_misuse`, or `prompt_injection`, depending on the target scenario.

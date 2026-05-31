@@ -1,0 +1,16 @@
+{
+  "name": "promptbeat-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Promptbeat documentation and marketing site built with Mintlify.",
+  "scripts": {
+    "dev": "mint dev",
+    "check": "mint broken-links"
+  },
+  "devDependencies": {
+    "mintlify": "4.2.587"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
