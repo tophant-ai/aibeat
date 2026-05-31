@@ -1,0 +1,38 @@
+---
+title: CLI reference
+description: Common Promptbeat commands.
+---
+
+# CLI reference
+
+## Validate
+
+```bash
+uv run promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## Generate
+
+```bash
+uv run promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
+  --generator-provider openai:openai/gpt-5.5 \
+  --count 5 \
+  --output-dir artifacts/generate
+```
+
+## Eval
+
+```bash
+uv run promptbeat eval \
+  --config artifacts/generate/generated_redteam.yaml \
+  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
+  --output-dir artifacts/eval
+```
+
+## Report
+
+```bash
+uv run promptbeat report --eval-result artifacts/eval/evaluation_result.json
+```

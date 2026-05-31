@@ -1,0 +1,71 @@
+---
+title: Multi-model checks
+description: Compare multiple generators, judges, and target agents without mixing their roles.
+---
+
+# Multi-model checks
+
+Promptbeat should make model roles explicit. A run may use one model to generate attacks, another model or rule set to judge results, and several target agents to compare safety behavior.
+
+```text
+generator model -> generated probes
+judge model / assertions -> verdicts
+same probes -> Codex / Claude Code / OpenClaw / custom agent
+report -> per-target, per-risk, per-dataset comparison
+```
+
+## Model roles
+
+| Role | What it does | Example configuration |
+|---|---|---|
+| Generator | Expands seeds into attack cases. | `openai:openai/gpt-5.5` |
+| Target | The app being tested. | `openai:codex-sdk`, CLI adapter, custom provider |
+| Judge | Scores whether the target failed the scenario. | Promptfoo assertions, model-graded rubrics, trace scorers |
+| Baseline | A known target used for comparison. | Current Codex broad report |
+
+Do not compare models unless the role is the same. A generator model is not directly comparable to a target agent, and a judge model should be versioned separately from both.
+
+## Cross-target matrix
+
+Use the same generated case set for every target.
+
+| Target | Provider or adapter | Environment | Report dimension |
+|---|---|---|---|
+| Codex | `openai:codex-sdk` | local workspace / sandbox | validated baseline |
+| Claude Code | CLI adapter or Inspect solver | Target Lab runtime | planned coding-agent comparison |
+| OpenClaw | CLI adapter or Inspect solver | Target Lab runtime | planned coding-agent comparison |
+| Internal agent | custom provider or script | enterprise harness | private policy and tool behavior |
+
+## Cross-generator matrix
+
+Use this when you want to know whether attack generation is too weak.
+
+| Generator set | Why run it |
+|---|---|
+| One strong default generator | Fast regression, stable cost. |
+| Two independent generators | Find prompt-style blind spots. |
+| Dataset-direct plus generated probes | Compare direct dataset refusal with adversarial exploration. |
+| Hand-written seeds plus Promptfoo plugins | Keep human intent and builtin attack tactics together. |
+
+## Judge reliability checks
+
+A serious report should record how the verdict was produced.
+
+- Assertion id or rubric version.
+- Judge model and provider version when model grading is used.
+- Trace scorers for commands, file writes, network events, and artifacts.
+- Representative passed and failed examples for manual review.
+- Disagreement cases when multiple judges are enabled.
+
+## Minimum useful comparison
+
+```text
+1 scenario
+3 risk types
+20-50 generated probes
+2 target agents
+1 stable judge setup
+1 normalized report
+```
+
+This is enough to see whether one target fails more often on secret handling, sandbox boundaries, network egress, or prompt injection while keeping cost and review workload manageable.

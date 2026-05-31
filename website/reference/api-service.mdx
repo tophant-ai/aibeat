@@ -1,0 +1,50 @@
+---
+title: Go web service
+description: Seed expansion API, batch tasks, and container startup.
+---
+
+# Go web service
+
+Promptbeat includes a Go web service for downstream systems that need Promptbeat as an API instead of a local CLI.
+
+## What it supports
+
+| Feature | Use case |
+|---|---|
+| Synchronous preview | Small-batch seed expansion and low-latency debugging. |
+| Asynchronous batch task | Larger expansion jobs with task status and optional callbacks. |
+| Dataset risk mapping | Map upstream dataset categories into Promptbeat risk types. |
+| Plugin and strategy passthrough | Let callers select Promptfoo plugins, strategies, transforms, and framing styles. |
+| Trace metadata | Return source seed ids, mapping decisions, strategy choices, and generation metadata. |
+| Container startup | Run the Go API and Python Promptbeat core together in the service image. |
+
+## Endpoints
+
+```http
+POST /api/v1/attack/preview
+POST /api/v1/attack/task/create
+GET  /api/v1/attack/task/{taskId}
+```
+
+Use `preview` for small batches. Use `task/create` when seed count, `expansionRatio`, or `maxOutputs` is large enough that generation should run asynchronously.
+
+## Local container
+
+```bash
+make docker-build
+make docker-run
+```
+
+The service listens on port `8080` by default. Runtime values can be injected through `api/.env.docker`, including `OPENAI_API_KEY`, `PROMPTBEAT_GENERATOR_PROVIDER`, `PROMPTBEAT_DATABASE_URL`, `PROMPTBEAT_REDIS_URL`, and `PROMPTBEAT_DISABLE_TASK_WORKER`.
+
+## Smoke test
+
+```bash
+api/tests/smoke_seed_expansion.sh
+```
+
+Set `BASE_URL` when testing a deployed service:
+
+```bash
+BASE_URL=http://staging.example.com api/tests/smoke_seed_expansion.sh
+```

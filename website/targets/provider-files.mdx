@@ -1,0 +1,38 @@
+---
+title: Provider files
+description: Keep target configuration separate from generation and scenario files.
+---
+
+# Provider files
+
+Provider files define the real systems under test.
+
+```yaml
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK target
+    config:
+      model: openai/gpt-5.4
+      working_dir: agent-workspace
+```
+
+## Why provider files matter
+
+- They keep target execution separate from scenario logic.
+- They make it easy to re-evaluate the same generated cases against another target.
+- They avoid hardcoding secrets into generated configs.
+- They support provider-specific configuration.
+
+## Path handling
+
+Promptbeat resolves provider-file `working_dir` and `cwd` relative to the provider file. This avoids failures when generated configs are written to an artifact directory.
+
+## Secret handling
+
+Do not commit real keys. Use shell environment variables or a local secret manager.
+
+For production runs, use explicit environment allowlists instead of broad inheritance.
+
+## More examples
+
+See [Agent configuration examples](/targets/agent-configuration-examples) for Codex, Codex app-server, Claude Code, OpenCode, OpenClaw, browser agents, support agents, data agents, DevOps agents, security triage agents, and internal enterprise agents.

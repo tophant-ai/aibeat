@@ -1,0 +1,49 @@
+---
+title: Capability sources
+description: Promptfoo, Inspect, datasets, and benchmark adapters are capability sources selected by scenario.
+---
+
+# Capability sources
+
+Capability sources provide generation, execution, judging, or environment control.
+
+Promptbeat selects them based on scenario.
+
+## Promptfoo
+
+Use Promptfoo for:
+
+- redteam generation
+- builtin plugins and strategies
+- coding-agent plugin coverage
+- provider-based targets such as `openai:codex-sdk`
+- assertions and reports
+
+## Datasets
+
+Use datasets as seed pools:
+
+- HarmBench
+- JBB Behaviors
+- ALERT
+- SimpleSafetyTests
+- Forbidden Questions
+- JADE-DB
+- BeaverTails
+- SALAD-Bench
+
+Datasets need risk mapping before they can support scenario-level reporting. See [Dataset-started evaluation](/datasets/overview) and [Risk taxonomy](/concepts/risk-taxonomy).
+
+## Inspect
+
+Use Inspect when the scenario needs:
+
+- agent lifecycle control
+- benchmark environment setup
+- hidden tests and scorers
+- sandbox-local CLI runtime
+- artifact and trace collection
+
+## Environment adapters
+
+Use adapters for benchmark task sources such as Terminal-Bench and Harbor. The benchmark owns task setup, tests, services, and scoring. Promptbeat owns target contracts, scenario selection, and report normalization.

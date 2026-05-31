@@ -1,0 +1,14 @@
+providers:
+  # Template for an OpenCode SDK/server adapter.
+  # Use provider-started runtime or point this at an existing OpenCode service.
+  - id: opencode:sdk
+    label: OpenCode adapter target
+    config:
+      working_dir: ../../codex_agent/agent-workspace
+      model: '{{env.OPENCODE_MODEL}}'
+      base_url: '{{env.OPENCODE_BASE_URL}}'
+      api_key: '{{env.OPENCODE_API_KEY}}'
+      approval_policy: never
+      sandbox_mode: read-only
+      collect_trace: true
+      trace_output: artifacts/opencode-trace.jsonl

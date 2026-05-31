@@ -1,0 +1,96 @@
+---
+title: Agent targets
+description: Current and planned agent target integrations.
+---
+
+# Agent targets
+
+Promptbeat is designed to evaluate real agent applications, not only model endpoints. See [Typical agent apps](/targets/typical-agent-apps) for the broader target taxonomy and [Agent configuration examples](/targets/agent-configuration-examples) for concrete provider files.
+
+## Current baseline: Codex
+
+Codex is the first fully exercised target path.
+
+| Capability | Status |
+|---|---|
+| Provider | validated via `openai:codex-sdk` |
+| Real CLI target | validated |
+| Promptbeat generate + eval | validated |
+| Coding-agent broad suite | validated |
+| Dataset-started HarmBench slice | validated |
+| HTML and Markdown reports | validated |
+
+Example provider:
+
+```yaml
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK target
+    config:
+      model: openai/gpt-5.4
+      working_dir: agent-workspace
+      sandbox_mode: read-only
+      approval_policy: never
+```
+
+## Claude Code
+
+Claude Code is a primary target for the same programming-assistant scenario.
+
+Planned paths:
+
+- Inspect-managed Agent App in Target Lab
+- sandbox-local CLI runtime image
+- Terminal-Bench / Harbor environment adapters
+- Promptbeat report normalization
+
+Target Lab binding work already models Claude Code as an Agent App rather than a hidden task runtime.
+
+## OpenClaw
+
+OpenClaw is another primary target for coding-agent comparison.
+
+Planned paths:
+
+- Inspect solver / CLI adapter
+- sandbox-local runtime image
+- shared coding-agent scenario coverage
+- same broad sample used for Codex comparison
+
+## Broader target classes
+
+Beyond coding agents, the same target abstraction covers browser agents, customer-support agents, data-analysis agents, DevOps agents, and security-triage agents. They differ in tools and environment adapters, but they still share scenario binding, seed mapping, trace capture, and report normalization.
+
+## Custom agents
+
+Promptbeat should support custom enterprise agents through:
+
+- custom providers
+- script providers
+- Inspect solvers
+- adapter-controlled environments
+- trace normalization into Promptbeat reports
+
+## Comparison goal
+
+The end goal is not just to run one agent. It is to compare targets across the same scenario and generated case set.
+
+```text
+same scenario + same generated probes
+  -> Codex
+  -> Claude Code
+  -> OpenClaw
+  -> internal agent
+  -> per-plugin and per-risk comparison
+```
+
+## Status language for the website
+
+Use precise wording:
+
+- Codex: validated target baseline.
+- Claude Code: primary planned target through Target Lab / Inspect.
+- OpenClaw: primary planned target through Target Lab / Inspect.
+- Custom agents: supported design path; implementation depends on provider or adapter.
+
+Avoid claiming all targets are production-ready until each one has a saved end-to-end report.

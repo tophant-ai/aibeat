@@ -1,0 +1,56 @@
+---
+title: Typical agent apps
+description: Concrete agent target classes, support status, and integration contracts.
+---
+
+# Typical agent apps
+
+Promptbeat treats an agent as a target when it has a concrete invocation contract: a provider, HTTP endpoint, custom provider, CLI command, Inspect solver, or Target Lab adapter. Support means Promptbeat can route generated cases to that contract and normalize the result. Validation evidence is tracked separately.
+
+See [Agent configuration examples](/targets/agent-configuration-examples) for provider files and runnable patterns.
+
+## Support status
+
+| Status | Meaning | What users can expect |
+|---|---|---|
+| Runnable now | Promptbeat has a checked-in example or saved end-to-end report. | Copy the example, provide credentials, run generate/eval, inspect artifacts. |
+| Adapter pattern | The target can be connected through a standard provider or adapter contract. | Provide the endpoint, CLI, workspace, or custom provider; use Promptbeat scenarios and reports. |
+| Roadmap | No stable contract is documented yet. | Do not list as a supported target until a provider or adapter contract exists. |
+
+## Coding agents
+
+| Agent app | Status | Integration contract | Best-fit risks | Evidence |
+|---|---|---|---|---|
+| Codex SDK | Runnable now | `openai:codex-sdk`; provider file plus workspace. | repo injection, terminal injection, secret handling, sandbox boundary, egress. | Broad Codex report saved in `examples/codex_agent/artifacts`. |
+| Codex app-server | Adapter pattern | `openai:codex-app-server` or `openai:codex-desktop`; local child process. | approvals, app-server events, skills/plugins, command/file trajectories. | Provider documented; Promptbeat report pending. |
+| Claude Agent SDK / Claude Code-like workflows | Adapter pattern | `anthropic:claude-agent-sdk`; optional Target Lab CLI container. | file reads, refactors, MCP/tool permissions, command execution. | Provider documented; Promptbeat report pending. |
+| OpenCode SDK | Adapter pattern | `opencode:sdk`; provider-started or existing OpenCode server. | provider-agnostic coding-agent comparison, skills, tool traces. | Provider documented; Promptbeat report pending. |
+| OpenClaw | Adapter pattern | OpenClaw providers such as `openclaw:main` and `openclaw:agent:main`; gateway URL required. | chat/response safety, WS agent flow, tool use, gateway policy. | Provider documented; Promptbeat report pending. |
+| Internal coding agent | Adapter pattern | HTTP provider, JavaScript/Python custom provider, shell provider, Inspect solver, or Target Lab adapter. | private tool policy, enterprise approvals, repo/workspace boundaries. | Depends on customer harness and saved report. |
+
+## Application agents
+
+| Agent class | Status | Integration contract | Example risks | Minimum evidence to collect |
+|---|---|---|---|---|
+| Browser agent | Adapter pattern | HTTP/custom provider when exposed as a service; Target Lab browser adapter when Promptbeat starts browser state. | DOM prompt injection, form exfiltration, unsafe navigation, cookie/session misuse. | final answer, visited URLs, DOM excerpts, form submissions, downloads. |
+| Customer support agent | Adapter pattern | HTTP provider, OpenAI Agents/ChatKit wrapper, or custom provider around the support backend. | cross-user access, refund abuse, PII leakage, policy override. | caller id, tenant id, tool calls, returned records, action audit log. |
+| Data analysis agent | Adapter pattern | JavaScript/Python custom provider, notebook runner, SQL harness, or Inspect solver. | prompt-injected data rows, secret table access, unsafe notebook command. | SQL queries, notebook cells, file reads, charts/artifacts, final answer. |
+| DevOps agent | Adapter pattern | Script/custom provider or Target Lab adapter with dry-run cloud fixtures. | credential discovery, destructive cleanup, privilege escalation, deployment sabotage. | commands, cloud API calls, diff plan, dry-run output, denied actions. |
+| Security triage agent | Adapter pattern | HTTP/custom provider connected to SIEM, ticketing, scanner, or enrichment APIs. | alert suppression, attacker-controlled log injection, false remediation. | alert input, enrichment calls, ticket changes, suppression decisions. |
+
+## Target-ready checklist
+
+A target page or provider file is not ready until these pieces are explicit:
+
+```text
+provider or adapter id
+  -> how the agent starts or is called
+  -> workspace / service startup / environment variables
+  -> permission model and sandbox
+  -> trace fields captured from the run
+  -> scenario risk types supported
+  -> assertions or scorer used for pass/fail
+  -> report fields and artifact paths
+```
+
+This is the difference between a real Promptbeat target and a vague integration claim.

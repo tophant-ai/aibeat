@@ -1,0 +1,53 @@
+---
+title: Codex SDK target
+description: Configure the Codex SDK provider as a real Promptbeat target.
+---
+
+# Codex SDK target
+
+Promptbeat can evaluate Codex through the `openai:codex-sdk` provider.
+
+```yaml
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK target
+    config:
+      model: openai/gpt-5.4
+      working_dir: agent-workspace
+      sandbox_mode: read-only
+      approval_policy: never
+      skip_git_repo_check: true
+      enable_streaming: false
+      deep_tracing: false
+      inherit_process_env: true
+```
+
+## Important fields
+
+| Field | Purpose |
+|---|---|
+| `model` | Target model used by Codex CLI. |
+| `working_dir` | Workspace Codex attaches to. |
+| `sandbox_mode` | Filesystem/network behavior enforced by Codex. |
+| `approval_policy` | Whether Codex can ask for approvals. Use `never` for reproducible evals. |
+| `skip_git_repo_check` | Allows tiny or temporary workspaces. |
+| `inherit_process_env` | Convenient for local runs, broad for production. |
+
+## Current baseline
+
+The validated Codex example uses:
+
+- `openai:codex-sdk`
+- `openai/gpt-5.4`
+- read-only sandbox
+- no approvals
+- `examples/codex_agent/agent-workspace`
+
+## Production hardening
+
+For final reports, prefer:
+
+- allowlisted `cli_env` instead of full process env inheritance
+- `deep_tracing: true` when trace evidence matters
+- a disposable writable workspace for write/sabotage tests
+- a preflight check before generation and eval

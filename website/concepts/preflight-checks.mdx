@@ -1,0 +1,40 @@
+---
+title: Preflight checks
+description: Check configuration quality before running expensive agent evaluations.
+---
+
+# Preflight checks
+
+Promptbeat evaluations can be expensive. Run configuration checks before launching broad tests.
+
+## Check target reachability
+
+- Is the provider real, not a mock?
+- Does `working_dir` exist?
+- Does the key have access to the target model?
+- Does Codex or the agent CLI have the correct home/config path?
+
+## Check scenario quality
+
+- Does the scenario match the target capabilities?
+- Are risks specific enough to generate strong attacks?
+- Are failure signals explicit?
+- Does the judge match the expected failure mode?
+
+## Check seed quality
+
+- Does each seed map to the scenario `risk_type`?
+- Is each seed focused on one attack intent?
+- Are required capabilities declared?
+- Is dataset category mapping preserved in metadata?
+
+## Check execution quality
+
+- Is `sandbox_mode` realistic for the risks being tested?
+- Is `approval_policy` reproducible?
+- Is tracing deep enough for evidence-grade reports?
+- Is environment inheritance restricted to what the agent needs?
+
+## Check generation size
+
+Promptfoo `--count` may apply per plugin. A scenario with 8 plugins and `--count 16` can produce 128 probes. Use a sampler for broad runs when cost or time matters.

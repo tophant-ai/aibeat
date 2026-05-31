@@ -1,0 +1,16 @@
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK via Promptfoo
+    config:
+      # Use the model name allowed by the configured gateway/key.
+      model: openai/gpt-5.4
+      # Relative paths are resolved from this provider file's directory by promptbeat.
+      working_dir: agent-workspace
+      sandbox_mode: read-only
+      approval_policy: never
+      skip_git_repo_check: true
+      enable_streaming: false
+      deep_tracing: false
+      # Let Codex see CODEX_HOME, OPENAI_BASE_URL, CODEX_API_KEY, and OPENAI_API_KEY
+      # from the invoking shell without committing secrets into this file.
+      inherit_process_env: true

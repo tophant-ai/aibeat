@@ -1,0 +1,4 @@
+node_modules/
+.mintlify/
+.next/
+dist/

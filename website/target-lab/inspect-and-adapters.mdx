@@ -1,0 +1,39 @@
+---
+title: Inspect and adapters
+description: How Promptbeat should connect Inspect, Terminal-Bench, and external agent harnesses.
+---
+
+# Inspect and adapters
+
+Inspect is the preferred execution layer when a scenario needs real environment control.
+
+## Adapter model
+
+A benchmark adapter should expose:
+
+- task instruction
+- task workspace
+- setup and reset
+- hidden tests
+- scorer output
+- artifact collection
+- timeout and resource policy
+
+The external agent harness should attach to that environment rather than being embedded as a benchmark runtime detail.
+
+## Terminal-Bench
+
+Terminal-Bench is a good first benchmark source for programming assistant scenarios because it already provides terminal tasks, tests, and scoring.
+
+Promptbeat's role is to compile scenario and target information into a form Inspect and the adapter can run, then normalize results back into Promptbeat reports.
+
+## Promptfoo bridge
+
+Promptfoo can still be used for:
+
+- generated red-team cases
+- coding-agent assertions
+- report compatibility
+- provider-based targets
+
+When Inspect is the runner, Promptbeat should bridge Inspect logs and artifacts into a common trace/report contract.

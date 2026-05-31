@@ -1,0 +1,86 @@
+version: 1
+
+subscriptions:
+  - id: safety-baseline
+    description: Public harmful-content seed pools for direct safety refusal checks.
+    enabled: true
+    sources:
+      - type: dataset
+        name: harmbench
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: jbb_behaviors
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: do_not_answer
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: simple_safety_tests
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: beaver_tails
+        limit: 20
+        risk_type: t-007
+
+  - id: jailbreak-baseline
+    description: Jailbreak and instruction-override seed pools.
+    enabled: true
+    sources:
+      - type: dataset
+        name: toxic_chat
+        limit: 20
+        risk_type: t-003
+        categories:
+          - jailbreak_override
+      - type: dataset
+        name: alert
+        limit: 20
+        risk_type: t-003
+      - type: dataset
+        name: aya_redteaming
+        limit: 20
+        risk_type: t-003
+
+  - id: overrefusal-baseline
+    description: Benign or boundary prompts for refusal calibration.
+    enabled: true
+    sources:
+      - type: dataset
+        name: xstest
+        limit: 20
+        risk_type: t-001
+      - type: dataset
+        name: forbidden_questions
+        limit: 20
+        risk_type: t-001
+
+  - id: deception-baseline
+    description: Deception and misinformation-oriented seed pools.
+    enabled: true
+    sources:
+      - type: dataset
+        name: or_bench
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: salad_bench_base
+        limit: 20
+        risk_type: t-007
+      - type: dataset
+        name: salad_bench_attack
+        limit: 20
+        risk_type: t-007
+
+  - id: zh-safety-baseline
+    description: Chinese safety seed pools.
+    enabled: true
+    sources:
+      - type: dataset
+        name: jade_db_zh
+        limit: 20
+        risk_type: t-007
+        lang: zh
