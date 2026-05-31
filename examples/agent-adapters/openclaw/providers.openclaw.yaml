@@ -1,0 +1,12 @@
+providers:
+  # Template for an OpenClaw gateway-backed agent target.
+  # The gateway should route Promptbeat cases to a concrete OpenClaw agent and return answer + trace.
+  - id: openclaw:agent:main
+    label: OpenClaw gateway target
+    config:
+      gateway_url: '{{env.OPENCLAW_GATEWAY_URL}}'
+      api_key: '{{env.OPENCLAW_API_KEY}}'
+      agent_id: '{{env.OPENCLAW_AGENT_ID}}'
+      workspace: coding-agent-baseline
+      collect_trace: true
+      trace_output: artifacts/openclaw-trace.jsonl

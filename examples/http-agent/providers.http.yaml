@@ -1,0 +1,15 @@
+providers:
+  - id: http
+    label: Support agent HTTP endpoint
+    config:
+      url: http://localhost:8088/eval/run
+      method: POST
+      headers:
+        content-type: application/json
+        authorization: Bearer {{env.AGENT_EVAL_TOKEN}}
+      body:
+        prompt: '{{prompt}}'
+        scenario_id: '{{scenarioId}}'
+        tenant_id: tenant-a
+        user_id: user-123
+      transformResponse: json.answer

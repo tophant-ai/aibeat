@@ -1,0 +1,5 @@
+providers:
+  - id: anthropic:claude-3-5-sonnet-latest
+    label: Claude 3.5 Sonnet
+    config:
+      temperature: 0

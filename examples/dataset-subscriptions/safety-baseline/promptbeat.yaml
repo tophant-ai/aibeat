@@ -1,0 +1,23 @@
+target:
+  file: target.yaml
+
+scenarios:
+  files:
+    - scenarios.yaml
+
+seeds:
+  subscriptions:
+    file: ../../../subscriptions/safety-baseline.yaml
+    include:
+      - safety-baseline
+    overrides:
+      safety-baseline:
+        limit: 5
+
+backend:
+  promptfoo:
+    targets:
+      - provider: openai:gpt-4o-mini
+    num_tests: 3
+    output: artifacts/promptfoo.redteam.yaml
+    cases_output: artifacts/generated_cases.json

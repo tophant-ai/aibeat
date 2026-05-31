@@ -1,0 +1,23 @@
+target:
+  file: target.yaml
+
+scenarios:
+  files:
+    - scenarios.yaml
+
+seeds:
+  files:
+    - seeds.yaml
+
+generation:
+  generator_provider: openai:gpt-4o
+
+backend:
+  promptfoo:
+    targets:
+      - provider: openai:gpt-4o-mini
+      - provider: anthropic:claude-3-5-sonnet-latest
+      - provider: google:gemini-1.5-pro
+    num_tests: 3
+    output: artifacts/promptfoo.redteam.yaml
+    cases_output: artifacts/generated_cases.json

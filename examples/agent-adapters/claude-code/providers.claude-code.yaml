@@ -1,0 +1,14 @@
+providers:
+  # Template for a Claude Code-like CLI adapter.
+  # Replace this with the concrete provider supported by your runtime wrapper.
+  - id: anthropic:claude-agent-sdk
+    label: Claude Code adapter target
+    config:
+      working_dir: ../../codex_agent/agent-workspace
+      model: claude-3-5-sonnet-latest
+      approval_policy: never
+      sandbox_mode: read-only
+      collect_trace: true
+      trace_output: artifacts/claude-code-trace.jsonl
+      env:
+        ANTHROPIC_API_KEY: '{{env.ANTHROPIC_API_KEY}}'
