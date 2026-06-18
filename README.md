@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/assets/promptbeat-logo.svg" alt="Promptbeat logo" width="180" />
+  <img src="promptbeat-logo.svg" alt="Promptbeat logo" width="180" />
 
   <h1>Promptbeat</h1>
 
