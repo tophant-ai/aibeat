@@ -1,137 +1,129 @@
-# Promptbeat
+<div align="center">
+  <img src="docs/assets/promptbeat-logo.svg" alt="Promptbeat logo" width="180" />
 
-Promptbeat is a scenario-driven safety evaluation toolkit for LLMs and agent applications. It starts from targets, scenarios, seeds, and dataset subscriptions, then generates and evaluates adversarial cases against real model or agent targets.
+  <h1>Promptbeat</h1>
 
-Promptbeat 是一个面向 LLM 与 Agent 应用的场景驱动安全评测工具。它从 target、scenario、seed 和 dataset subscription 出发，生成并执行对抗测试，用于评估真实模型或真实 Agent 的安全边界。
+  <p><strong>Scenario-driven AI red teaming for LLMs and agent applications.</strong></p>
+  <p>面向 LLM 与 Agent 的场景驱动红队评测、数据集构建与证据化报告工具链。</p>
 
-## What This Repository Contains / 仓库内容
+  <p>
+    <a href="https://github.com/tophant-ai/promptbeat/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/tophant-ai/promptbeat?style=flat&logo=github&label=Stars" /></a>
+    <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-2dd288" />
+    <img alt="Binary distribution" src="https://img.shields.io/badge/distribution-binary-111111" />
+    <img alt="AI Red Teaming" src="https://img.shields.io/badge/AI-Red%20Teaming-7c3aed" />
+    <img alt="LLM and Agent targets" src="https://img.shields.io/badge/targets-LLM%20%2B%20Agent-2088FF" />
+  </p>
 
-This public repository is for documentation, website content, and runnable configuration examples. It is not the full product source release.
+  <p>
+    <a href="#quick-start"><strong>Quick Start</strong></a>
+    · <a href="https://github.com/tophant-ai/promptbeat/releases"><strong>Releases</strong></a>
+    · <a href="examples/"><strong>Examples</strong></a>
+    · <a href="website/"><strong>Documentation</strong></a>
+    · <a href="website/datasets/catalog.mdx"><strong>Dataset Catalog</strong></a>
+  </p>
+</div>
 
-本公开仓库用于放置官网内容、说明文档和可运行配置示例，不作为完整产品源码开源仓库。
+---
 
-Included:
+Promptbeat turns **targets, scenarios, seed sources, attack recipes, and provider adapters** into reproducible red-team cases. It generates attacks, evaluates real LLM or Agent targets, normalizes evidence, and produces traceable reports and dataset artifacts.
 
-- `website/` — Mintlify documentation site with English and Chinese pages.
-- `examples/` — public Promptbeat configuration examples.
-- `subscriptions/` — seed-source subscription templates for dataset-started evaluation.
+Promptbeat 将 **目标画像、风险场景、种子来源、攻击策略与执行适配器** 组合为可复现的红队用例，并贯通攻击生成、真实靶标评测、结果归一化、证据留存与报告输出。
 
-包含内容：
+Promptbeat is distributed as prebuilt binary packages. This repository is **example-first** and primarily provides runnable configurations, dataset subscription templates, and product documentation.
 
-- `website/` — Mintlify 官网文档，包含英文和中文页面。
-- `examples/` — Promptbeat 公开配置示例。
-- `subscriptions/` — 从数据集启动评测的 seed source 订阅模板。
+Promptbeat 当前以预构建二进制包分发。本仓库以**可运行示例**为主，主要提供评测配置、数据集订阅模板与产品文档。
 
-Not included:
+<table>
+  <tr>
+    <td width="25%"><strong>🎯 Scenario-driven</strong><br />以风险场景、成功标准和 Judge 策略组织评测，而不是只执行孤立 Prompt。</td>
+    <td width="25%"><strong>🧬 Dataset-aware</strong><br />支持 Seed 文件、Dataset Subscription、多轮构造与完整样本血缘。</td>
+    <td width="25%"><strong>🤖 Agent-ready</strong><br />面向普通 LLM、HTTP Agent、Coding Agent 与自定义 Runtime Adapter。</td>
+    <td width="25%"><strong>🔎 Evidence-first</strong><br />保留回答、判定、工具调用、文件变化及其他可审计证据。</td>
+  </tr>
+</table>
 
-- Core product source code.
-- API service source code.
-- Raw benchmark datasets.
-- Private run artifacts, reports, credentials, or internal deployment files.
-
-不包含内容：
-
-- 核心产品源码。
-- API 服务源码。
-- 原始 benchmark 数据集。
-- 私有运行产物、报告、凭据或内部部署文件。
-
-## Core Idea / 核心思路
-
-Promptbeat treats a test as a scenario-driven decision, not just a model prompt.
-
-Promptbeat 把评测看成场景驱动的决策过程，而不只是单条 prompt 测试。
+## Core workflow / 核心流程
 
 ```text
 target profile
   + scenario / risk taxonomy
   + seed files or dataset subscriptions
+  + attack recipe
   + provider / agent adapter
-  -> generated attack cases
-  -> eval against real target
-  -> report with evidence
+  → generated attack cases
+  → evaluation against real targets
+  → normalized findings and evidence
+  → reports / benchmark artifacts
 ```
 
-Key abstractions / 关键抽象：
+### Core concepts / 核心抽象
 
 | Concept | Meaning | 中文说明 |
 | --- | --- | --- |
-| Target | The model or agent application under test. | 被测模型或 Agent 应用。 |
-| Scenario | The risk situation, success criteria, and judge strategy. | 风险场景、成功标准和判断方式。 |
-| Seed | Initial attack material before generation. | 生成前的初始攻击素材。 |
-| Subscription | A reusable seed-source plan, often backed by datasets. | 可复用的 seed 来源订阅，通常由数据集驱动。 |
-| Provider / Adapter | The execution contract for an LLM, HTTP service, Codex, or agent runtime. | LLM、HTTP 服务、Codex 或其他 Agent runtime 的执行接入方式。 |
+| **Target** | The LLM or Agent application under test. | 被测模型、Agent 或目标画像。 |
+| **Scenario** | Risk objective, success criteria, taxonomy binding, and judge strategy. | 风险场景、成功标准、分类映射和判定策略。 |
+| **Seed** | Initial attack material or intent before generation. | 生成前的初始攻击素材或攻击意图。 |
+| **Subscription** | A reusable seed-source plan, often backed by benchmark datasets. | 可复用的数据集或 Seed 来源订阅。 |
+| **Attack Recipe** | A repeatable transformation or attack strategy. | 可复用的攻击变换与策略。 |
+| **Provider / Adapter** | Execution contract for an LLM, HTTP service, Codex, or Agent runtime. | LLM、HTTP 服务、Codex 或 Agent Runtime 的执行接入契约。 |
 
-## Example Matrix / 示例矩阵
-
-| Path | Purpose | 中文说明 |
-| --- | --- | --- |
-| `examples/bootstrap/` | Minimal customer-support red-team example. | 最小电商客服红队示例。 |
-| `examples/llm-basic/` | Single LLM safety evaluation. | 单模型安全评测。 |
-| `examples/multi-llm/` | Compare multiple LLM providers side by side. | 多模型横向对比。 |
-| `examples/dataset-subscriptions/safety-baseline/` | Start from dataset subscriptions. | 从数据集订阅启动评测。 |
-| `examples/http-agent/` | Evaluate an agent exposed through an HTTP endpoint. | 评测通过 HTTP 暴露的 Agent。 |
-| `examples/codex_agent/` | Codex SDK coding-agent target example. | Codex SDK 编程 Agent 示例。 |
-| `examples/agent-adapters/` | Adapter templates for Claude Code, OpenCode, and OpenClaw. | Claude Code、OpenCode、OpenClaw 适配器模板。 |
-| `examples/scc_waf/` | SCC / AI-WAF oriented scenario example. | SCC / AI-WAF 场景示例。 |
-
+<a id="quick-start"></a>
 ## Quick Start / 快速开始
 
-Install or unpack a Promptbeat release package, then run from the package root.
+Download and unpack the release package for your platform, then run Promptbeat from the package root.
 
-安装或解压 Promptbeat release 包后，在包根目录执行：
+下载并解压对应平台的二进制发布包，然后在发布包根目录执行：
 
 ```bash
 ./bin/promptbeat --version
+
+./bin/promptbeat validate \
+  --config examples/llm-basic/promptbeat.yaml
 ```
 
-Validate a basic LLM example:
-
-校验基础 LLM 示例：
-
-```bash
-./bin/promptbeat validate --config examples/llm-basic/promptbeat.yaml
-```
-
-Generate attack cases:
-
-生成攻击用例：
+Generate adversarial cases:
 
 ```bash
 export OPENAI_API_KEY="sk-..."
 
 ./bin/promptbeat generate \
   --config examples/llm-basic/promptbeat.yaml \
-  --output-dir artifacts/llm-basic/generate
+  --output artifacts/llm-basic/cases.json
 ```
 
-Evaluate the generated config:
-
-执行评测：
+Evaluate and generate a report:
 
 ```bash
 ./bin/promptbeat eval \
-  --config artifacts/llm-basic/generate/generated_redteam.yaml \
+  --config artifacts/llm-basic/promptfoo.redteam.yaml \
   --output-dir artifacts/llm-basic/eval
-```
 
-Generate a report:
-
-生成报告：
-
-```bash
 ./bin/promptbeat report \
-  --eval-result artifacts/llm-basic/eval/evaluation_result.json \
+  --input artifacts/llm-basic/eval/evaluation_result.json \
   --output artifacts/llm-basic/report.html
 ```
 
-## Dataset Subscriptions / 数据集订阅
+## Start with examples / 从示例开始
 
-Promptbeat can load initial seeds from dataset subscriptions instead of hand-written seed files.
+The fastest way to understand Promptbeat is to select the example closest to your target, copy it into a project workspace, and replace the target and provider settings.
 
-Promptbeat 支持通过 dataset subscription 加载初始 seed，而不必在每个项目里手写 `seeds.yaml`。
+理解 Promptbeat 最快的方式，是从最接近被测系统的示例出发，复制配置后替换 Target、Provider 与场景参数。
 
-Example:
+| Example | Purpose | 中文说明 |
+| --- | --- | --- |
+| `examples/bootstrap/` | Minimal customer-support red-team run. | 最小客服红队示例。 |
+| `examples/llm-basic/` | Single-LLM safety evaluation. | 单模型安全评测。 |
+| `examples/multi-llm/` | Compare multiple providers side by side. | 多模型横向对比。 |
+| `examples/dataset-subscriptions/safety-baseline/` | Start from dataset subscriptions. | 从数据集订阅启动评测。 |
+| `examples/http-agent/` | Evaluate an Agent exposed through HTTP. | 评测通过 HTTP 暴露的 Agent。 |
+| `examples/codex_agent/` | Codex SDK coding-agent target. | Codex SDK 编程 Agent 示例。 |
+| `examples/agent-adapters/` | Adapter templates for Agent runtimes. | Agent Runtime 适配器模板。 |
+| `examples/china-compliance/` | Risk taxonomy and China compliance walkthrough. | 风险分类与中国合规示例。 |
+| `examples/scc_waf/` | SCC / AI-WAF-oriented scenario. | SCC / AI-WAF 场景示例。 |
+
+## Dataset subscriptions / 数据集订阅
+
+Promptbeat can load initial attack material from reusable dataset subscriptions instead of maintaining a separate handwritten `seeds.yaml` for every project.
 
 ```yaml
 seeds:
@@ -144,9 +136,7 @@ seeds:
         limit: 5
 ```
 
-Raw datasets are not bundled in this public repository or release examples. Point Promptbeat to a local raw dataset directory when needed:
-
-公开仓库和 release 示例不内置原始数据集。需要使用本地数据集时，可以指定 raw dataset 目录：
+Raw benchmark datasets are not bundled with release examples. Point Promptbeat to a local raw dataset directory when needed:
 
 ```bash
 export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
@@ -155,60 +145,14 @@ export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
   --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml
 ```
 
-The subscription file can reference catalog datasets such as HarmBench, JailbreakBench behaviors, Do-Not-Answer, XSTest, ToxicChat, ALERT, JADE-DB, BeaverTails, OR-Bench, SALAD-Bench, and others when their raw files are available locally.
+The catalog supports sources such as HarmBench, JailbreakBench behaviors, Do-Not-Answer, XSTest, ToxicChat, ALERT, JADE-DB, BeaverTails, OR-Bench, and SALAD-Bench when their raw files are available locally.
 
-当本地 raw 文件可用时，订阅文件可以引用 HarmBench、JailbreakBench behaviors、Do-Not-Answer、XSTest、ToxicChat、ALERT、JADE-DB、BeaverTails、OR-Bench、SALAD-Bench 等数据集。
+## Supported target patterns / 靶标接入形态
 
-## Agent Targets / Agent 靶标
+- Standard LLM providers.
+- HTTP services wrapping business Agents.
+- Codex SDK and coding-agent runtimes.
+- Claude Code, OpenCode, OpenClaw, or internal systems through adapters.
+- Controlled Target Lab / Inspect environments.
 
-Promptbeat models agent applications as first-class targets. A target can be:
-
-Promptbeat 将 Agent 应用作为一等靶标建模。target 可以是：
-
-- A normal LLM provider.
-- An HTTP service wrapping a business agent.
-- Codex SDK / coding-agent runtime.
-- Claude Code, OpenCode, OpenClaw, or internal agent through an adapter.
-- A future Inspect / Target Lab controlled environment.
-
-对应中文：
-
-- 普通 LLM provider。
-- 包装业务 Agent 的 HTTP 服务。
-- Codex SDK / 编程 Agent runtime。
-- 通过 adapter 接入的 Claude Code、OpenCode、OpenClaw 或内部 Agent。
-- 后续由 Inspect / Target Lab 控制的环境。
-
-The important contract is that the adapter should expose the final answer and, when possible, trace evidence such as commands, tool calls, file changes, network events, or policy denials.
-
-关键契约是：adapter 应暴露最终回答，并尽可能提供 trace 证据，例如命令、工具调用、文件变化、网络事件或策略拒绝。
-
-## Website / 官网
-
-The documentation site lives in `website/` and is managed independently from product/runtime dependencies.
-
-官网位于 `website/`，其依赖独立管理，不和核心产品、API 服务或其他运行时依赖混在一起。
-
-```bash
-cd website
-npm install
-npm run dev
-```
-
-Mintlify hosting can deploy from the `website/` project root. Custom domains can be configured in the Mintlify dashboard after the docs project is connected.
-
-Mintlify 可以直接从 `website/` 目录部署。连接 docs 项目后，可以在 Mintlify 控制台配置自定义域名。
-
-## Status / 当前状态
-
-- Codex SDK path has a runnable example.
-- HTTP agent path is a generic runnable adapter pattern.
-- Dataset subscription loading supports catalog datasets when raw files are available locally.
-- Claude Code, OpenCode, and OpenClaw examples are adapter templates until connected to real runtimes and validated with saved reports.
-
-中文状态：
-
-- Codex SDK 路径已有可运行示例。
-- HTTP Agent 路径是通用可运行 adapter 形态。
-- Dataset subscription 在本地 raw 文件可用时支持 catalog 数据集。
-- Claude Code、OpenCode、OpenClaw 当前是 adapter 模板，需连接真实 runtime 并产出报告后才算完成验证。
+An adapter should expose the final answer and, when available, trace evidence such as commands, tool calls, file changes, network events, or policy denials.
