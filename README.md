@@ -9,9 +9,9 @@
   <p>
     <a href="https://github.com/tophant-ai/promptbeat/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/tophant-ai/promptbeat?style=flat&logo=github&label=Stars" /></a>
     <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-2dd288" />
-    <img alt="Binary distribution" src="https://img.shields.io/badge/distribution-binary-111111" />
+    <!-- <img alt="Binary distribution" src="https://img.shields.io/badge/distribution-binary-111111" /> -->
     <img alt="AI Red Teaming" src="https://img.shields.io/badge/AI-Red%20Teaming-7c3aed" />
-    <img alt="LLM and Agent targets" src="https://img.shields.io/badge/targets-LLM%20%2B%20Agent-2088FF" />
+    <!-- <img alt="LLM and Agent targets" src="https://img.shields.io/badge/targets-LLM%20%2B%20Agent-2088FF" /> -->
   </p>
 
   <p>
