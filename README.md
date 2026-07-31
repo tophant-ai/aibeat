@@ -32,14 +32,14 @@
     <a href="https://discord.gg/8A6mFckxZ"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" /></a>
   </p>
 
-  <video
-    src="demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm"
-    poster="demo/recordings/videos/hero.gif"
-    controls muted playsinline preload="metadata" width="960">
-    <a href="demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm">Watch the AI Beat walkthrough</a>
-  </video>
+  <a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm">
+    <img src="demo/recordings/videos/hero.gif" alt="PromptBeat running a live red-team evaluation in the terminal" width="960" />
+  </a>
 
-  <p><sub>Walkthrough — describe a scenario, generate attacks, run them against a real target, then open the evidence.</sub></p>
+  <p>
+    ▶ <b><a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm">Watch the full walkthrough</a></b><br />
+    <sub>Describe a scenario, generate attacks, run them against a real target, then open the evidence.</sub>
+  </p>
 </div>
 
 ---
