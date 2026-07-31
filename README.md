@@ -1,126 +1,205 @@
 <div align="center">
-  <img src="promptbeat-logo.svg" alt="Promptbeat logo" width="180" />
+  <p>
+    <img src="docs/assets/promptbeat-logo.svg" alt="PromptBeat logo" height="72" />
+    &nbsp;&nbsp;
+    <img src="docs/assets/agentbeat-logo.svg" alt="AgentBeat logo" height="72" />
+  </p>
 
-  <h1>Promptbeat</h1>
+  <h1>AI Beat · PromptBeat &amp; AgentBeat</h1>
 
-  <p><strong>Break your AI before they do.</strong></p>
-  <p>Scenario-driven AI red teaming for LLMs and agent applications.</p>
-  <p>面向 LLM 与 Agent 的场景驱动红队评测、数据集构建与证据化报告工具链。</p>
+  <p><strong>From prompt red teaming to agent behavior evidence.</strong></p>
+  <p>Scenario-driven safety evaluation for LLMs, RAG apps, and real agent runtimes.</p>
+  <p><a href="README.zh-CN.md"><strong>中文介绍</strong></a></p>
 
   <p>
-    <a href="https://github.com/tophant-ai/aibeat/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/tophant-ai/aibeat?style=flat&logo=github&label=Stars" /></a>
-    <a href="https://github.com/tophant-ai/aibeat/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/tophant-ai/aibeat?style=flat&label=release&color=2dd288" /></a>
-    <img alt="Binary distribution" src="https://img.shields.io/badge/distribution-binary-111111" />
+    <a href="https://github.com/tophant-ai/promptbeat/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/tophant-ai/promptbeat?style=flat&logo=github&label=Stars" /></a>
+    <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-2dd288" />
     <img alt="AI Red Teaming" src="https://img.shields.io/badge/AI-Red%20Teaming-7c3aed" />
-    <img alt="LLM and Agent targets" src="https://img.shields.io/badge/targets-LLM%20%2B%20Agent-2088FF" />
+    <img alt="LLM + Agent" src="https://img.shields.io/badge/targets-LLM%20%2B%20Agent-2088FF" />
+    <img alt="Evidence-first" src="https://img.shields.io/badge/evidence-answer%20%2B%20trace-111111" />
   </p>
 
   <p>
-    <a href="#quick-start"><strong>Quick Start</strong></a>
-    · <a href="https://github.com/tophant-ai/aibeat/releases"><strong>Releases</strong></a>
-    · <a href="https://promptbeat.mintlify.app"><strong>Docs</strong></a>
+    <a href="#why-aibeat"><strong>Why AI Beat</strong></a>
+    · <a href="#promptbeat--agentbeat"><strong>Products</strong></a>
+    · <a href="#quick-start"><strong>Quick Start</strong></a>
+    · <a href="https://github.com/tophant-ai/promptbeat/releases"><strong>Releases</strong></a>
     · <a href="examples/"><strong>Examples</strong></a>
-    · <a href="https://promptbeat.mintlify.app/datasets/catalog"><strong>Dataset Catalog</strong></a>
+    · <a href="website/"><strong>Docs</strong></a>
   </p>
+
+  <br />
+  <img src="demo/recordings/videos/hero.gif" alt="PromptBeat live red-team evaluation TUI" width="960" />
 </div>
 
 ---
 
-Promptbeat turns **targets, scenarios, seed sources, attack recipes, and provider adapters** into reproducible red-team cases. Generate attacks, evaluate real LLM or Agent targets, keep the evidence, and ship traceable reports.
+Stop treating AI safety as a one-off red-team project.
 
-Promptbeat 将 **目标画像、风险场景、种子来源、攻击策略与执行适配器** 组合成可复现的红队用例，贯通攻击生成、真实靶标评测、证据留存与报告输出。
-
-This public repository is **example-first**: runnable configs, dataset subscription templates, and product documentation. Promptbeat itself ships as prebuilt binary packages.
-
-本公开仓库以**可运行示例**为主，提供评测配置、数据集订阅模板与产品文档。Promptbeat 本体以预构建二进制包分发。
-
-<table>
-  <tr>
-    <td width="25%"><strong>🎯 Scenario-driven</strong><br />Organize evaluation around risk scenarios, success criteria, and judge policy — not isolated prompts.<br />以风险场景、成功标准和 Judge 策略组织评测。</td>
-    <td width="25%"><strong>🧬 Dataset-aware</strong><br />Start from seeds, dataset subscriptions, multi-turn construction, and full sample lineage.<br />支持 Seed、数据集订阅、多轮构造与样本血缘。</td>
-    <td width="25%"><strong>🤖 Agent-ready</strong><br />Cover plain LLMs, HTTP agents, coding agents, and custom runtime adapters.<br />覆盖普通 LLM、HTTP Agent、Coding Agent 与自定义 Adapter。</td>
-    <td width="25%"><strong>🔎 Evidence-first</strong><br />Keep answers, judgments, tool calls, file changes, and other auditable traces.<br />保留回答、判定、工具调用、文件变化等可审计证据。</td>
-  </tr>
-</table>
-
-## Why Promptbeat / 为什么选择 Promptbeat
-
-Most safety checks stop at a prompt and a yes/no label. Real agent failures span tools, files, commands, network, policies, and hidden verifiers. Promptbeat is built for that gap:
-
-- **Scenario first** — decide what risk you are proving, then generate or load the probes.
-- **Real targets** — evaluate the system you ship, not only a chat completion endpoint.
-- **Traceable results** — reports should explain *what failed* and *why it counts*, not only ASR.
-- **Repeatable workflow** — configs, seeds, adapters, and outputs stay reviewable by another engineer.
-
-多数安全检查停在“一条 prompt + 一个是否越狱”。真实 Agent 故障往往跨越工具、文件、命令、网络、策略和隐藏 verifier。Promptbeat 面向这条完整链路：
-
-- **场景优先**：先定义要证明的风险，再生成或加载探测样本。
-- **真实靶标**：评测你真正上线的系统，而不仅是 chat completion 接口。
-- **结果可解释**：报告要说明失败点与判定依据，而不是只给 ASR。
-- **流程可复现**：配置、种子、适配器和产物都能被他人复查。
-
-## Core workflow / 核心流程
+**PromptBeat** continuously finds and upgrades attack cases.  
+**AgentBeat** verifies whether a real agent actually crossed the line — with tools, files, and environment evidence, not just the final chat reply.
 
 ```text
-target profile
-  + scenario / risk taxonomy
-  + seed files or dataset subscriptions
-  + attack recipe
-  + provider / agent adapter
-  → generated attack cases
-  → evaluation against real targets
-  → normalized findings and evidence
-  → reports / benchmark artifacts
+PromptBeat: discover risk
+    → AgentBeat: verify real behavior
+    → findings + regression data feed the next round
 ```
 
-### Core concepts / 核心抽象
+> AI Beat is for **pre-release acceptance, continuous regression, and evidence-grade findings**.  
+> It does **not** replace a runtime WAF / gateway.
 
-| Concept | Meaning | 中文说明 |
-| --- | --- | --- |
-| **Target** | The LLM or Agent application under test. | 被测模型、Agent 或目标画像。 |
-| **Scenario** | Risk objective, success criteria, taxonomy binding, and judge strategy. | 风险场景、成功标准、分类映射和判定策略。 |
-| **Seed** | Initial attack material or intent before generation. | 生成前的初始攻击素材或攻击意图。 |
-| **Subscription** | A reusable seed-source plan, often backed by benchmark datasets. | 可复用的数据集或 Seed 来源订阅。 |
-| **Attack Recipe** | A repeatable transformation or attack strategy. | 可复用的攻击变换与策略。 |
-| **Provider / Adapter** | Execution contract for an LLM, HTTP service, Codex, or Agent runtime. | LLM、HTTP 服务、Codex 或 Agent Runtime 的执行接入契约。 |
+## Evidence-grade reports
 
-## Install / 安装
+Reports keep more than a score: overview metrics, model comparison, case-level drill-down, and runtime traces for retest.
 
-Download the latest binary package from [Releases](https://github.com/tophant-ai/aibeat/releases/latest), unpack it, and run Promptbeat from the package root.
+### Overview
 
-从 [Releases](https://github.com/tophant-ai/aibeat/releases/latest) 下载对应平台的二进制包，解压后在包根目录执行：
+<p align="center">
+  <img src="docs/assets/screenshots/readme-report-promptbeat.png" alt="PromptBeat evaluation report overview with PASS/FAIL counts and model performance" width="960" />
+</p>
 
-| Asset | Platform |
+<p align="center">
+  <img src="docs/assets/screenshots/readme-report-agentbeat.png" alt="AgentBeat runtime evaluation report for a coding-agent target" width="960" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/readme-report-cycle.png" alt="PromptBeat dataset build-cycle report with stable, rewrite, and reject outcomes" width="960" />
+</p>
+
+### Case Explorer & evidence detail
+
+Drill from the global result into every execution: status, risk, target/model, then open the case sheet for expected vs actual, judge rationale, and agent trace.
+
+<p align="center">
+  <img src="docs/assets/screenshots/readme-case-explorer-promptbeat.png" alt="PromptBeat Case Explorer filtered to FAIL cases" width="960" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/readme-case-explorer-agentbeat.png" alt="AgentBeat Case Explorer listing coding-agent cases" width="960" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/readme-case-detail-agentbeat.png" alt="AgentBeat case detail with Expected vs Actual, judge decision, and Agent Trace" width="960" />
+</p>
+
+| Screenshot | What it shows |
 | --- | --- |
-| `promptbeat-*-darwin-arm64.tar.gz` | macOS Apple Silicon |
-| `promptbeat-*-darwin-x64.tar.gz` | macOS Intel |
-| `promptbeat-*-linux-x64.tar.gz` | Linux x86_64 |
+| PromptBeat evaluation | Multi-model safety eval overview — PASS / FAIL / REVIEW plus ASR-style metrics |
+| AgentBeat evaluation | Real agent runtime report (Codex app-server) with trace-backed findings |
+| Dataset build cycle | Promote / rewrite / reject outcomes that grow a regression baseline |
+| Case Explorer | Case-level list with status, risk, model, and evidence actions |
+| Case detail | Expected vs actual, judge policy, and Agent Trace for a FAIL case |
+
+Source demos: `demo/reports/demo-agent-showcase.html`, `demo/reports/demo-codex-agent.html`, `demo/reports/cycle-report.html`.
+
+## Why AI Beat
+
+Most teams still rely on one of these:
+
+| Common approach | What breaks |
+| --- | --- |
+| Manual red teaming | Hard to scale, hard to reproduce, hard to regress after every model/prompt change |
+| Fixed benchmark sets | Limited coverage; new attack expressions keep appearing |
+| Single score reports | No durable baseline when models, tools, or policies change |
+| Answer-only judges | An agent can look safe in text while leaking secrets via tools or files |
+
+AI Beat turns that into an engineering loop:
+
+```text
+scenario + seeds/datasets + attack strategies
+  → real target execution
+  → judge + evidence
+  → promote / rewrite / reject
+  → versioned regression baseline
+```
+
+## PromptBeat & AgentBeat
+
+| | **PromptBeat** | **AgentBeat** |
+| --- | --- | --- |
+| One-line role | **Find risk** — generate, run, score, and grow attack cases | **Prove the step** — observe runtime behavior and collect evidence |
+| Best for | LLMs, RAG apps, simple agents, model comparison | Tool-using / coding / workflow agents |
+| Core question | Is there a security risk, and can I build a reusable test set? | Did the agent actually overreach — which tool, file, or step? |
+| Main evidence | Attack case, model output, risk score, finding | Tool calls, command traces, file/env diffs, side effects |
+| Typical output | Red-team cases, ASR / coverage, golden datasets | Runtime evidence chain, reproducible attack path, fix/retest pack |
+
+### PromptBeat — generate, execute, improve
+
+PromptBeat is the **test-generation and evaluation layer**:
+
+1. **Scenario-driven risk modeling** — define who you test, which risks matter, and what counts as failure  
+2. **Seed & dataset intake** — public benchmarks, internal corpora, or subscription packs  
+3. **Attack generation & rewrite** — expand expressions, strategies, and encodings  
+4. **Real target execution** — LLM APIs, HTTP agents, coding agents, adapters  
+5. **Standardized judging** — PASS / FAIL / REVIEW with severity  
+6. **Data loop** — promote hard hits, rewrite near-misses, reject noise into a versioned baseline
+
+**What you can do with PromptBeat**
+
+- Red-team an LLM or RAG app before release  
+- Compare models/providers on the **same attack set and judge**  
+- Build a living safety baseline instead of a static spreadsheet  
+- Start from dataset subscriptions (HarmBench, JailbreakBench, JADE-DB, SALAD-Bench, and more when local raw data is available)  
+- Keep lineage from seed → generated case → finding → report  
+
+### AgentBeat — answer + process + environment
+
+A safe-looking reply can still be a failure:
+
+```text
+Task: generate a support package for troubleshooting
+Answer: looks fine — no secrets in the chat
+Process: ran  env | sort > env_dump.txt
+Environment: sensitive values written to disk  → FAIL
+```
+
+AgentBeat is the **runtime observation and forensics layer**:
+
+1. Connect the real agent (SDK / HTTP / adapter)  
+2. Run scenario-bound tasks with explicit forbidden boundaries  
+3. Capture **answer + execution trace + environment change**  
+4. Locate the step that crossed the line  
+5. Package findings for fix verification and retest  
+
+Use PromptBeat when you need coverage and a growing attack corpus.  
+Use AgentBeat when “it refused in text” is not enough — you need to know **which action** failed.
+
+## Product boundary
+
+| AI Beat is | AI Beat is not |
+| --- | --- |
+| Automated evaluation on real targets | A runtime blocking gateway / WAF |
+| Evidence-grade findings + regression data | A dump of attack prompts only |
+| A complement to human red teaming | A full replacement for expert review on critical findings |
+| PromptBeat (cases) + AgentBeat (runtime proof) | A claim of “100% coverage” or “absolute safety” |
+
+## Quick Start
+
+Download a release for your platform, unpack it, then from the package root:
 
 ```bash
-tar xf promptbeat-*-<platform>.tar.gz
-cd promptbeat-*-<platform>
 ./bin/promptbeat --version
 ```
 
-No separate Python, Node.js, or promptfoo install is required for the release package.
-
-使用发布包时，无需额外安装 Python、Node.js 或 promptfoo。
-
-<a id="quick-start"></a>
-## Quick Start / 快速开始
-
-Clone this repository for examples, then point the binary at a starter config:
-
-克隆本仓库获取示例，再用二进制指向 starter 配置：
+Configure provider roles for the basic LLM example:
 
 ```bash
-git clone https://github.com/tophant-ai/aibeat.git
-cd aibeat
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="sk-..."
 
-export OPENAI_API_KEY="sk-..."
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="https://api.openai.com/v1"
+export JUDGE_API_KEY="sk-..."
 
-./bin/promptbeat validate \
-  --config examples/llm-basic/promptbeat.yaml
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="https://api.openai.com/v1"
+export TARGET_API_KEY="sk-..."
+```
+
+```bash
+# validate → generate → evaluate → report
+./bin/promptbeat validate --config examples/llm-basic/promptbeat.yaml
 
 ./bin/promptbeat generate \
   --config examples/llm-basic/promptbeat.yaml \
@@ -135,32 +214,30 @@ export OPENAI_API_KEY="sk-..."
   --output artifacts/llm-basic/report.html
 ```
 
-> Tip: put the downloaded `./bin/promptbeat` on your `PATH`, or run it with an absolute path next to this checkout.
->
-> 提示：把下载的 `./bin/promptbeat` 放到 `PATH`，或在本仓库旁用绝对路径调用。
+Prefer source checkout?
 
-## Start with examples / 从示例开始
+```bash
+cd core/go
+go run ./cmd/promptbeat -- --version
+```
 
-Pick the example closest to your target, copy it into a project workspace, and replace target / provider settings.
+## Start with examples
 
-选择最接近被测系统的示例，复制后替换 Target、Provider 与场景参数。
+Pick the closest target shape, copy the example, then swap providers and scenarios.
 
-| Example | Purpose | 中文说明 |
-| --- | --- | --- |
-| [`examples/bootstrap/`](examples/bootstrap/) | Minimal customer-support red-team run. | 最小客服红队示例。 |
-| [`examples/llm-basic/`](examples/llm-basic/) | Single-LLM safety evaluation. | 单模型安全评测。 |
-| [`examples/multi-llm/`](examples/multi-llm/) | Compare multiple providers side by side. | 多模型横向对比。 |
-| [`examples/dataset-subscriptions/safety-baseline/`](examples/dataset-subscriptions/safety-baseline/) | Start from dataset subscriptions. | 从数据集订阅启动评测。 |
-| [`examples/http-agent/`](examples/http-agent/) | Evaluate an Agent exposed through HTTP. | 评测通过 HTTP 暴露的 Agent。 |
-| [`examples/codex_agent/`](examples/codex_agent/) | Codex SDK coding-agent target. | Codex SDK 编程 Agent 示例。 |
-| [`examples/agent-adapters/`](examples/agent-adapters/) | Adapter templates for Claude Code / OpenCode / OpenClaw. | Agent Runtime 适配器模板。 |
-| [`examples/scc_waf/`](examples/scc_waf/) | SCC / AI-WAF-oriented scenario. | SCC / AI-WAF 场景示例。 |
+| Example | Use it when |
+| --- | --- |
+| `examples/bootstrap/` | You want the smallest end-to-end path |
+| `examples/llm-basic/` | Single-model safety eval |
+| `examples/multi-llm/` | Side-by-side provider comparison |
+| `examples/dataset-subscriptions/safety-baseline/` | Start from reusable dataset subscriptions |
+| `examples/http-agent/` | Business agent exposed over HTTP |
+| `examples/codex_agent/` | Coding agent / runtime-trace style evaluation |
+| `examples/agent-adapters/` | Custom agent runtime adapters |
+| `examples/china-compliance/` | Risk taxonomy + China compliance walkthrough |
+| `examples/scc_waf/` | SCC / AI-WAF oriented scenarios |
 
-## Dataset subscriptions / 数据集订阅
-
-Load initial attack material from reusable dataset subscriptions instead of handwriting a new `seeds.yaml` for every project.
-
-通过可复用的数据集订阅加载初始攻击素材，无需为每个项目手写 `seeds.yaml`。
+### Dataset subscriptions
 
 ```yaml
 seeds:
@@ -173,60 +250,71 @@ seeds:
         limit: 5
 ```
 
-Raw benchmark datasets are not bundled. Point Promptbeat at a local raw dataset directory when needed:
-
-原始 benchmark 数据默认不随示例打包。需要时把 Promptbeat 指向本地原始数据集目录：
+Large raw benchmarks are not bundled. Point PromptBeat at a local raw dataset root when needed:
 
 ```bash
 export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
-
-./bin/promptbeat validate \
-  --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml
 ```
 
-Catalog sources include HarmBench, JailbreakBench behaviors, Do-Not-Answer, XSTest, ToxicChat, ALERT, JADE-DB, BeaverTails, OR-Bench, and SALAD-Bench when raw files are available locally.
+## Supported targets
 
-See the live catalog: [Dataset Catalog](https://promptbeat.mintlify.app/datasets/catalog)
+- Standard LLM providers  
+- HTTP services wrapping business agents  
+- Codex SDK and coding-agent runtimes  
+- Claude Code, OpenCode, OpenClaw, or internal systems via adapters  
+- Controlled Target Lab / Inspect-style environments  
 
-## Supported targets / 支持的靶标形态
+Adapters should return the final answer and, when available, **trace evidence**: commands, tool calls, file changes, network events, policy denials.
 
-- Standard LLM providers
-- HTTP services wrapping business agents
-- Codex SDK and coding-agent runtimes
-- Claude Code, OpenCode, OpenClaw, or internal systems through adapters
-- Controlled Target Lab / Inspect environments
+## Core concepts
 
-Adapters should expose the final answer and, when available, trace evidence such as commands, tool calls, file changes, network events, or policy denials.
-
-## Documentation / 文档
-
-| Resource | Link |
+| Concept | Meaning |
 | --- | --- |
-| Product docs | [promptbeat.mintlify.app](https://promptbeat.mintlify.app) |
-| Getting started | [Scenario-driven evaluation](https://promptbeat.mintlify.app/getting-started/scenario-driven-evaluation) |
-| Dataset catalog | [Datasets](https://promptbeat.mintlify.app/datasets/catalog) |
-| Releases | [github.com/tophant-ai/aibeat/releases](https://github.com/tophant-ai/aibeat/releases) |
-| Website source in this repo | [`website/`](website/) |
+| **Target** | Model, app, or agent under test |
+| **Scenario** | Risk objective, success/failure boundary, taxonomy, judge policy |
+| **Seed** | Initial attack material before generation |
+| **Subscription** | Reusable dataset / seed-source plan |
+| **Attack recipe** | Repeatable strategy or transform |
+| **Provider / Adapter** | Execution contract for LLMs, HTTP, CLI, or agent runtimes |
 
-## Repository layout / 仓库结构
+## Skills (lower the barrier)
+
+Natural-language entry points for AI coding assistants:
+
+| Skill | Purpose |
+| --- | --- |
+| `promptbeat-getting-started` | Route into the right evaluation path |
+| `promptbeat-select-risk-pack` | Choose scenarios, seeds, and strategies |
+| `promptbeat-run-quick-eval` | Run a small eval and locate artifacts |
+| `promptbeat-connect-coding-agent` | Wire a coding-agent target |
+| `promptbeat-debug-run` | Diagnose common config/runtime issues |
+
+See `promptbeat-skills/`.
+
+## Repository map
+
+This repo is **product + examples first** (binary distribution for day-to-day use):
 
 | Path | Purpose |
 | --- | --- |
-| `examples/` | Runnable Promptbeat projects for LLM, HTTP Agent, coding-agent, and dataset workflows. |
-| `subscriptions/` | Reusable dataset subscription configs. |
-| `website/` | Documentation website source. |
-| `promptbeat-logo.svg` | Brand mark used by this homepage. |
+| `core/go/` | PromptBeat CLI core |
+| `examples/` | Runnable LLM / agent / compliance projects |
+| `subscriptions/` | Dataset subscription packs |
+| `promptbeat-skills/` | Assistant skills for common workflows |
+| `docs/` | Design notes, promo messaging, methodology |
+| `website/` | Documentation site source |
+| `api/` | Web/API service around generation capabilities |
 
-## Security note / 安全说明
+## Learn more
 
-Promptbeat is a red-teaming toolkit. Use it only on systems you own or are explicitly authorized to test. Generated prompts and evaluation artifacts may contain sensitive or harmful content — handle outputs carefully and keep them out of public issue trackers unless sanitized.
+- [Usage guide](docs/usage-guide.md)  
+- [Scenario-driven evaluation](website/getting-started/scenario-driven-evaluation.mdx)  
+- [Agent targets](website/targets/agent-targets.mdx)  
+- [Dataset catalog](website/datasets/catalog.mdx)  
+- [Releases](https://github.com/tophant-ai/promptbeat/releases)  
 
-Promptbeat 是红队评测工具。请仅在你拥有或已获明确授权的系统上使用。生成样本与评测产物可能包含敏感或有害内容，请妥善保管，避免未经脱敏直接公开。
+---
 
-## Community / 社区
-
-- Star the repo if Promptbeat helps your AI safety workflow.
-- Open issues for bugs, docs gaps, and public example requests.
-- Prefer private channels for vulnerability reports against production systems.
-
-如果 Promptbeat 对你的 AI 安全评测有帮助，欢迎 Star。公开 issue 适合反馈 bug、文档缺口和示例需求；针对生产系统的漏洞报告请走私密渠道。
+<div align="center">
+  <sub>AI Beat Series · PromptBeat finds risk · AgentBeat proves the step · Continuous retest keeps every AI update honest</sub>
+</div>
