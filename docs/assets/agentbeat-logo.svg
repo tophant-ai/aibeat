@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="252" viewBox="0 0 260 252" role="img" aria-labelledby="title desc">
+  <title id="title">Agentbeat logo</title>
+  <desc id="desc">A fast fist forming the letter A on a gold rounded square.</desc>
+  <path d="M 20 13 L 17 17 L 17 228 L 18 230 L 22 234 L 233 234 L 235 233 L 239 229 L 239 17 L 238 15 L 236 13 L 232 12 L 231 11 L 25 11 L 24 12 Z" fill="#f5c518"/>
+  <g fill="#000000">
+    <path d="M 44 196 L 92 196 L 100 178 L 160 178 L 168 196 L 216 196 L 154 60 L 106 60 Z M 112 158 L 130 116 L 148 158 Z" fill-rule="evenodd"/>
+    <path d="M 40 132 L 78 132 L 74 142 L 36 142 Z" />
+    <path d="M 30 108 L 70 108 L 66 118 L 26 118 Z" />
+    <path d="M 22 84 L 64 84 L 60 94 L 18 94 Z" />
+  </g>
+</svg>

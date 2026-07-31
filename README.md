@@ -1,5 +1,9 @@
 <div align="center">
-  <img src="docs/assets/promptbeat-logo.svg" alt="PromptBeat" width="96" />
+  <p>
+    <img src="docs/assets/promptbeat-logo.svg" alt="PromptBeat logo" height="72" />
+    &nbsp;&nbsp;
+    <img src="docs/assets/agentbeat-logo.svg" alt="AgentBeat logo" height="72" />
+  </p>
 
   <h1>AI Beat</h1>
 
