@@ -32,12 +32,12 @@
     <a href="https://discord.gg/8A6mFckxZ"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" /></a>
   </p>
 
-  <a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm">
+  <a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.mp4">
     <img src="demo/recordings/videos/hero.gif" alt="PromptBeat 在终端里实时执行红队评测" width="960" />
   </a>
 
   <p>
-    ▶ <b><a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.webm">观看完整使用视频介绍</a></b><br />
+    ▶ <b><a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.mp4">观看完整使用视频介绍</a></b><br />
     <sub>描述场景、生成攻击、打到真实目标，然后打开证据。</sub>
   </p>
 </div>
