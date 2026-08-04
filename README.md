@@ -16,7 +16,7 @@
 
   <p>
     <a href="#quick-start"><b>Quick start</b></a> ·
-    <a href="#what-the-artifacts-look-like"><b>Artifacts</b></a> ·
+    <a href="#what-can-you-do-with-ai-beat"><b>What can you do</b></a> ·
     <a href="#which-one-do-i-need"><b>Which one do I need</b></a> ·
     <a href="#datasets"><b>Datasets</b></a> ·
     <a href="#community"><b>Community</b></a> ·
@@ -30,14 +30,6 @@
     <img alt="Targets" src="https://img.shields.io/badge/targets-LLM%20%7C%20RAG%20%7C%20agent-2088FF" />
     <img alt="Evidence" src="https://img.shields.io/badge/evidence-answer%20%2B%20trace%20%2B%20env-111111" />
     <a href="https://discord.gg/8A6mFckxZ"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" /></a>
-  </p>
-
-
-https://github.com/user-attachments/assets/a2ca5f57-9a10-4f4c-b167-2a3d83f12544
-
-  <p>
-    <sub>Describe a scenario, generate attacks, run them against a real target, then open the evidence ·
-    <a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.mp4">download the walkthrough</a></sub>
   </p>
 </div>
 
@@ -57,6 +49,21 @@ flowchart LR
   E --> F["promote / rewrite / reject"]
   F -.->|"versioned regression set"| B
 ```
+
+## What can you do with AI Beat?
+
+- **Describe a risk scenario, get runnable attacks.** You write the target and what "failure" means in declarative YAML; PromptBeat generates cases mapped to taxonomies and compliance controls you never hand-wrote. See [What the artifacts look like](#what-the-artifacts-look-like).
+- **Run against the real target, not a mock.** Attacks execute against your actual LLM, RAG, or agent endpoint, and the judge scores PASS / FAIL / REVIEW from rules, not vibes.
+- **Keep evidence you can reopen.** Every run stores the answer, a typed trace, and environment changes — so a finding is something you can diff and retest after the next model upgrade.
+- **Catch what a chat-only judge misses (AgentBeat).** An agent can refuse in chat while writing your secrets to disk through a tool call; AgentBeat captures the tool calls, commands, and file/env diffs that make that a FAIL.
+- **Grow a regression corpus, don't throw runs away.** Promote, rewrite, or reject cases across rounds into a versioned dataset that becomes next round's baseline. See [Datasets](#datasets).
+- **Compare models on one scenario.** Run the same attack set across several targets side by side to see pass rate and attack-success rate per model.
+
+<sub>The full walkthrough — describe a scenario, generate attacks, run them against a real target, then open the evidence:</sub>
+
+<p align="center">
+  <img src="demo/recordings/videos/promptbeat-evidence-flow.gif" alt="A failed banking-agent case in the AI Beat report: expected refusal versus the actual unauthorized transfer, the judge confirming bank_ledger.transfer was called without authorization, the trace tracing it to an untrusted email, and the resulting account balance change" width="820" />
+</p>
 
 ## Quick start
 
