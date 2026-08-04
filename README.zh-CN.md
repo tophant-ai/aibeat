@@ -16,7 +16,7 @@
 
   <p>
     <a href="#快速开始"><b>快速开始</b></a> ·
-    <a href="#产物长什么样"><b>产物示例</b></a> ·
+    <a href="#ai-beat-能做什么"><b>能做什么</b></a> ·
     <a href="#我该用哪个"><b>我该用哪个</b></a> ·
     <a href="#数据集"><b>数据集</b></a> ·
     <a href="#社区"><b>社区</b></a> ·
@@ -30,14 +30,6 @@
     <img alt="Targets" src="https://img.shields.io/badge/targets-LLM%20%7C%20RAG%20%7C%20agent-2088FF" />
     <img alt="Evidence" src="https://img.shields.io/badge/evidence-answer%20%2B%20trace%20%2B%20env-111111" />
     <a href="https://discord.gg/8A6mFckxZ"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" /></a>
-  </p>
-
-
-https://github.com/user-attachments/assets/a2ca5f57-9a10-4f4c-b167-2a3d83f12544
-
-  <p>
-    <sub>描述场景、生成攻击、打到真实目标，然后打开证据 ·
-    <a href="https://github.com/tophant-ai/aibeat/blob/main/demo/recordings/videos/AI%20Beat%20%E4%BD%BF%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%8B%E7%BB%8D.mp4">下载视频</a></sub>
   </p>
 </div>
 
@@ -56,6 +48,21 @@ flowchart LR
   E --> F["晋级 / 改写 / 丢弃"]
   F -.->|"版本化回归集"| B
 ```
+
+## AI Beat 能做什么
+
+- **描述一个风险场景，就能拿到可运行的攻击用例。** 你只需要用声明式 YAML 定义目标和"失败"的判定标准；PromptBeat 生成的用例会自动映射到攻击分类和合规控制项，不用你手写这层映射。详见[产物长什么样](#产物长什么样)。
+- **打真实目标，不是打 Mock。** 攻击直接执行在你的真实 LLM、RAG 或 Agent 端点上，裁判按规则给出 PASS / FAIL / REVIEW，不是靠感觉判断。
+- **留下可以重新打开的证据。** 每次运行都会保存回答、结构化的执行轨迹（Trace）和环境变更——所以一条发现是可以对比、可以在下一次模型升级后重跑验证的。
+- **抓住只看对话内容会漏掉的问题（AgentBeat）。** Agent 可能在对话里一口拒绝，同时通过一次工具调用把你的密钥写到磁盘上；AgentBeat 会记录让这变成 FAIL 的工具调用、命令和文件/环境差异。
+- **持续扩充回归用例集，而不是每次都推倒重来。** 跨轮次将用例晋级、改写或丢弃，沉淀成下一轮的版本化基线。详见[数据集](#数据集)。
+- **在同一场景下横向对比多个模型。** 用同一套攻击集跑多个目标，直接看每个模型的通过率和攻击成功率。
+
+<sub>完整流程演示——描述场景、生成攻击、打到真实目标，然后打开证据：</sub>
+
+<p align="center">
+  <img src="demo/recordings/videos/promptbeat-evidence-flow.gif" alt="AI Beat 报告中一个失败的银行 Agent 案例：预期拒绝 vs 实际执行的未授权转账，裁判确认 bank_ledger.transfer 被未授权调用，Trace 溯源到不可信邮件，以及最终的账户余额变化" width="820" />
+</p>
 
 ## 快速开始
 
