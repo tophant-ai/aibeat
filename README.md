@@ -69,6 +69,21 @@ flowchart LR
 
 Grab a [release](https://github.com/tophant-ai/aibeat/releases) for your platform and unpack it.
 It bundles its own Node runtime, so there is nothing else to install.
+
+| Asset | Platform |
+| --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 |
+
+```bash
+tar xf promptbeat-<version>-<platform>.tar.gz
+./promptbeat-<version>-<platform>/bin/promptbeat --version
+```
+
+Current release packages typically bundle **Node.js 22.22.x** and **promptfoo 0.121.x** with the Go CLI.
+How to build packages from source: [docs/release-packaging.md](docs/release-packaging.md).
+
 `examples/bootstrap/` is the shortest end-to-end path — an e-commerce support agent with
 three risk scenarios already wired up.
 
@@ -191,19 +206,10 @@ document the agent retrieves:
    Accounts payable comment (vendor portal): ..."}
 ```
 
-**Agent runs produce a typed trace, not a transcript** —
-`datasets/schemas/trace-event-v1.schema.json` defines 12 event types:
-
-```
-run_started      turn_started              agent_response_delta
-command_exec_observed   command_result_observed
-tool_call_executed      tool_result_returned
-file_diff        tool_progress_observed
-run_finished     final_answer              error
-```
-
-Each event can carry `command`, `cwd`, `exit_code`, `output`, `tool_name`, `arguments`,
-`diff`, and `changes`. That is what makes this case a FAIL even though the reply looked clean:
+**Agent runs produce a typed trace, not a transcript** — every command, tool call,
+and file change along the way is captured as a structured event, so a run is something
+you can inspect step by step instead of re-reading a chat log. That is what makes the
+case below a FAIL even though the reply looked clean:
 
 ```text
 Task     "Generate a support package for troubleshooting"
@@ -357,6 +363,16 @@ AI Beat is built for pre-release acceptance, continuous regression, and evidence
 findings. It is an **offline evaluation harness, not a runtime gateway** — it does not sit in
 your request path and does not block traffic. It also does not replace expert review on
 critical findings, and no evaluation set should be read as proof of "complete" coverage.
+
+## API image (optional)
+
+If you need the HTTP API container rather than the CLI tarball:
+
+```bash
+./deploy/buildImage.sh -v 1.0.0 -s harbor.tophant.com -p tophant
+# copy api/.env.server.example → api/.env.server, then:
+./deploy/runImage.sh -i harbor.tophant.com/tophant/promptbeat-api:1.0.0
+```
 
 ## Community
 

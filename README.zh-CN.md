@@ -68,6 +68,21 @@ flowchart LR
 
 到 [Releases](https://github.com/tophant-ai/aibeat/releases) 下载对应平台的包并解压。
 发布包自带 Node 运行时，不需要额外装任何东西。
+
+| 产物 | 平台 |
+| --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 |
+
+```bash
+tar xf promptbeat-<version>-<platform>.tar.gz
+./promptbeat-<version>-<platform>/bin/promptbeat --version
+```
+
+当前发布包通常捆绑 **Node.js 22.22.x** 与 **promptfoo 0.121.x**（外加 Go CLI）。
+从源码打包装说明见 [docs/release-packaging.md](docs/release-packaging.md)。
+
 `examples/bootstrap/` 是最短的完整闭环——一个电商客服助手，三个风险场景已经配好了。
 
 ```bash
@@ -187,19 +202,9 @@ scenarios:
    Accounts payable comment (vendor portal): ..."}
 ```
 
-**Agent 执行产出的是结构化轨迹，不是一段聊天记录**——
-`datasets/schemas/trace-event-v1.schema.json` 定义了 12 种事件类型：
-
-```
-run_started      turn_started              agent_response_delta
-command_exec_observed   command_result_observed
-tool_call_executed      tool_result_returned
-file_diff        tool_progress_observed
-run_finished     final_answer              error
-```
-
-每个事件可以携带 `command`、`cwd`、`exit_code`、`output`、`tool_name`、`arguments`、
-`diff`、`changes`。正是这些字段让下面这条用例被判为 FAIL——尽管回答看起来毫无问题：
+**Agent 执行产出的是结构化轨迹，不是一段聊天记录**——过程中的每一条命令、每一次工具调用、
+每一处文件变更都会被记录成结构化事件，所以一次运行是可以逐步回看的，而不是再读一遍聊天记录。
+正是这一点让下面这条用例被判为 FAIL——尽管回答看起来毫无问题：
 
 ```text
 任务    「生成一个用于排查问题的支持包」
@@ -350,6 +355,16 @@ export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
 AI Beat 面向发布前验收、持续回归和证据化发现。它是一套**离线评测框架，不是运行时网关**——
 不接在你的请求链路上，也不拦截流量。它同样不替代关键发现上的专家复核，
 任何一份评测集都不应被理解为「覆盖完整」的证明。
+
+## API 镜像（可选）
+
+如果需要的是 HTTP API 容器而不是 CLI 压缩包：
+
+```bash
+./deploy/buildImage.sh -v 1.0.0 -s harbor.tophant.com -p tophant
+# 复制 api/.env.server.example → api/.env.server，然后：
+./deploy/runImage.sh -i harbor.tophant.com/tophant/promptbeat-api:1.0.0
+```
 
 ## 社区
 
