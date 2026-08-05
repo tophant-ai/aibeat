@@ -61,7 +61,9 @@ flowchart LR
 <sub>完整流程演示——描述场景、生成攻击、打到真实目标，然后打开证据：</sub>
 
 <p align="center">
-  <img src="demo/recordings/videos/promptbeat-evidence-flow.gif" alt="AI Beat 报告中一个失败的银行 Agent 案例：预期拒绝 vs 实际执行的未授权转账，裁判确认 bank_ledger.transfer 被未授权调用，Trace 溯源到不可信邮件，以及最终的账户余额变化" width="820" />
+  <video src="demo/recordings/videos/aibeat-intro-en-v1.webm" width="820" controls playsinline>
+    <a href="demo/recordings/videos/aibeat-intro-en-v1.webm">AI Beat 使用介绍视频</a>
+  </video>
 </p>
 
 ## 快速开始

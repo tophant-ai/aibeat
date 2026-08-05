@@ -62,7 +62,9 @@ flowchart LR
 <sub>The full walkthrough — describe a scenario, generate attacks, run them against a real target, then open the evidence:</sub>
 
 <p align="center">
-  <img src="demo/recordings/videos/promptbeat-evidence-flow.gif" alt="A failed banking-agent case in the AI Beat report: expected refusal versus the actual unauthorized transfer, the judge confirming bank_ledger.transfer was called without authorization, the trace tracing it to an untrusted email, and the resulting account balance change" width="820" />
+  <video src="demo/recordings/videos/aibeat-intro-en-v1.webm" width="820" controls playsinline>
+    <a href="demo/recordings/videos/aibeat-intro-en-v1.webm">AI Beat walkthrough video</a>
+  </video>
 </p>
 
 ## Quick start
