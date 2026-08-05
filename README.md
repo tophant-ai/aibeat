@@ -62,9 +62,9 @@ flowchart LR
 <sub>The full walkthrough — describe a scenario, generate attacks, run them against a real target, then open the evidence:</sub>
 
 <p align="center">
-  <video src="demo/recordings/videos/aibeat-intro-en-v1.webm" width="820" controls playsinline>
-    <a href="demo/recordings/videos/aibeat-intro-en-v1.webm">AI Beat walkthrough video</a>
-  </video>
+
+https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
+
 </p>
 
 ## Quick start

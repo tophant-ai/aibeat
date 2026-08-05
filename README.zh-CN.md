@@ -61,9 +61,9 @@ flowchart LR
 <sub>完整流程演示——描述场景、生成攻击、打到真实目标，然后打开证据：</sub>
 
 <p align="center">
-  <video src="demo/recordings/videos/aibeat-intro-en-v1.webm" width="820" controls playsinline>
-    <a href="demo/recordings/videos/aibeat-intro-en-v1.webm">AI Beat 使用介绍视频</a>
-  </video>
+
+https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
+
 </p>
 
 ## 快速开始
