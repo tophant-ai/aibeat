@@ -15,27 +15,27 @@ Promptbeat 通过 `registry/seed-registry/v1/` 下的 seed registry 分发带版
 
 集合列表、单个集合的详情（文件、来源、记录 schema、Cisco 风险类型与 OWASP ASI
 覆盖、审核状态、已知限制），以及按风险类型、语言、目标类型、敏感级别的筛选，
-都在 **Promptbeat 种子社区站**上。该站与文档站同域部署，路径前缀为 `/community/`。
+现在统一保留在 **种子集合** 文档页。`website/public/community/` 中不可复现的
+静态社区站产物已移除；后续社区站会从可复现源码重新接入。
 
 <CardGroup cols={2}>
-  <Card title="打开种子社区" icon="layer-group" href="https://promptbeat.mintlify.app/community/zh/">
-    中文界面的集合浏览、筛选与搜索。
+  <Card title="种子集合" icon="layer-group" href="/cn/datasets/collections">
+    中文集合摘要与拉取说明。
   </Card>
-  <Card title="English community" icon="language" href="https://promptbeat.mintlify.app/community/">
-    同一 registry 数据的英文界面。
+  <Card title="Seed collections" icon="language" href="/datasets/collections">
+    同一 registry 数据的英文摘要。
   </Card>
 </CardGroup>
 
 <Info>
-  本地 `mint dev` 只托管 Mintlify 文档路由。社区站是另一棵静态树：执行
-  由已审查并提交到 `public/community/` 的静态产物提供；
-  或单独预览社区站端口。生产环境用 nginx / OSS+CDN 同域挂载即可。
+  本地 `mint dev` 只托管 Mintlify 文档路由。`/community/` 会走重定向，
+  `/public/community/` 不再有静态产物可服务。
 </Info>
 
 | 集合 | 社区页 |
 | --- | --- |
-| `jailbreak-baseline@0.1.0` | [社区页面](https://promptbeat.mintlify.app/community/zh/collections/jailbreak-baseline/) |
-| `agent-safety-baseline@0.1.0` | [社区页面](https://promptbeat.mintlify.app/community/zh/collections/agent-safety-baseline/) |
+| `jailbreak-baseline@0.1.0` | [种子集合](/cn/datasets/collections) |
+| `agent-safety-baseline@0.1.0` | [种子集合](/cn/datasets/collections) |
 
 ## registry 现在有什么
 

@@ -18,29 +18,29 @@ attack seed pool by hand.
 Collection listings, per-collection detail (files, provenance, record schema,
 Cisco risk-type and OWASP ASI coverage, review status, known limitations) and
 filtering by risk type, language, target type and sensitivity live on the
-**Promptbeat seed community site**, which is generated from the registry and
-deployed with this docs site under the same origin.
+**Seed collections** docs page. The standalone community-site artifact is no
+longer published from `website/public/community/`; future community work will
+land from the reproducible source site.
 
 <CardGroup cols={2}>
-  <Card title="Open seed community" icon="layer-group" href="https://promptbeat.mintlify.app/community/">
-    English collection browser with filters and search.
+  <Card title="Seed collections" icon="layer-group" href="/datasets/collections">
+    English collection summary and pull instructions.
   </Card>
-  <Card title="中文种子社区" icon="language" href="https://promptbeat.mintlify.app/community/zh/">
-    Same registry-backed pages in Chinese chrome.
+  <Card title="中文种子集合" icon="language" href="/cn/datasets/collections">
+    Same registry-backed summary in Chinese.
   </Card>
 </CardGroup>
 
 <Info>
-  Local docs (`mint dev`) only hosts Mintlify routes. The community site is a
-  separate static tree: run `npm run build:community` then serve the host that
-  includes the reviewed static artifact under `public/community/`.
-  Production static hosting (nginx / OSS+CDN) serves both from one origin.
+  Local docs (`mint dev`) only hosts Mintlify routes. `/community/` and
+  `/public/community/` are handled as redirects or 404s, rather than serving a
+  checked-in static build.
 </Info>
 
 | Collection | Community page |
 | --- | --- |
-| `jailbreak-baseline@0.1.0` | [Community page](https://promptbeat.mintlify.app/community/collections/jailbreak-baseline/) |
-| `agent-safety-baseline@0.1.0` | [Community page](https://promptbeat.mintlify.app/community/collections/agent-safety-baseline/) |
+| `jailbreak-baseline@0.1.0` | [Seed collections](/datasets/collections) |
+| `agent-safety-baseline@0.1.0` | [Seed collections](/datasets/collections) |
 
 ## What is in the registry today
 

@@ -39,7 +39,7 @@
       },
       {
         "label": "Seed community",
-        "href": "https://promptbeat.mintlify.app/community/"
+        "href": "/datasets/collections"
       },
       {
         "label": "Promptbeat",
@@ -163,7 +163,7 @@
             },
             {
               "label": "Seed community",
-              "href": "https://promptbeat.mintlify.app/community/"
+              "href": "/datasets/collections"
             },
             {
               "label": "Promptbeat",
@@ -287,7 +287,7 @@
             },
             {
               "label": "种子社区",
-              "href": "https://promptbeat.mintlify.app/community/zh/"
+              "href": "/cn/datasets/collections"
             },
             {
               "label": "Promptbeat",
@@ -312,6 +312,68 @@
       "github": "https://github.com/tophant-ai/promptbeat"
     }
   },
+  "redirects": [
+    {
+      "source": "/community",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/zh",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/community/zh/",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/community/collections/jailbreak-baseline",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/collections/jailbreak-baseline/",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/collections/agent-safety-baseline",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/collections/agent-safety-baseline/",
+      "destination": "/datasets/collections"
+    },
+    {
+      "source": "/community/zh/collections/jailbreak-baseline",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/community/zh/collections/jailbreak-baseline/",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/community/zh/collections/agent-safety-baseline",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/community/zh/collections/agent-safety-baseline/",
+      "destination": "/cn/datasets/collections"
+    },
+    {
+      "source": "/zh",
+      "destination": "/cn/about/overview"
+    },
+    {
+      "source": "/zh/",
+      "destination": "/cn/about/overview"
+    },
+    {
+      "source": "/zh/:slug*",
+      "destination": "/cn/:slug*"
+    }
+  ],
   "fonts": {
     "family": "Noto Sans SC",
     "weight": 400,
