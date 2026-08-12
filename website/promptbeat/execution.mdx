@@ -1,0 +1,127 @@
+---
+title: Execution
+description: Real target execution, providers, multi-model matrix, preflight checks and cost control.
+---
+
+# Execution
+
+Execution sends every candidate to a real target — model API, RAG endpoint, HTTP agent, CLI agent — and records what came back. Nothing here is a mock; if the target is not real, the finding is not real.
+
+```bash
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir examples/codex_agent/artifacts/run
+```
+
+## Providers
+
+A provider connects Promptbeat to a target. Common shapes:
+
+| Provider kind | Example config | Target class |
+|---|---|---|
+| OpenAI-compatible model | `openai:openai/gpt-5.4` | Chat / instruction-following model |
+| Codex SDK | `openai:codex-sdk` | Codex CLI agent |
+| HTTP endpoint | `http:` block with request template | RAG service, custom HTTP agent |
+| Provider file | `providers/<name>.yaml` | Anything with a custom adapter |
+
+Provider config lives next to the target definition. See [Providers](/providers/overview) for the full catalog.
+
+## Model roles
+
+Do not compare across roles. A generator and a target are different things.
+
+| Role | What it does | Example |
+|---|---|---|
+| **Generator** | Expands seeds into attack candidates. | `openai:openai/gpt-5.5` |
+| **Target** | The app being tested. | `openai:codex-sdk`, custom provider |
+| **Judge** | Scores whether the target failed the scenario. | Model-graded judge, deterministic assertions, trace scorer |
+| **Baseline** | A known target used for comparison. | Prior Codex broad report |
+
+Version each role separately in reports. A comparison where the judge silently changed is not a comparison.
+
+## Multi-model matrix
+
+Use the same generated case set across every target. Rebuilding candidates for each target invalidates comparability.
+
+| Target | Provider / adapter | Environment | Comparison dimension |
+|---|---|---|---|
+| Codex | `openai:codex-sdk` | Local workspace / sandbox | Validated baseline |
+| Claude Code | CLI adapter or Inspect solver | Runtime adapter | Coding-agent comparison |
+| OpenClaw | CLI adapter or Inspect solver | Runtime adapter | Coding-agent comparison |
+| Internal agent | Custom provider or script | Enterprise harness | Private policy behavior |
+
+## Preflight
+
+Runs cost money. Fail fast before spending target-side tokens.
+
+<CardGroup cols={2}>
+  <Card title="Target reachability" icon="signal">
+    - Provider is real, not a mock
+    - `working_dir` exists
+    - API key can access the selected model
+    - CLI agent home / config paths resolve
+  </Card>
+  <Card title="Scenario quality" icon="clipboard-check">
+    - Scenario matches target capabilities
+    - Risks are specific enough to generate strong attacks
+    - Failure signals are explicit and judgeable
+    - Judge matches the expected failure mode
+  </Card>
+  <Card title="Seed quality" icon="seedling">
+    - Each seed maps to the scenario `risk_type`
+    - Each seed focuses on one attack intent
+    - Required capabilities are declared
+    - Dataset category mapping is preserved in metadata
+  </Card>
+  <Card title="Execution quality" icon="server">
+    - `sandbox_mode` is realistic for the risks being tested
+    - `approval_policy` is reproducible
+    - Tracing is deep enough for evidence-grade reports
+    - Environment inheritance is restricted to what the agent needs
+  </Card>
+</CardGroup>
+
+```bash
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## Cost control
+
+Broad runs multiply fast: candidates × plugins × strategies × rewrite passes × targets. A few patterns to keep runs bounded.
+
+<Steps>
+  <Step title="Start small">
+    Run a subset of scenarios with `--count 3` first. Inspect the candidate JSON. Confirm judges write something usable. Then scale.
+  </Step>
+  <Step title="Sample broad">
+    For breadth-first exploration, sample from the seed pool rather than exhaustively iterating. Use rewrite passes to concentrate on the interesting slices.
+  </Step>
+  <Step title="Cache generation">
+    Reusing the same candidate set across targets keeps generation cost fixed while target coverage grows.
+  </Step>
+  <Step title="Split runs">
+    Long runs into short ones by scenario or risk type. Failure isolation and cost visibility both improve.
+  </Step>
+</Steps>
+
+## What comes out of a run
+
+Every run produces an `evaluation_result.json` with:
+
+- Per-candidate request, response, and metadata
+- Judge input and judge verdict
+- Trace metadata (deeper for Agentbeat-enabled providers)
+- Lineage: which seed, which scenario, which rewrite generation produced this candidate
+
+Findings and reports are generated from this file — see [Reports](/promptbeat/reports).
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Judgement" icon="scale-balanced" href="/promptbeat/judgment">
+    How judges score results and where they come from.
+  </Card>
+  <Card title="Reports" icon="file-lines" href="/promptbeat/reports">
+    Turn a run into a shareable finding.
+  </Card>
+</CardGroup>

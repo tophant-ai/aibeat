@@ -1,0 +1,84 @@
+---
+title: Seed collections
+description: Versioned, reviewed seed collections built from the Promptbeat seed registry. Browsed on the seed community site.
+---
+
+{/*
+  Short pointer only. Full catalogue is the community site under /community/,
+  generated from registry/seed-registry/v1/ at build time.
+*/}
+
+Promptbeat ships versioned, hash-verified seed collections through the seed
+registry at `registry/seed-registry/v1/`. Each collection is a bundle you pull
+with the CLI, so a team can run its first real evaluation without assembling an
+attack seed pool by hand.
+
+## Browse the collections
+
+Collection listings, per-collection detail (files, provenance, record schema,
+Cisco risk-type and OWASP ASI coverage, review status, known limitations) and
+filtering by risk type, language, target type and sensitivity live on the
+**Promptbeat seed community site**, which is generated from the registry and
+deployed with this docs site under the same origin.
+
+<CardGroup cols={2}>
+  <Card title="Open seed community" icon="layer-group" href="https://promptbeat.mintlify.app/community/">
+    English collection browser with filters and search.
+  </Card>
+  <Card title="中文种子社区" icon="language" href="https://promptbeat.mintlify.app/community/zh/">
+    Same registry-backed pages in Chinese chrome.
+  </Card>
+</CardGroup>
+
+<Info>
+  Local docs (`mint dev`) only hosts Mintlify routes. The community site is a
+  separate static tree: run `npm run build:community` then serve the host that
+  includes the reviewed static artifact under `public/community/`.
+  Production static hosting (nginx / OSS+CDN) serves both from one origin.
+</Info>
+
+| Collection | Community page |
+| --- | --- |
+| `jailbreak-baseline@0.1.0` | [Community page](https://promptbeat.mintlify.app/community/collections/jailbreak-baseline/) |
+| `agent-safety-baseline@0.1.0` | [Community page](https://promptbeat.mintlify.app/community/collections/agent-safety-baseline/) |
+
+## What is in the registry today
+
+| Collection | Items | Languages | Target types |
+| --- | --- | --- | --- |
+| `jailbreak-baseline@0.1.0` | 499 | zh | llm |
+| `agent-safety-baseline@0.1.0` | 110 | en, zh | agent, http-agent, coding-agent |
+
+Counts come from `registry/seed-registry/v1/index.json`. The community site
+recomputes them from the registry on every build, so if the two ever disagree,
+the registry wins.
+
+## Pull a collection
+
+Distribution is from the source repository only for now — there is no public
+hosted registry URL, so `--registry` points at a local checkout. Run this from
+the repository root.
+
+<Info>
+  TODO: replace `--registry ./registry/seed-registry/v1` with the public hosted
+  registry URL once public distribution is approved. Publication requires
+  separate license and release approval.
+</Info>
+
+```bash
+promptbeat seed pull jailbreak-baseline@0.1.0 \
+  --registry ./registry/seed-registry/v1 \
+  --output-dir ./.promptbeat/seeds/jailbreak-baseline/0.1.0
+```
+
+Then point a scenario at the downloaded file:
+
+```yaml
+seeds:
+  files:
+    - ./.promptbeat/seeds/jailbreak-baseline/0.1.0/seeds.jsonl
+```
+
+Both collections are `staging` and carry `controlled` sensitivity: they contain
+working attack prompts. Handle the downloaded `seeds.jsonl` the way you would
+handle any other offensive test corpus.

@@ -1,0 +1,75 @@
+---
+title: Promptbeat 与 Agentbeat 的区别
+description: 什么时候用哪个、什么时候两个一起用、它们共用了什么。
+---
+
+# Promptbeat 与 Agentbeat 的区别
+
+两个产品都在测 AI 应用的安全性。回答的是不同的问题。
+
+| | Promptbeat | Agentbeat |
+|---|---|---|
+| **回答的问题** | 目标会不会拒答、会不会泄露？ | Agent 的执行过程有没有越界？ |
+| **目标类型** | LLM、RAG、HTTP Agent、黑盒 Agent | 有工具调用、文件、环境、记忆的 Agent |
+| **观察什么** | 请求 / 响应、Judge 判定 | 响应 + 工具调用 + 文件 + 环境变化 |
+| **失败信号** | 内容不当、密钥泄露、越权回答 | 错误动作、未声明的副作用、越过边界 |
+| **典型证据** | Prompt、响应、Judge 判定 | 以上 + 工具 Trace、文件 diff、环境快照 |
+| **迭代速度** | 快——每分钟很多候选 | 慢——真实运行时、真实副作用 |
+| **数据产出** | 攻击 Seed、判定后的用例、回归集 | 带运行时证据、可复现的 Agent Finding |
+
+## 什么时候用哪个
+
+<CardGroup cols={2}>
+  <Card title="用 Promptbeat" icon="wand-sparkles">
+    - 筛一个基础模型、API 或供应商
+    - 上线前评估一个 RAG 应用
+    - 在同一批场景上横向对比多个模型
+    - 为两个产品共同的 Seed / 回归集做数据建设
+    - 把 Agent 当黑盒测，不接入它的运行时
+  </Card>
+  <Card title="用 Agentbeat" icon="robot">
+    - 给会碰文件、工具或生产数据的 Agent 做上线验收
+    - 排查一个"回答正常但发生了问题"的 Agent 回归
+    - 为真实事件产出取证证据
+    - 验证边界策略（审批、隔离、工具范围）
+    - 检验 Promptbeat 黑盒发现的问题是否在 Agent 内部真的能复现
+  </Card>
+</CardGroup>
+
+## 什么时候两个一起用
+
+常见模式：**Promptbeat 发现候选、Agentbeat 验证真实行为**。
+
+<Steps>
+  <Step title="Promptbeat 生成候选">
+    候选来自场景、Seed、数据集订阅和多轮 Rewrite。大部分已经根据目标响应做过 Judge。
+  </Step>
+  <Step title="晋级的候选进入 Agentbeat">
+    高价值候选——真正暴露风险的那批——作为 Agentbeat 的输入，在真实 Agent 运行时里跑。
+  </Step>
+  <Step title="Agentbeat 定位并留证">
+    每个 Finding 都带上执行 Trace：调用了哪个工具、写了哪个文件、读了哪个环境变量。报告同时展示失败的响应和失败的动作。
+  </Step>
+  <Step title="Finding 晋级为回归集">
+    可复现的 Finding 进入版本化回归集，模型 / Prompt / 策略每次变更都重跑。
+  </Step>
+</Steps>
+
+## 共用了什么
+
+两个产品搭在同一套原语上，不用配两遍。
+
+| 层 | 是否共用 | 说明 |
+|---|---|---|
+| CLI | 完全共用 | `promptbeat validate / generate / run / report` 驱动两个产品。 |
+| 配置 schema | 大部分共用 | Agentbeat 在 `target / scenario / seed` 之上增加 `forbidden_boundary` 和 `observation` 段。 |
+| Seed / 数据集 registry | 完全共用 | 详见[种子社区站](https://docs.promptbeat.ai)。 |
+| Judge | 扩展 | Promptbeat 判断内容；Agentbeat 额外看 Trace 和环境变化。 |
+| 报告 schema | 扩展 | Agent Finding 额外带 `trace` 段和 `env_delta` 段。 |
+| Provider | 扩展 | Agentbeat 需要能提供 Trace 和环境信息的 adapter。 |
+
+## 不是二选一，是渐进
+
+Promptbeat 是一个快速的黑盒循环；当黑盒视图不够——需要把失败绑到 Agent 内部具体动作上时——就升级到 Agentbeat。
+
+可以先用 Promptbeat 起步，之后再加 Agentbeat，不需要推翻场景、Seed 或数据集，升级是加法。

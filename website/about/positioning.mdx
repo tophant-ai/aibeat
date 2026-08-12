@@ -1,0 +1,104 @@
+---
+title: Positioning
+description: Where the platform fits — client value, typical scenarios, and what the platform deliberately does not do.
+---
+
+# Positioning
+
+## The 30-second version
+
+> Promptbeat and Agentbeat make up an automated security evaluation platform for LLM, RAG and agent applications. They generate attacks from risk scenarios, run them against real customer targets, produce standardized findings and reports, and promote high-value samples into a versioned regression baseline.
+>
+> They are for pre-launch acceptance and continuous regression. They do not replace runtime protection gateways.
+
+## The three-minute version
+
+**Start with the problem.** Manual red teaming does not scale. A fixed test bank does not cover new attack expressions. When the model, prompt or policy changes, you cannot tell whether safety regressed.
+
+**Move to the platform.** Scenario configuration produces attack candidates, which run against real targets. A standardized judge writes findings. Findings promote into regression datasets.
+
+**End with what the customer gets.** Coverage metrics, attack success rate, findings evidence, model-vs-model diffs, versioned datasets, and a way to catch regressions on every upgrade.
+
+**Then draw the boundary.** This platform is not a runtime WAF. It is not an attack prompt library. Some findings still need expert review.
+
+## Customer value
+
+<CardGroup cols={2}>
+  <Card title="From project to capability" icon="chart-line">
+    AI safety testing stops being a one-off deliverable and becomes a repeatable engineering capability: same scenarios, same judges, same regression set across releases.
+  </Card>
+  <Card title="Evidence, not just scores" icon="magnifying-glass">
+    Every finding carries the request, the response, the judge's reasoning and — for Agentbeat — the execution trace. Engineering can act on it, not just read a percentage.
+  </Card>
+  <Card title="Comparable across upgrades" icon="code-compare">
+    Versioned datasets and consistent judges make model / prompt / policy changes measurable rather than anecdotal.
+  </Card>
+  <Card title="Data asset over time" icon="database">
+    Real findings, difficult examples and edge cases accumulate into a security dataset owned by the customer and re-used across projects.
+  </Card>
+</CardGroup>
+
+## Typical scenarios
+
+| Scenario | Trigger words we listen for |
+|---|---|
+| **Pre-launch acceptance** — validate risks and boundaries before a model or AI app ships. | "we're launching", "we need sign-off" |
+| **Post-upgrade regression** — check for safety regressions after system prompt / model / knowledge / policy changes. | "frequent iteration", "worried about regression" |
+| **Model & vendor comparison** — evaluate multiple models on the same scenarios and datasets. | "vendor selection", "swapping supplier" |
+| **RAG & agent boundary evaluation** — data leakage, prompt injection, tool authorization, cross-user access. | "RAG", "agent", "tool call" |
+| **Enterprise security dataset** — accumulate historical issues, high-value attacks and hard cases into a versioned internal baseline. | "internal standard", "baseline building" |
+
+## What we deliberately do not do
+
+<Info>
+  Understanding the boundary is part of the positioning — over-claiming loses credibility faster than a modest scope statement.
+</Info>
+
+| We do not… | Reason | What to use instead |
+|---|---|---|
+| …sit in the request path at runtime | This platform evaluates, not intercepts. Real-time blocking is a different product class and different SLO. | Any runtime protection gateway / WAF / guardrail layer. |
+| …replace expert red teamers | Standardized and reproducible cases can be automated; hard findings and business-edge cases still need a human. | Keep an on-call red team for critical launches. |
+| …ship as a stand-alone attack prompt library | Attack generation is one stage. Real execution, judgement, evidence and dataset closed-loop are what makes the finding usable. | The platform. |
+
+## Positioning vs adjacent approaches
+
+<CardGroup cols={2}>
+  <Card title="vs manual red-teaming" icon="user-plus">
+    Manual work is flexible and expert-driven, but it does not scale and results are hard to reproduce. This platform automates the repeatable middle and lets experts focus on high-risk cases.
+  </Card>
+  <Card title="vs fixed test banks / scripts" icon="list-check">
+    Fixed banks are fast to run and cheap, but they do not adapt and they do not learn from execution results. This platform closes the loop between generation, execution and dataset evolution.
+  </Card>
+  <Card title="vs runtime protection" icon="shield-halved">
+    Complementary, not competitive. A gateway blocks in production; this platform validates before production and keeps regressing after every upgrade. Both belong in a serious AI security stack.
+  </Card>
+  <Card title="vs LLM eval frameworks" icon="microscope">
+    Traditional evals score a single response. This platform runs attacks on real agents, records what they *did*, and promotes findings into regression sets. It is compatible with existing eval tools where useful.
+  </Card>
+</CardGroup>
+
+## Current delivery boundary
+
+Match the marketing to what the product actually ships.
+
+<CardGroup cols={3}>
+  <Card title="Delivering today" icon="circle-check">
+    - Target / Scenario / Seed with dataset subscriptions
+    - Generate → execute → judge → report + findings
+    - LLM, HTTP agent, Codex, multi-model comparison
+    - Dataset promotion / rewrite / reject with lineage
+    - Agent trace capture for supported adapters
+  </Card>
+  <Card title="Extending" icon="arrow-up-right-dots">
+    - More agent runtime adapters, deeper traces
+    - Multi-target / multi-version / multi-defense comparison
+    - Better efficiency under a fixed generation budget
+  </Card>
+  <Card title="Research (label as such)" icon="flask">
+    - Contextual bandit / learned critic
+    - Cross-target attack transfer
+    - Attacker–defender dynamic game
+
+    _Do not describe as generally available._
+  </Card>
+</CardGroup>

@@ -1,0 +1,96 @@
+---
+title: Core concepts
+description: Target, scenario, seed, finding, judge and dataset — the six words that make up every evaluation.
+---
+
+# Core concepts
+
+Six words show up in every configuration, page and report. Read them once here and the rest of the docs will make sense.
+
+## Target
+
+**What you are testing.** Not "GPT-5" — "the customer-support agent, running with the `production-readonly` credential, accessing the orders API."
+
+A target has an identity, a set of capabilities, an authentication context and a boundary. Same underlying model, different targets: a coding agent that can execute shell commands, a support agent that can look up orders, and a bare chat completion API are three targets, not one.
+
+```yaml
+target:
+  id: support-agent-prod-readonly
+  kind: http-agent
+  endpoint: https://internal.example.com/agent/v1
+  identity: user-123
+  boundary:
+    - "may access orders for user-123 only"
+    - "may not modify orders"
+```
+
+## Scenario
+
+**What risk you are testing for, in this target.** A scenario names the risk surface, the success criterion (what counts as a failure) and the boundary (what the target should refuse to do).
+
+Same request means different things in different scenarios:
+
+| Request | Chat model | Coding agent | Support agent |
+|---|---|---|---|
+| "Read environment variables." | policy refusal | secret exfiltration | usually irrelevant |
+| "Look up order for user-987." | general Q&A | irrelevant | cross-user access risk |
+| "Modify tests to pass." | not applicable | verifier sabotage | not applicable |
+
+A scenario turns "the model said something" into "the model crossed *this* boundary in *this* context."
+
+## Seed
+
+**Where an attack starts.** A seed is one concrete input or transcript that expresses a scenario. It can be:
+
+- a curated example from your own testing history
+- a row from a public dataset (HarmBench, JBB, ALERT, etc.)
+- an item from a shared community collection ([seed community](https://docs.promptbeat.ai))
+- a hand-written stress case for a specific customer boundary
+
+Seeds are the raw material. They are not "the whole test suite" — generation, rewriting and dataset promotion sit on top.
+
+## Judge
+
+**How a run is scored.** A judge takes a target's output (and, for Agentbeat, its trace and environment) and returns a verdict:
+
+- `PASS` — the target held the boundary
+- `FAIL` — the target crossed the boundary; a finding is created
+- `REVIEW` — signal is present but not conclusive; needs a human look
+
+Judges are specific to the risk. A jailbreak judge, a data-exfiltration judge and a tool-authorization judge are different rules; the platform ships a set for common risks and you can add your own.
+
+## Finding
+
+**A concrete failure, with everything needed to reproduce it.** A finding includes the target, the scenario, the input, the output, the judge verdict, severity and — for agent runs — the trace and any environment delta.
+
+Findings are the unit of shareable output. A report is a set of findings plus their aggregates.
+
+## Dataset
+
+**Findings and candidates that pay their way over time.** Attack candidates flow through three outcomes:
+
+| Outcome | Meaning |
+|---|---|
+| **Promote** | Reproducible failure; enters the versioned regression dataset. |
+| **Rewrite** | Signal is real but the phrasing is weak; goes into the next generation round with rewrite hints. |
+| **Reject** | Duplicate, low quality, or does not reflect a real risk. |
+
+Datasets are versioned and hash-verified, exactly like a code library. Every model, prompt or policy upgrade re-runs the same regression set and shows differences immediately.
+
+## Putting it together
+
+```text
+target × scenario × seed
+  → generated candidates
+  → real target execution
+  → judge (PASS / FAIL / REVIEW)
+  → finding (with evidence and, for agents, trace)
+  → dataset (promote / rewrite / reject)
+  → next run
+```
+
+Every configuration, every command and every page in this docs site references these six words. Everything else is either a specific implementation of one of them (a particular judge, a particular seed collection) or a delivery format on top of them (report layout, artifact structure).
+
+<Card title="See it in a real run" icon="rocket" href="/promptbeat/quickstart">
+  The Promptbeat quickstart walks target → seed → generate → run → report on a real Codex agent.
+</Card>

@@ -1,0 +1,103 @@
+---
+title: Quickstart
+description: Run Promptbeat end-to-end against a real Codex target in about 5 minutes.
+---
+
+# Promptbeat quickstart
+
+This walks you through validate → generate → run → report on a real Codex CLI target using the `openai:codex-sdk` provider. Promptbeat ships as a native Go binary; no build step needed.
+
+## Prerequisites
+
+You need Node, Codex CLI credentials, and API keys for both the generator model and the Codex target.
+
+```bash
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+export OPENAI_API_KEY="sk-..."
+export CODEX_API_KEY="sk-..."
+export CODEX_HOME="$HOME/.codex"
+```
+
+<Info>
+  Do not commit secrets. `inherit_process_env: true` is fine for local smoke tests. For production reports, use an allowlisted `cli_env` block in the target config instead.
+</Info>
+
+## 1. Validate the config
+
+```bash
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+Confirms the config parses, the target is reachable, the provider is real, and required environment is present. See [Preflight](/promptbeat/execution#preflight) for what this actually checks.
+
+## 2. Generate attack candidates
+
+```bash
+./bin/promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --count 5 \
+  --output examples/codex_agent/artifacts/generated_cases.json
+```
+
+The generator is the attacker model. The Codex target is not called yet — this step only produces candidates you can inspect before spending target-side tokens.
+
+<Info>
+  `--count` may be per plugin. A scenario with 8 plugins and `--count 16` produces 128 probes. Start small.
+</Info>
+
+## 3. Run against the real target
+
+```bash
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir examples/codex_agent/artifacts/run
+```
+
+Sends every candidate to Codex. Records request, response, trace metadata and judge input for each case. All artifacts land in the output dir; nothing is only in memory.
+
+## 4. Generate a report
+
+```bash
+./bin/promptbeat report \
+  --eval-result examples/codex_agent/artifacts/run/evaluation_result.json
+```
+
+Produces JSON, HTML and a comprehensive Markdown report. See [Reports](/promptbeat/reports) for the artifact layout.
+
+## Common issues
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `working_dir does not exist` | provider path is relative to the wrong directory | use provider-file path normalization or an absolute path |
+| auth error | key is missing or has no access to the selected model | check `OPENAI_API_KEY`, `CODEX_API_KEY`, and model name |
+| Codex home error | `CODEX_HOME` missing or invalid | export a valid `CODEX_HOME` |
+| Weak evidence in reports | tracing is off | enable deeper traces for final runs (see [Execution](/promptbeat/execution)) |
+| Way more probes than expected | `--count` × plugins × strategies | sample first; scale after inspection |
+
+## What you just did
+
+```text
+target (Codex CLI via openai:codex-sdk)
+  × scenario (from examples/codex_agent/promptbeat.yaml)
+  × seeds (bundled with the example)
+    → 5 generated candidates
+    → 5 real Codex runs
+    → 5 judged verdicts
+    → one report with reproducible findings
+```
+
+Any candidate that failed is a reproducible finding you can hand to engineering. To turn those into a regression baseline, see [Dataset loop](/promptbeat/dataset-loop).
+
+## Where to go next
+
+<CardGroup cols={3}>
+  <Card title="Scenarios" icon="map-location" href="/promptbeat/scenarios">
+    Design your own scenario, target and seed set.
+  </Card>
+  <Card title="Execution" icon="server" href="/promptbeat/execution">
+    Providers, multi-model runs, preflight, cost control.
+  </Card>
+  <Card title="Reports" icon="file-lines" href="/promptbeat/reports">
+    What the artifacts contain and how to read them.
+  </Card>
+</CardGroup>

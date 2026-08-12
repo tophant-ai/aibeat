@@ -1,12 +1,27 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Promptbeat",
-  "theme": "mint",
+  "name": "Promptbeat & Agentbeat",
+  "theme": "maple",
   "favicon": "/images/favicon.svg",
   "colors": {
     "primary": "#0F766E",
-    "light": "#0F766E",
+    "light": "#2DD4BF",
     "dark": "#2DD4BF"
+  },
+  "background": {
+    "decoration": "gradient",
+    "color": {
+      "light": "#FBFEFD",
+      "dark": "#0A0D15"
+    }
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  },
+  "styling": {
+    "eyebrows": "section",
+    "codeblocks": "system"
   },
   "logo": {
     "light": "/images/logo-light.svg",
@@ -16,29 +31,29 @@
     "links": [
       {
         "label": "Docs",
-        "href": "/getting-started/overview"
+        "href": "/"
       },
       {
         "label": "中文",
-        "href": "/zh/getting-started/overview"
+        "href": "/cn/about/overview"
       },
       {
-        "label": "Examples",
-        "href": "/getting-started/codex-quickstart"
+        "label": "Seed community",
+        "href": "https://promptbeat.mintlify.app/community/"
       },
       {
-        "label": "Architecture",
-        "href": "/target-lab/architecture"
+        "label": "Promptbeat",
+        "href": "/promptbeat/overview"
       },
       {
-        "label": "Reports",
-        "href": "/reports/comprehensive-reports"
+        "label": "Agentbeat",
+        "href": "/agentbeat/overview"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Start with Codex",
-      "href": "/getting-started/codex-quickstart"
+      "label": "Quickstart",
+      "href": "/promptbeat/quickstart"
     }
   },
   "navigation": {
@@ -47,39 +62,56 @@
         "language": "en",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "About",
             "pages": [
-              "getting-started/overview",
-              "getting-started/scenario-driven-evaluation",
-              "getting-started/codex-quickstart"
+              "about/overview",
+              "about/promptbeat-vs-agentbeat",
+              "about/positioning",
+              "about/core-concepts"
             ]
           },
           {
-            "group": "Concepts",
+            "group": "Promptbeat",
             "pages": [
-              "concepts/target-scenario-seed",
-              "concepts/configuration-model",
-              "concepts/risk-taxonomy",
-              "concepts/multi-model-checks",
-              "concepts/capability-sources",
-              "concepts/preflight-checks"
+              "promptbeat/overview",
+              "promptbeat/quickstart",
+              "promptbeat/scenarios",
+              "promptbeat/generation",
+              "promptbeat/execution",
+              "promptbeat/judgment",
+              "promptbeat/reports",
+              "promptbeat/dataset-loop"
             ]
           },
           {
-            "group": "Targets",
+            "group": "Agentbeat",
             "pages": [
-              "targets/agent-targets",
-              "targets/typical-agent-apps",
-              "targets/agent-configuration-examples",
-              "targets/codex-sdk",
-              "targets/provider-files"
+              "agentbeat/overview",
+              "agentbeat/quickstart",
+              "agentbeat/observation-model",
+              "agentbeat/scenarios",
+              "agentbeat/adapters",
+              "agentbeat/evidence",
+              "agentbeat/case-studies"
+            ]
+          },
+          {
+            "group": "Use cases",
+            "pages": [
+              "use-cases/pre-launch-acceptance",
+              "use-cases/post-upgrade-regression",
+              "use-cases/model-vendor-comparison",
+              "use-cases/rag-agent-boundary",
+              "use-cases/enterprise-datasets"
             ]
           },
           {
             "group": "Datasets",
             "pages": [
               "datasets/overview",
+              "datasets/risk-taxonomy",
               "datasets/catalog",
+              "datasets/collections",
               "datasets/harmbench"
             ]
           },
@@ -93,18 +125,14 @@
             ]
           },
           {
-            "group": "Target Lab",
+            "group": "Providers & targets",
             "pages": [
-              "target-lab/architecture",
-              "target-lab/inspect-and-adapters"
-            ]
-          },
-          {
-            "group": "Reports",
-            "pages": [
-              "reports/comprehensive-reports",
-              "reports/report-schema",
-              "reports/result-artifacts"
+              "providers/overview",
+              "targets/agent-targets",
+              "targets/typical-agent-apps",
+              "targets/agent-configuration-examples",
+              "targets/codex-sdk",
+              "targets/provider-files"
             ]
           },
           {
@@ -112,84 +140,170 @@
             "pages": [
               "reference/cli",
               "reference/api-service",
-              "reference/yaml"
+              "reference/yaml",
+              "reports/report-schema",
+              "reports/result-artifacts",
+              "reports/comprehensive-reports",
+              "concepts/configuration-model",
+              "concepts/preflight-checks",
+              "target-lab/architecture",
+              "target-lab/inspect-and-adapters"
             ]
           }
-        ]
+        ],
+        "navbar": {
+          "links": [
+            {
+              "label": "Docs",
+              "href": "/"
+            },
+            {
+              "label": "中文",
+              "href": "/cn/about/overview"
+            },
+            {
+              "label": "Seed community",
+              "href": "https://promptbeat.mintlify.app/community/"
+            },
+            {
+              "label": "Promptbeat",
+              "href": "/promptbeat/overview"
+            },
+            {
+              "label": "Agentbeat",
+              "href": "/agentbeat/overview"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Quickstart",
+            "href": "/promptbeat/quickstart"
+          }
+        },
+        "default": true
       },
       {
-        "language": "zh",
+        "language": "cn",
         "groups": [
           {
-            "group": "快速开始",
+            "group": "关于平台",
             "pages": [
-              "zh/getting-started/overview",
-              "zh/getting-started/scenario-driven-evaluation",
-              "zh/getting-started/codex-quickstart"
+              "cn/about/overview",
+              "cn/about/promptbeat-vs-agentbeat",
+              "cn/about/positioning",
+              "cn/about/core-concepts"
             ]
           },
           {
-            "group": "核心概念",
+            "group": "Promptbeat",
             "pages": [
-              "zh/concepts/target-scenario-seed",
-              "zh/concepts/configuration-model",
-              "zh/concepts/risk-taxonomy",
-              "zh/concepts/multi-model-checks",
-              "zh/concepts/capability-sources",
-              "zh/concepts/preflight-checks"
+              "cn/promptbeat/overview",
+              "cn/promptbeat/quickstart",
+              "cn/promptbeat/scenarios",
+              "cn/promptbeat/generation",
+              "cn/promptbeat/execution",
+              "cn/promptbeat/judgment",
+              "cn/promptbeat/reports",
+              "cn/promptbeat/dataset-loop"
             ]
           },
           {
-            "group": "目标",
+            "group": "Agentbeat",
             "pages": [
-              "zh/targets/agent-targets",
-              "zh/targets/typical-agent-apps",
-              "zh/targets/agent-configuration-examples",
-              "zh/targets/codex-sdk",
-              "zh/targets/provider-files"
+              "cn/agentbeat/overview",
+              "cn/agentbeat/quickstart",
+              "cn/agentbeat/observation-model",
+              "cn/agentbeat/scenarios",
+              "cn/agentbeat/adapters",
+              "cn/agentbeat/evidence",
+              "cn/agentbeat/case-studies"
+            ]
+          },
+          {
+            "group": "典型场景",
+            "pages": [
+              "cn/use-cases/pre-launch-acceptance",
+              "cn/use-cases/post-upgrade-regression",
+              "cn/use-cases/model-vendor-comparison",
+              "cn/use-cases/rag-agent-boundary",
+              "cn/use-cases/enterprise-datasets"
             ]
           },
           {
             "group": "数据集",
             "pages": [
-              "zh/datasets/overview",
-              "zh/datasets/catalog",
-              "zh/datasets/harmbench"
+              "cn/datasets/overview",
+              "cn/datasets/risk-taxonomy",
+              "cn/datasets/catalog",
+              "cn/datasets/collections",
+              "cn/datasets/harmbench"
             ]
           },
           {
             "group": "Coding Agent 安全",
             "pages": [
-              "zh/coding-agent/coverage",
-              "zh/coding-agent/attack-patterns",
-              "zh/coding-agent/attack-examples",
-              "zh/coding-agent/broad-codex-report"
+              "cn/coding-agent/coverage",
+              "cn/coding-agent/attack-patterns",
+              "cn/coding-agent/attack-examples",
+              "cn/coding-agent/broad-codex-report"
             ]
           },
           {
-            "group": "Target Lab",
+            "group": "Providers 与目标",
             "pages": [
-              "zh/target-lab/architecture",
-              "zh/target-lab/inspect-and-adapters"
-            ]
-          },
-          {
-            "group": "报告",
-            "pages": [
-              "zh/reports/comprehensive-reports",
-              "zh/reports/report-schema",
-              "zh/reports/result-artifacts"
+              "cn/providers/overview",
+              "cn/targets/agent-targets",
+              "cn/targets/typical-agent-apps",
+              "cn/targets/agent-configuration-examples",
+              "cn/targets/codex-sdk",
+              "cn/targets/provider-files"
             ]
           },
           {
             "group": "参考",
             "pages": [
-              "zh/reference/cli",
-              "zh/reference/api-service",
-              "zh/reference/yaml"
+              "cn/reference/cli",
+              "cn/reference/api-service",
+              "cn/reference/yaml",
+              "cn/reports/report-schema",
+              "cn/reports/result-artifacts",
+              "cn/reports/comprehensive-reports",
+              "cn/concepts/configuration-model",
+              "cn/concepts/preflight-checks",
+              "cn/target-lab/architecture",
+              "cn/target-lab/inspect-and-adapters"
             ]
           }
-        ]
+        ],
+        "navbar": {
+          "links": [
+            {
+              "label": "文档",
+              "href": "/cn/about/overview"
+            },
+            {
+              "label": "English",
+              "href": "/about/overview"
+            },
+            {
+              "label": "种子社区",
+              "href": "https://promptbeat.mintlify.app/community/zh/"
+            },
+            {
+              "label": "Promptbeat",
+              "href": "/cn/promptbeat/overview"
+            },
+            {
+              "label": "Agentbeat",
+              "href": "/cn/agentbeat/overview"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "快速上手",
+            "href": "/cn/promptbeat/quickstart"
+          }
+        }
       }
     ]
   },
@@ -197,5 +311,27 @@
     "socials": {
       "github": "https://github.com/tophant-ai/promptbeat"
     }
+  },
+  "fonts": {
+    "family": "Noto Sans SC",
+    "weight": 400,
+    "heading": {
+      "family": "Noto Sans SC",
+      "weight": 600
+    },
+    "body": {
+      "family": "Noto Sans SC",
+      "weight": 400
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view"
+    ],
+    "display": "header"
+  },
+  "interaction": {
+    "drilldown": false
   }
 }

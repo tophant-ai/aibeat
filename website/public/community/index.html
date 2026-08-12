@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Attack seed collections, versioned and hash-verified · Promptbeat Seed Community</title><meta name="description" content="Versioned, hash-verified attack seed collections for red-teaming LLMs and agents."><meta name="generator" content="Astro v5.5.5"><link rel="alternate" hreflang="zh-CN" href="/community/zh/"><link rel="icon" href="/community/favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="/community/favicon.ico" sizes="any"><script>
+      // Dark-first: default to dark for new visitors (security-tooling context
+      // reads more serious in dark) and remember the user's toggle across
+      // sessions. Inlined so no light flash before first paint.
+      try {
+        var saved = localStorage.getItem('pb-theme');
+        var theme = saved === 'light' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script><link rel="stylesheet" href="/community/_astro/_id_.BEwJqQPF.css"></head> <body> <a class="skip-link" href="#main">Skip to content</a> <header class="site-header"> <div class="shell site-header-inner"> <a class="brand" href="/community/"> <span class="brand-mark" aria-hidden="true">  <svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"> <rect width="40" height="40" rx="9" class="brand-mark-bg"></rect> <path d="M9 24 18 7h14l-9 15h9L15 36l5-12z" class="brand-mark-bolt"></path> </svg> </span> <span>Promptbeat Seed Community</span> </a> <div class="header-actions"> <a class="header-link" href="/" rel="noreferrer">Documentation</a> <a class="header-link" href="/community/zh/" hreflang="zh-CN" aria-label="Switch to Chinese"> 中文 </a> <button class="icon-button" type="button" id="theme-toggle" aria-label="Toggle dark mode"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="12" cy="12" r="4.5"></circle> <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path> </svg> </button> </div> </div> </header> <main id="main">  <section class="hero"> <div class="shell"> <p class="hero-eyebrow">Built from the Promptbeat seed registry</p> <h1 class="hero-title">Attack seed collections, versioned and hash-verified</h1> <p class="hero-lede">Pull a reviewed seed pool with promptbeat seed pull instead of hand-curating one before your first real evaluation. Every collection carries its provenance, risk-type coverage and review status.</p> <div class="hero-stats"> <div> <div class="stat-value">2</div> <div class="stat-label">collections</div> </div> <div> <div class="stat-value">609</div> <div class="stat-label">seeds total</div> </div> <div> <div class="stat-value">4</div> <div class="stat-label">risk types</div> </div> </div> </div> </section> <div class="browse shell"> <div> <form class="filter-panel" id="filter-panel" role="search" aria-label="Filters"> <div class="filter-head"> <h2 class="filter-title">Filters</h2> <button class="clear-filters" type="button" id="clear-filters" hidden>Clear all</button> </div>  <div class="facet-group" role="group" aria-labelledby="facet-legend-riskType"> <span class="facet-legend" id="facet-legend-riskType">Risk type</span> <div class="facet-list"> <label class="facet" data-facet-row="riskType:data_exfiltration"> <input type="checkbox" name="riskType" value="data_exfiltration"> <span class="facet-name">data_exfiltration</span> <span class="facet-count" data-facet-count="riskType:data_exfiltration">1</span> </label><label class="facet" data-facet-row="riskType:illegal_harmful_content"> <input type="checkbox" name="riskType" value="illegal_harmful_content"> <span class="facet-name">illegal_harmful_content</span> <span class="facet-count" data-facet-count="riskType:illegal_harmful_content">1</span> </label><label class="facet" data-facet-row="riskType:instruction_override"> <input type="checkbox" name="riskType" value="instruction_override"> <span class="facet-name">instruction_override</span> <span class="facet-count" data-facet-count="riskType:instruction_override">1</span> </label><label class="facet" data-facet-row="riskType:unauthorized_action"> <input type="checkbox" name="riskType" value="unauthorized_action"> <span class="facet-name">unauthorized_action</span> <span class="facet-count" data-facet-count="riskType:unauthorized_action">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-language"> <span class="facet-legend" id="facet-legend-language">Language</span> <div class="facet-list"> <label class="facet" data-facet-row="language:zh"> <input type="checkbox" name="language" value="zh"> <span class="facet-name">zh</span> <span class="facet-count" data-facet-count="language:zh">2</span> </label><label class="facet" data-facet-row="language:en"> <input type="checkbox" name="language" value="en"> <span class="facet-name">en</span> <span class="facet-count" data-facet-count="language:en">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-targetType"> <span class="facet-legend" id="facet-legend-targetType">Target</span> <div class="facet-list"> <label class="facet" data-facet-row="targetType:agent"> <input type="checkbox" name="targetType" value="agent"> <span class="facet-name">agent</span> <span class="facet-count" data-facet-count="targetType:agent">1</span> </label><label class="facet" data-facet-row="targetType:coding-agent"> <input type="checkbox" name="targetType" value="coding-agent"> <span class="facet-name">coding-agent</span> <span class="facet-count" data-facet-count="targetType:coding-agent">1</span> </label><label class="facet" data-facet-row="targetType:http-agent"> <input type="checkbox" name="targetType" value="http-agent"> <span class="facet-name">http-agent</span> <span class="facet-count" data-facet-count="targetType:http-agent">1</span> </label><label class="facet" data-facet-row="targetType:llm"> <input type="checkbox" name="targetType" value="llm"> <span class="facet-name">llm</span> <span class="facet-count" data-facet-count="targetType:llm">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-reviewStatus"> <span class="facet-legend" id="facet-legend-reviewStatus">Review</span> <div class="facet-list"> <label class="facet" data-facet-row="reviewStatus:automated"> <input type="checkbox" name="reviewStatus" value="automated"> <span class="facet-name">automated</span> <span class="facet-count" data-facet-count="reviewStatus:automated">1</span> </label><label class="facet" data-facet-row="reviewStatus:sampled"> <input type="checkbox" name="reviewStatus" value="sampled"> <span class="facet-name">sampled</span> <span class="facet-count" data-facet-count="reviewStatus:sampled">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-sensitivity"> <span class="facet-legend" id="facet-legend-sensitivity">Sensitivity</span> <div class="facet-list"> <label class="facet" data-facet-row="sensitivity:controlled"> <input type="checkbox" name="sensitivity" value="controlled"> <span class="facet-name">controlled</span> <span class="facet-count" data-facet-count="sensitivity:controlled">2</span> </label> </div> </div> </form> <div class="results-toolbar"> <div class="search-field"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path> </svg> <label class="visually-hidden" for="search-input">Search collections</label> <input class="search-input" id="search-input" type="search" autocomplete="off" placeholder="Search by name or description…"> <button class="search-clear" type="button" id="search-clear" aria-label="Clear all" hidden>×</button> </div> <p class="result-count" id="result-count" aria-live="polite"> 2 of 2 collections </p> </div> <div class="active-chips" id="active-chips" hidden aria-label="Active filters"></div> <div class="card-grid" id="card-grid"> <a class="card" href="/community/collections/agent-safety-baseline/" data-card="agent-safety-baseline" data-name="promptbeat agent safety baseline" data-desc="trace-aware tool-using agent safety seeds derived from agentdojo, injecagent, agentharm, toolemu, and adversarial cases." data-risk-type="data_exfiltration|instruction_override|unauthorized_action" data-language="en|zh" data-target-type="agent|http-agent|coding-agent" data-review-status="automated" data-sensitivity="controlled"> <div class="card-status"> <span class="pill pill-staging pill-dot">staging</span> <span class="pill pill-neutral">automated review</span> <span class="pill pill-care">controlled</span> </div> <h3 class="card-title">Promptbeat Agent Safety Baseline</h3> <p class="card-desc">Trace-aware tool-using agent safety seeds derived from AgentDojo, InjecAgent, AgentHarm, ToolEmu, and adversarial cases.</p> <div class="card-body"> <div class="card-count-row"> <span class="card-count">110</span> <span class="card-count-unit">seeds</span> </div> <div class="card-risks"> <div class="card-risk"> <span class="card-risk-name" title="instruction_override">instruction_override</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:100%"></span></span> <span class="card-risk-num">71</span> </div><div class="card-risk"> <span class="card-risk-name" title="unauthorized_action">unauthorized_action</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:37%"></span></span> <span class="card-risk-num">26</span> </div><div class="card-risk"> <span class="card-risk-name" title="data_exfiltration">data_exfiltration</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:18%"></span></span> <span class="card-risk-num">13</span> </div> </div> </div> <p class="card-facets"> en, zh · agent, http-agent, coding-agent </p> <div class="card-foot"> <span class="card-meta"> <span class="card-version">v0.1.0</span> <span>ASI01–ASI09</span> </span> <span class="card-go"> View collection <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h13M13 6l6 6-6 6"></path> </svg> </span> </div> </a><a class="card" href="/community/collections/jailbreak-baseline/" data-card="jailbreak-baseline" data-name="promptbeat jailbreak baseline" data-desc="chinese jailbreak and harmful-content refusal seeds adapted from jailbench, alert adversarial cases, and original curated prompts." data-risk-type="illegal_harmful_content" data-language="zh" data-target-type="llm" data-review-status="sampled" data-sensitivity="controlled"> <div class="card-status"> <span class="pill pill-staging pill-dot">staging</span> <span class="pill pill-neutral">sampled review</span> <span class="pill pill-care">controlled</span> </div> <h3 class="card-title">Promptbeat Jailbreak Baseline</h3> <p class="card-desc">Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts.</p> <div class="card-body"> <div class="card-count-row"> <span class="card-count">499</span> <span class="card-count-unit">seeds</span> </div> <div class="card-risks"> <div class="card-risk"> <span class="card-risk-name" title="illegal_harmful_content">illegal_harmful_content</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:100%"></span></span> <span class="card-risk-num">499</span> </div> </div> </div> <p class="card-facets"> zh · llm </p> <div class="card-foot"> <span class="card-meta"> <span class="card-version">v0.1.0</span> <span>illegal_harmful_content</span> </span> <span class="card-go"> View collection <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h13M13 6l6 6-6 6"></path> </svg> </span> </div> </a> </div> <div class="empty-state" id="empty-state" hidden> <p>No collections match these filters.</p> <p class="hint">Try clearing a filter or searching for a different term.</p> </div> </div> </div> <script type="application/json" id="registry-payload">{"generatedAt":"2026-07-30T00:00:00Z","collections":[{"id":"agent-safety-baseline","name":"Promptbeat Agent Safety Baseline","description":"Trace-aware tool-using agent safety seeds derived from AgentDojo, InjecAgent, AgentHarm, ToolEmu, and adversarial cases.","version":"0.1.0","status":"staging","sensitivity":"controlled","reviewStatus":"automated","itemCount":110,"languages":["en","zh"],"targetTypes":["agent","http-agent","coding-agent"],"riskTypes":["data_exfiltration","instruction_override","unauthorized_action"],"asiIds":["ASI01","ASI02","ASI03","ASI04","ASI05","ASI06","ASI09"],"tags":["agent-safety","tool-use","trace-aware","baseline"],"counts":{"risk":{"data_exfiltration":13,"instruction_override":71,"unauthorized_action":26},"native":{"adversarial_game_breach":19,"arbitrary_code_execution":1,"config_tampering":1,"credential_leak":3,"destructive_action":4,"financial_fraud":2,"privacy_violation":5,"prompt_injection":49,"reconnaissance":1,"sensitive_data_leak":5,"social_engineering":3,"supply_chain_attack":1,"unauthorized_access":4,"unauthorized_surveillance":1,"unauthorized_tool_invocation":11},"asi":{"ASI01":68,"ASI02":29,"ASI03":7,"ASI04":1,"ASI05":1,"ASI06":1,"ASI09":3},"lang":{"en":22,"zh":88}}},{"id":"jailbreak-baseline","name":"Promptbeat Jailbreak Baseline","description":"Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts.","version":"0.1.0","status":"staging","sensitivity":"controlled","reviewStatus":"sampled","itemCount":499,"languages":["zh"],"targetTypes":["llm"],"riskTypes":["illegal_harmful_content"],"asiIds":[],"tags":["jailbreak","harmful-content","zh","baseline"],"counts":{"risk":{"illegal_harmful_content":499},"native":{"biological_weapon":1,"chemical_weapon":3,"cybercrime":62,"disinformation":52,"environmental_crime":1,"fraud":106,"hate_speech":183,"illegal_activity":20,"illegal_drug":3,"mass_violence":1,"privacy_violation":38,"violent_crime":28,"weapon_modification":1},"asi":{},"lang":{"zh":499}}}]}</script> <script>(function(){const i18nCount = "en";
+
+  (function () {
+    var grid = document.getElementById('card-grid');
+    if (!grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-card]'));
+    var panel = document.getElementById('filter-panel');
+    var search = document.getElementById('search-input');
+    var searchClear = document.getElementById('search-clear');
+    var countEl = document.getElementById('result-count');
+    var chipsEl = document.getElementById('active-chips');
+    var emptyEl = document.getElementById('empty-state');
+    var clearBtn = document.getElementById('clear-filters');
+    var total = cards.length;
+
+    // facet key -> the card data attribute holding its values
+    var ATTR = {
+      riskType: 'riskType',
+      language: 'language',
+      targetType: 'targetType',
+      reviewStatus: 'reviewStatus',
+      sensitivity: 'sensitivity',
+    };
+
+    var countText = function (n, tot) {
+      return i18nCount === 'zh' ? tot + ' 个集合中的 ' + n + ' 个' : n + ' of ' + tot + ' collections';
+    };
+
+    var selected = function () {
+      var out = {};
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]:checked'), function (input) {
+        (out[input.name] = out[input.name] || []).push(input.value);
+      });
+      return out;
+    };
+
+    var cardValues = function (card, key) {
+      var raw = card.dataset[ATTR[key]] || '';
+      return raw ? raw.split('|') : [];
+    };
+
+    // A card matches when every active facet group has at least one of its
+    // chosen values on the card (AND across groups, OR inside a group).
+    var matches = function (card, sel, term) {
+      for (var key in sel) {
+        if (!sel[key].length) continue;
+        var vals = cardValues(card, key);
+        var hit = sel[key].some(function (v) { return vals.indexOf(v) !== -1; });
+        if (!hit) return false;
+      }
+      if (term) {
+        var hay = (card.dataset.name || '') + ' ' + (card.dataset.desc || '');
+        if (hay.indexOf(term) === -1) return false;
+      }
+      return true;
+    };
+
+    var renderChips = function (sel, term) {
+      chipsEl.innerHTML = '';
+      var any = false;
+      Object.keys(sel).forEach(function (key) {
+        sel[key].forEach(function (value) {
+          any = true;
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'chip';
+          chip.setAttribute('data-chip', key + ':' + value);
+          chip.innerHTML = '<span>' + value + '</span><span class="chip-x" aria-hidden="true">×</span>';
+          chip.addEventListener('click', function () {
+            var input = panel.querySelector('input[name="' + key + '"][value="' + value + '"]');
+            if (input) { input.checked = false; apply(); }
+          });
+          chipsEl.appendChild(chip);
+        });
+      });
+      chipsEl.hidden = !any;
+      clearBtn.hidden = !any && !term;
+    };
+
+    // Recompute how many collections each facet would still yield, given the
+    // other active groups. Zero-yield facets are dimmed rather than removed so
+    // the filter list does not jump around.
+    var updateFacetCounts = function (sel, term) {
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]'), function (input) {
+        var probe = {};
+        Object.keys(sel).forEach(function (k) { if (k !== input.name) probe[k] = sel[k]; });
+        probe[input.name] = [input.value];
+        var n = cards.filter(function (c) { return matches(c, probe, term); }).length;
+        var badge = panel.querySelector('[data-facet-count="' + input.name + ':' + input.value + '"]');
+        if (badge) badge.textContent = String(n);
+        var row = panel.querySelector('[data-facet-row="' + input.name + ':' + input.value + '"]');
+        if (row) row.setAttribute('data-empty', n === 0 ? 'true' : 'false');
+      });
+    };
+
+    var syncUrl = function (sel, term) {
+      var params = new URLSearchParams();
+      Object.keys(sel).forEach(function (k) { sel[k].forEach(function (v) { params.append(k, v); }); });
+      if (term) params.set('q', term);
+      var qs = params.toString();
+      history.replaceState(null, '', qs ? location.pathname + '?' + qs : location.pathname);
+    };
+
+    var apply = function () {
+      var sel = selected();
+      var term = (search.value || '').trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function (card) {
+        var ok = matches(card, sel, term);
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      countEl.textContent = countText(shown, total);
+      emptyEl.hidden = shown !== 0;
+      searchClear.hidden = !term;
+      renderChips(sel, term);
+      updateFacetCounts(sel, term);
+      syncUrl(sel, term);
+    };
+
+    // Restore state from the URL so a filtered view is shareable.
+    var initial = new URLSearchParams(location.search);
+    initial.forEach(function (value, key) {
+      if (key === 'q') { search.value = value; return; }
+      var input = panel.querySelector('input[name="' + key + '"][value="' + value + '"]');
+      if (input) input.checked = true;
+    });
+
+    panel.addEventListener('change', apply);
+    panel.addEventListener('submit', function (e) { e.preventDefault(); });
+    search.addEventListener('input', apply);
+    searchClear.addEventListener('click', function () { search.value = ''; apply(); search.focus(); });
+    clearBtn.addEventListener('click', function () {
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]'), function (i) { i.checked = false; });
+      search.value = '';
+      apply();
+    });
+
+    apply();
+  })();
+})();</script> <section class="section shell"> <h2 class="section-label" id="risk-types">Cisco risk types</h2> <p class="section-note">Seed counts per risk type across every collection. A collection can appear in more than one row, so per-row counts do not sum to a collection total.</p> <div class="table-wrap"> <table class="data"> <thead> <tr> <th>Risk type</th> <th class="num">Items</th> <th class="bar-cell"></th> <th>Collection</th> <th>Languages</th> <th>Targets</th> </tr> </thead> <tbody> <tr> <td rowspan="1"> <strong>illegal_harmful_content</strong> </td> <td class="num">499</td> <td class="bar-cell"> <div class="bar" style="width:100%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/jailbreak-baseline/">Promptbeat Jailbreak Baseline</a> </td> <td>zh</td> <td>llm</td> </tr><tr> <td rowspan="1"> <strong>instruction_override</strong> </td> <td class="num">71</td> <td class="bar-cell"> <div class="bar" style="width:14%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr><tr> <td rowspan="1"> <strong>unauthorized_action</strong> </td> <td class="num">26</td> <td class="bar-cell"> <div class="bar" style="width:5%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr><tr> <td rowspan="1"> <strong>data_exfiltration</strong> </td> <td class="num">13</td> <td class="bar-cell"> <div class="bar" style="width:3%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr> </tbody> </table> </div> </section> <section class="section shell"> <h2 class="section-label" id="owasp-asi">OWASP Agentic Security Initiative (ASI) coverage</h2> <p class="section-note">Agent-targeting seeds also carry an OWASP ASI mapping, since agent evaluators often need to report against that taxonomy directly.</p> <div class="table-wrap"> <table class="data"> <thead> <tr> <th>ASI ID</th> <th>Name</th> <th class="num">Items</th> <th class="bar-cell"></th> <th>Collection</th> </tr> </thead> <tbody> <tr> <td class="mono-cell">ASI01</td> <td><strong>Agent Goal Hijacking</strong></td> <td class="num">68</td> <td class="bar-cell"> <div class="bar" style="width:100%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI02</td> <td><strong>Tool Misuse and Exploitation</strong></td> <td class="num">29</td> <td class="bar-cell"> <div class="bar" style="width:43%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI03</td> <td><strong>Identity and Privilege Abuse</strong></td> <td class="num">7</td> <td class="bar-cell"> <div class="bar" style="width:10%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI04</td> <td><strong>Agentic Supply Chain Vulnerabilities</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI05</td> <td><strong>Unexpected Code Execution</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI06</td> <td><strong>Memory and Context Poisoning</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI09</td> <td><strong>Human-Agent Trust Exploitation</strong></td> <td class="num">3</td> <td class="bar-cell"> <div class="bar" style="width:4%" aria-hidden="true"></div> </td> <td> <a href="/community/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr> </tbody> </table> </div> <p class="section-note" style="margin-top:1.25rem;margin-bottom:0"> No seed in this registry maps to ASI07, ASI08, ASI10 yet — these are uncovered gaps, not omissions. </p> </section> <section class="section shell"> <h2 class="section-label">A shared library, still early</h2> <p class="section-note">Both collections here are seeded and reviewed by the core team today. There is no public submission or review workflow yet, so contribution is not open. The registry versioning, hashing, and review-status fields exist specifically so that a workflow like that can be added later without breaking anyone already pinned to a version.</p>  <p class="notice notice-soon">Community contribution is not open yet</p> </section>  </main> <footer class="site-footer"> <div class="shell"> <p>Static site generated at build time from the Promptbeat seed registry.</p> <p> Generated from registry/seed-registry/v1/index.json at <code>2026-07-30T00:00:00Z</code> </p> </div> </footer> <script>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('pb-theme', next); } catch (e) {}
+        });
+      })();
+    </script> </body> </html>

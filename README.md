@@ -20,7 +20,7 @@
     <a href="#which-one-do-i-need"><b>Which one do I need</b></a> ·
     <a href="#datasets"><b>Datasets</b></a> ·
     <a href="#community"><b>Community</b></a> ·
-    <a href="https://promptbeat.mintlify.app/introduction"><b>Docs</b></a> ·
+    <a href="https://promptbeat.mintlify.app/"><b>Docs</b></a> ·
     <a href="README.zh-CN.md"><b>中文</b></a>
   </p>
 
@@ -403,4 +403,3 @@ occasional community rewards.
   <br />
   <sub>PromptBeat finds the risk · AgentBeat proves the step · retest keeps every AI update honest</sub>
 </div>
-

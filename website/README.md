@@ -31,3 +31,9 @@ npm run check
 ## Deployment notes
 
 Use Mintlify hosting for the first launch. Configure the production domain in the Mintlify dashboard after the project is connected. Keep generated reports and benchmark artifacts out of this folder unless they are sanitized and intentionally published.
+
+The seed community under `public/community/` is a prebuilt static artifact. It
+contains collection metadata and aggregate counts only; controlled seed prompts
+are not included. Rebuild it from the private registry source, scan the output
+for prompt-bearing fields and secrets, then replace the committed artifact as a
+single reviewed change.

@@ -1,0 +1,61 @@
+---
+title: 升级后回归
+description: 模型、Prompt、知识库或策略变更后，抓住安全回退。
+---
+
+# 升级后回归
+
+**触发词：** "频繁迭代"、"担心回退"、"刚换了模型"
+
+每次模型、系统 Prompt、知识库或策略变更，都是悄无声息丢安全的机会。数据闭环就是为这一刻准备的。
+
+## 这个场景优化什么
+
+| 目标 | 怎么做 |
+|---|---|
+| 与上一版问同样的问题 | 钉死 `collection@version`——永远不用"最新" |
+| 同一批 Judge | 两次运行都记录 Judge 版本 |
+| 清晰的 diff | 对比报告：回退 / 改善 / 不变 |
+| 便宜到能常跑 | 复用候选集；Seed 没变就不全量重生成 |
+
+## 推荐路径
+
+<Steps>
+  <Step title="钉死基线">
+    用上次验收运行的回归数据集与配置版本。
+  </Step>
+  <Step title="只换变了的那一项">
+    新模型 id、新系统 Prompt、新策略文件——能一次只动一个变量就只动一个。
+  </Step>
+  <Step title="重跑同一批 Scenario">
+    黑盒用 Promptbeat；目标是 Agent 且边界是行为级时用 Agentbeat。
+  </Step>
+  <Step title="对比两次运行">
+    见 [Reports — 对比](/zh/promptbeat/reports#对比报告)。优先看回退的 FAIL。
+  </Step>
+  <Step title="修复、复测、新失败晋级">
+    接受的回退要有负责人；新失败走 Promote / Rewrite / Reject。
+  </Step>
+</Steps>
+
+## 什么叫"无回退"
+
+- 声明的核心风险上，先前 PASS 的 case 没有新 FAIL
+- 持续 FAIL 的 Severity 没有上升，除非有明确接受
+- Agent 运行：同一 Seed 集上没有新的 forbidden-boundary 命中
+- 两次运行的 Judge 与数据集版本未变（或变更已文档化）
+
+## 反模式
+
+| 反模式 | 为什么失败 |
+|---|---|
+| 为新模型重新生成候选 | 破坏可比较性 |
+| 同时换 Judge 和模型 | 分不清 diff 来自谁 |
+| Agent 升级只跑内容 Judge | 漏掉行为回退 |
+| 用"最新"数据集 | 基线在脚下溜走 |
+
+## 相关
+
+- [数据闭环](/zh/promptbeat/dataset-loop)
+- [报告](/zh/promptbeat/reports)
+- [Execution — 多模型矩阵](/zh/promptbeat/execution#多模型矩阵)

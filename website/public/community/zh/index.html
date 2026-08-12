@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>带版本与哈希校验的攻击种子集合 · Promptbeat 种子社区</title><meta name="description" content="面向 LLM 与 agent 红队评测的、带版本和哈希校验的攻击种子集合。"><meta name="generator" content="Astro v5.5.5"><link rel="alternate" hreflang="en" href="/community/"><link rel="icon" href="/community/favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="/community/favicon.ico" sizes="any"><script>
+      // Dark-first: default to dark for new visitors (security-tooling context
+      // reads more serious in dark) and remember the user's toggle across
+      // sessions. Inlined so no light flash before first paint.
+      try {
+        var saved = localStorage.getItem('pb-theme');
+        var theme = saved === 'light' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script><link rel="stylesheet" href="/community/_astro/_id_.BEwJqQPF.css"></head> <body> <a class="skip-link" href="#main">Skip to content</a> <header class="site-header"> <div class="shell site-header-inner"> <a class="brand" href="/community/zh/"> <span class="brand-mark" aria-hidden="true">  <svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"> <rect width="40" height="40" rx="9" class="brand-mark-bg"></rect> <path d="M9 24 18 7h14l-9 15h9L15 36l5-12z" class="brand-mark-bolt"></path> </svg> </span> <span>Promptbeat 种子社区</span> </a> <div class="header-actions"> <a class="header-link" href="/" rel="noreferrer">文档</a> <a class="header-link" href="/community/" hreflang="en" aria-label="切换到英文"> English </a> <button class="icon-button" type="button" id="theme-toggle" aria-label="Toggle dark mode"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="12" cy="12" r="4.5"></circle> <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path> </svg> </button> </div> </div> </header> <main id="main">  <section class="hero"> <div class="shell"> <p class="hero-eyebrow">由 Promptbeat seed registry 生成</p> <h1 class="hero-title">带版本与哈希校验的攻击种子集合</h1> <p class="hero-lede">用 promptbeat seed pull 直接拉一份经过审核的种子池，不必在第一次真实评测前从零手工整理。每个集合都带着自己的来源、风险类型覆盖和审核状态。</p> <div class="hero-stats"> <div> <div class="stat-value">2</div> <div class="stat-label">个集合</div> </div> <div> <div class="stat-value">609</div> <div class="stat-label">条种子</div> </div> <div> <div class="stat-value">4</div> <div class="stat-label">类风险</div> </div> </div> </div> </section> <div class="browse shell"> <div> <form class="filter-panel" id="filter-panel" role="search" aria-label="筛选"> <div class="filter-head"> <h2 class="filter-title">筛选</h2> <button class="clear-filters" type="button" id="clear-filters" hidden>清除全部</button> </div>  <div class="facet-group" role="group" aria-labelledby="facet-legend-riskType"> <span class="facet-legend" id="facet-legend-riskType">风险类型</span> <div class="facet-list"> <label class="facet" data-facet-row="riskType:data_exfiltration"> <input type="checkbox" name="riskType" value="data_exfiltration"> <span class="facet-name">data_exfiltration</span> <span class="facet-count" data-facet-count="riskType:data_exfiltration">1</span> </label><label class="facet" data-facet-row="riskType:illegal_harmful_content"> <input type="checkbox" name="riskType" value="illegal_harmful_content"> <span class="facet-name">illegal_harmful_content</span> <span class="facet-count" data-facet-count="riskType:illegal_harmful_content">1</span> </label><label class="facet" data-facet-row="riskType:instruction_override"> <input type="checkbox" name="riskType" value="instruction_override"> <span class="facet-name">instruction_override</span> <span class="facet-count" data-facet-count="riskType:instruction_override">1</span> </label><label class="facet" data-facet-row="riskType:unauthorized_action"> <input type="checkbox" name="riskType" value="unauthorized_action"> <span class="facet-name">unauthorized_action</span> <span class="facet-count" data-facet-count="riskType:unauthorized_action">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-language"> <span class="facet-legend" id="facet-legend-language">语言</span> <div class="facet-list"> <label class="facet" data-facet-row="language:zh"> <input type="checkbox" name="language" value="zh"> <span class="facet-name">zh</span> <span class="facet-count" data-facet-count="language:zh">2</span> </label><label class="facet" data-facet-row="language:en"> <input type="checkbox" name="language" value="en"> <span class="facet-name">en</span> <span class="facet-count" data-facet-count="language:en">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-targetType"> <span class="facet-legend" id="facet-legend-targetType">目标类型</span> <div class="facet-list"> <label class="facet" data-facet-row="targetType:agent"> <input type="checkbox" name="targetType" value="agent"> <span class="facet-name">agent</span> <span class="facet-count" data-facet-count="targetType:agent">1</span> </label><label class="facet" data-facet-row="targetType:coding-agent"> <input type="checkbox" name="targetType" value="coding-agent"> <span class="facet-name">coding-agent</span> <span class="facet-count" data-facet-count="targetType:coding-agent">1</span> </label><label class="facet" data-facet-row="targetType:http-agent"> <input type="checkbox" name="targetType" value="http-agent"> <span class="facet-name">http-agent</span> <span class="facet-count" data-facet-count="targetType:http-agent">1</span> </label><label class="facet" data-facet-row="targetType:llm"> <input type="checkbox" name="targetType" value="llm"> <span class="facet-name">llm</span> <span class="facet-count" data-facet-count="targetType:llm">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-reviewStatus"> <span class="facet-legend" id="facet-legend-reviewStatus">审核状态</span> <div class="facet-list"> <label class="facet" data-facet-row="reviewStatus:automated"> <input type="checkbox" name="reviewStatus" value="automated"> <span class="facet-name">automated</span> <span class="facet-count" data-facet-count="reviewStatus:automated">1</span> </label><label class="facet" data-facet-row="reviewStatus:sampled"> <input type="checkbox" name="reviewStatus" value="sampled"> <span class="facet-name">sampled</span> <span class="facet-count" data-facet-count="reviewStatus:sampled">1</span> </label> </div> </div><div class="facet-group" role="group" aria-labelledby="facet-legend-sensitivity"> <span class="facet-legend" id="facet-legend-sensitivity">敏感级别</span> <div class="facet-list"> <label class="facet" data-facet-row="sensitivity:controlled"> <input type="checkbox" name="sensitivity" value="controlled"> <span class="facet-name">controlled</span> <span class="facet-count" data-facet-count="sensitivity:controlled">2</span> </label> </div> </div> </form> <div class="results-toolbar"> <div class="search-field"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path> </svg> <label class="visually-hidden" for="search-input">搜索集合</label> <input class="search-input" id="search-input" type="search" autocomplete="off" placeholder="按名称或描述搜索…"> <button class="search-clear" type="button" id="search-clear" aria-label="清除全部" hidden>×</button> </div> <p class="result-count" id="result-count" aria-live="polite"> 2 个集合中的 2 个 </p> </div> <div class="active-chips" id="active-chips" hidden aria-label="已选条件"></div> <div class="card-grid" id="card-grid"> <a class="card" href="/community/zh/collections/agent-safety-baseline/" data-card="agent-safety-baseline" data-name="promptbeat agent safety baseline" data-desc="trace-aware tool-using agent safety seeds derived from agentdojo, injecagent, agentharm, toolemu, and adversarial cases." data-risk-type="data_exfiltration|instruction_override|unauthorized_action" data-language="en|zh" data-target-type="agent|http-agent|coding-agent" data-review-status="automated" data-sensitivity="controlled"> <div class="card-status"> <span class="pill pill-staging pill-dot">staging</span> <span class="pill pill-neutral">automated 审核</span> <span class="pill pill-care">controlled</span> </div> <h3 class="card-title">Promptbeat Agent Safety Baseline</h3> <p class="card-desc">Trace-aware tool-using agent safety seeds derived from AgentDojo, InjecAgent, AgentHarm, ToolEmu, and adversarial cases.</p> <div class="card-body"> <div class="card-count-row"> <span class="card-count">110</span> <span class="card-count-unit">条种子</span> </div> <div class="card-risks"> <div class="card-risk"> <span class="card-risk-name" title="instruction_override">instruction_override</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:100%"></span></span> <span class="card-risk-num">71</span> </div><div class="card-risk"> <span class="card-risk-name" title="unauthorized_action">unauthorized_action</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:37%"></span></span> <span class="card-risk-num">26</span> </div><div class="card-risk"> <span class="card-risk-name" title="data_exfiltration">data_exfiltration</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:18%"></span></span> <span class="card-risk-num">13</span> </div> </div> </div> <p class="card-facets"> en, zh · agent, http-agent, coding-agent </p> <div class="card-foot"> <span class="card-meta"> <span class="card-version">v0.1.0</span> <span>ASI01–ASI09</span> </span> <span class="card-go"> 查看集合 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h13M13 6l6 6-6 6"></path> </svg> </span> </div> </a><a class="card" href="/community/zh/collections/jailbreak-baseline/" data-card="jailbreak-baseline" data-name="promptbeat jailbreak baseline" data-desc="chinese jailbreak and harmful-content refusal seeds adapted from jailbench, alert adversarial cases, and original curated prompts." data-risk-type="illegal_harmful_content" data-language="zh" data-target-type="llm" data-review-status="sampled" data-sensitivity="controlled"> <div class="card-status"> <span class="pill pill-staging pill-dot">staging</span> <span class="pill pill-neutral">sampled 审核</span> <span class="pill pill-care">controlled</span> </div> <h3 class="card-title">Promptbeat Jailbreak Baseline</h3> <p class="card-desc">Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts.</p> <div class="card-body"> <div class="card-count-row"> <span class="card-count">499</span> <span class="card-count-unit">条种子</span> </div> <div class="card-risks"> <div class="card-risk"> <span class="card-risk-name" title="illegal_harmful_content">illegal_harmful_content</span> <span class="card-risk-track"><span class="card-risk-fill" style="width:100%"></span></span> <span class="card-risk-num">499</span> </div> </div> </div> <p class="card-facets"> zh · llm </p> <div class="card-foot"> <span class="card-meta"> <span class="card-version">v0.1.0</span> <span>illegal_harmful_content</span> </span> <span class="card-go"> 查看集合 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h13M13 6l6 6-6 6"></path> </svg> </span> </div> </a> </div> <div class="empty-state" id="empty-state" hidden> <p>没有集合符合当前筛选条件。</p> <p class="hint">试着清除一个筛选条件，或换一个关键词。</p> </div> </div> </div> <script type="application/json" id="registry-payload">{"generatedAt":"2026-07-30T00:00:00Z","collections":[{"id":"agent-safety-baseline","name":"Promptbeat Agent Safety Baseline","description":"Trace-aware tool-using agent safety seeds derived from AgentDojo, InjecAgent, AgentHarm, ToolEmu, and adversarial cases.","version":"0.1.0","status":"staging","sensitivity":"controlled","reviewStatus":"automated","itemCount":110,"languages":["en","zh"],"targetTypes":["agent","http-agent","coding-agent"],"riskTypes":["data_exfiltration","instruction_override","unauthorized_action"],"asiIds":["ASI01","ASI02","ASI03","ASI04","ASI05","ASI06","ASI09"],"tags":["agent-safety","tool-use","trace-aware","baseline"],"counts":{"risk":{"data_exfiltration":13,"instruction_override":71,"unauthorized_action":26},"native":{"adversarial_game_breach":19,"arbitrary_code_execution":1,"config_tampering":1,"credential_leak":3,"destructive_action":4,"financial_fraud":2,"privacy_violation":5,"prompt_injection":49,"reconnaissance":1,"sensitive_data_leak":5,"social_engineering":3,"supply_chain_attack":1,"unauthorized_access":4,"unauthorized_surveillance":1,"unauthorized_tool_invocation":11},"asi":{"ASI01":68,"ASI02":29,"ASI03":7,"ASI04":1,"ASI05":1,"ASI06":1,"ASI09":3},"lang":{"en":22,"zh":88}}},{"id":"jailbreak-baseline","name":"Promptbeat Jailbreak Baseline","description":"Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts.","version":"0.1.0","status":"staging","sensitivity":"controlled","reviewStatus":"sampled","itemCount":499,"languages":["zh"],"targetTypes":["llm"],"riskTypes":["illegal_harmful_content"],"asiIds":[],"tags":["jailbreak","harmful-content","zh","baseline"],"counts":{"risk":{"illegal_harmful_content":499},"native":{"biological_weapon":1,"chemical_weapon":3,"cybercrime":62,"disinformation":52,"environmental_crime":1,"fraud":106,"hate_speech":183,"illegal_activity":20,"illegal_drug":3,"mass_violence":1,"privacy_violation":38,"violent_crime":28,"weapon_modification":1},"asi":{},"lang":{"zh":499}}}]}</script> <script>(function(){const i18nCount = "zh";
+
+  (function () {
+    var grid = document.getElementById('card-grid');
+    if (!grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-card]'));
+    var panel = document.getElementById('filter-panel');
+    var search = document.getElementById('search-input');
+    var searchClear = document.getElementById('search-clear');
+    var countEl = document.getElementById('result-count');
+    var chipsEl = document.getElementById('active-chips');
+    var emptyEl = document.getElementById('empty-state');
+    var clearBtn = document.getElementById('clear-filters');
+    var total = cards.length;
+
+    // facet key -> the card data attribute holding its values
+    var ATTR = {
+      riskType: 'riskType',
+      language: 'language',
+      targetType: 'targetType',
+      reviewStatus: 'reviewStatus',
+      sensitivity: 'sensitivity',
+    };
+
+    var countText = function (n, tot) {
+      return i18nCount === 'zh' ? tot + ' 个集合中的 ' + n + ' 个' : n + ' of ' + tot + ' collections';
+    };
+
+    var selected = function () {
+      var out = {};
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]:checked'), function (input) {
+        (out[input.name] = out[input.name] || []).push(input.value);
+      });
+      return out;
+    };
+
+    var cardValues = function (card, key) {
+      var raw = card.dataset[ATTR[key]] || '';
+      return raw ? raw.split('|') : [];
+    };
+
+    // A card matches when every active facet group has at least one of its
+    // chosen values on the card (AND across groups, OR inside a group).
+    var matches = function (card, sel, term) {
+      for (var key in sel) {
+        if (!sel[key].length) continue;
+        var vals = cardValues(card, key);
+        var hit = sel[key].some(function (v) { return vals.indexOf(v) !== -1; });
+        if (!hit) return false;
+      }
+      if (term) {
+        var hay = (card.dataset.name || '') + ' ' + (card.dataset.desc || '');
+        if (hay.indexOf(term) === -1) return false;
+      }
+      return true;
+    };
+
+    var renderChips = function (sel, term) {
+      chipsEl.innerHTML = '';
+      var any = false;
+      Object.keys(sel).forEach(function (key) {
+        sel[key].forEach(function (value) {
+          any = true;
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'chip';
+          chip.setAttribute('data-chip', key + ':' + value);
+          chip.innerHTML = '<span>' + value + '</span><span class="chip-x" aria-hidden="true">×</span>';
+          chip.addEventListener('click', function () {
+            var input = panel.querySelector('input[name="' + key + '"][value="' + value + '"]');
+            if (input) { input.checked = false; apply(); }
+          });
+          chipsEl.appendChild(chip);
+        });
+      });
+      chipsEl.hidden = !any;
+      clearBtn.hidden = !any && !term;
+    };
+
+    // Recompute how many collections each facet would still yield, given the
+    // other active groups. Zero-yield facets are dimmed rather than removed so
+    // the filter list does not jump around.
+    var updateFacetCounts = function (sel, term) {
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]'), function (input) {
+        var probe = {};
+        Object.keys(sel).forEach(function (k) { if (k !== input.name) probe[k] = sel[k]; });
+        probe[input.name] = [input.value];
+        var n = cards.filter(function (c) { return matches(c, probe, term); }).length;
+        var badge = panel.querySelector('[data-facet-count="' + input.name + ':' + input.value + '"]');
+        if (badge) badge.textContent = String(n);
+        var row = panel.querySelector('[data-facet-row="' + input.name + ':' + input.value + '"]');
+        if (row) row.setAttribute('data-empty', n === 0 ? 'true' : 'false');
+      });
+    };
+
+    var syncUrl = function (sel, term) {
+      var params = new URLSearchParams();
+      Object.keys(sel).forEach(function (k) { sel[k].forEach(function (v) { params.append(k, v); }); });
+      if (term) params.set('q', term);
+      var qs = params.toString();
+      history.replaceState(null, '', qs ? location.pathname + '?' + qs : location.pathname);
+    };
+
+    var apply = function () {
+      var sel = selected();
+      var term = (search.value || '').trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function (card) {
+        var ok = matches(card, sel, term);
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      countEl.textContent = countText(shown, total);
+      emptyEl.hidden = shown !== 0;
+      searchClear.hidden = !term;
+      renderChips(sel, term);
+      updateFacetCounts(sel, term);
+      syncUrl(sel, term);
+    };
+
+    // Restore state from the URL so a filtered view is shareable.
+    var initial = new URLSearchParams(location.search);
+    initial.forEach(function (value, key) {
+      if (key === 'q') { search.value = value; return; }
+      var input = panel.querySelector('input[name="' + key + '"][value="' + value + '"]');
+      if (input) input.checked = true;
+    });
+
+    panel.addEventListener('change', apply);
+    panel.addEventListener('submit', function (e) { e.preventDefault(); });
+    search.addEventListener('input', apply);
+    searchClear.addEventListener('click', function () { search.value = ''; apply(); search.focus(); });
+    clearBtn.addEventListener('click', function () {
+      Array.prototype.forEach.call(panel.querySelectorAll('input[type=checkbox]'), function (i) { i.checked = false; });
+      search.value = '';
+      apply();
+    });
+
+    apply();
+  })();
+})();</script> <section class="section shell"> <h2 class="section-label" id="risk-types">Cisco 风险类型</h2> <p class="section-note">所有集合按风险类型汇总的种子条数。同一个集合可能出现在多行里，所以单行的条目数不需要相加等于集合总条目数。</p> <div class="table-wrap"> <table class="data"> <thead> <tr> <th>风险类型</th> <th class="num">条目数</th> <th class="bar-cell"></th> <th>所属集合</th> <th>语言</th> <th>目标类型</th> </tr> </thead> <tbody> <tr> <td rowspan="1"> <strong>illegal_harmful_content</strong> </td> <td class="num">499</td> <td class="bar-cell"> <div class="bar" style="width:100%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/jailbreak-baseline/">Promptbeat Jailbreak Baseline</a> </td> <td>zh</td> <td>llm</td> </tr><tr> <td rowspan="1"> <strong>instruction_override</strong> </td> <td class="num">71</td> <td class="bar-cell"> <div class="bar" style="width:14%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr><tr> <td rowspan="1"> <strong>unauthorized_action</strong> </td> <td class="num">26</td> <td class="bar-cell"> <div class="bar" style="width:5%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr><tr> <td rowspan="1"> <strong>data_exfiltration</strong> </td> <td class="num">13</td> <td class="bar-cell"> <div class="bar" style="width:3%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a> </td> <td>en, zh</td> <td>agent, http-agent, coding-agent</td> </tr> </tbody> </table> </div> </section> <section class="section shell"> <h2 class="section-label" id="owasp-asi">OWASP Agentic Security Initiative (ASI) 覆盖</h2> <p class="section-note">面向 agent 的种子还带有 OWASP ASI 映射，因为很多 agent 评测场景需要直接按这套分类体系出报告。</p> <div class="table-wrap"> <table class="data"> <thead> <tr> <th>ASI ID</th> <th>名称</th> <th class="num">条目数</th> <th class="bar-cell"></th> <th>所属集合</th> </tr> </thead> <tbody> <tr> <td class="mono-cell">ASI01</td> <td><strong>Agent Goal Hijacking</strong></td> <td class="num">68</td> <td class="bar-cell"> <div class="bar" style="width:100%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI02</td> <td><strong>Tool Misuse and Exploitation</strong></td> <td class="num">29</td> <td class="bar-cell"> <div class="bar" style="width:43%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI03</td> <td><strong>Identity and Privilege Abuse</strong></td> <td class="num">7</td> <td class="bar-cell"> <div class="bar" style="width:10%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI04</td> <td><strong>Agentic Supply Chain Vulnerabilities</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI05</td> <td><strong>Unexpected Code Execution</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI06</td> <td><strong>Memory and Context Poisoning</strong></td> <td class="num">1</td> <td class="bar-cell"> <div class="bar" style="width:2%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr><tr> <td class="mono-cell">ASI09</td> <td><strong>Human-Agent Trust Exploitation</strong></td> <td class="num">3</td> <td class="bar-cell"> <div class="bar" style="width:4%" aria-hidden="true"></div> </td> <td> <a href="/community/zh/collections/agent-safety-baseline/">Promptbeat Agent Safety Baseline</a>  </td> </tr> </tbody> </table> </div> <p class="section-note" style="margin-top:1.25rem;margin-bottom:0"> 这个 registry 里暂时没有映射到 ASI07, ASI08, ASI10 的种子——属于尚未覆盖的空缺，不是刻意省略。 </p> </section> <section class="section shell"> <h2 class="section-label">共建的种子社区，现在还在早期</h2> <p class="section-note">目前这两个集合都由核心团队整理和审核。还没有公开的提交或审核工作流——社区贡献尚未开放。Registry 里的版本、哈希、审核状态这些字段，正是为了让未来加入这样的工作流时，不会破坏已经固定在某个版本上的使用者。</p>  <p class="notice notice-soon">社区共建机制尚未开放</p> </section>  </main> <footer class="site-footer"> <div class="shell"> <p>本站为纯静态站点，页面在构建时由 Promptbeat seed registry 生成。</p> <p> 生成自 registry/seed-registry/v1/index.json，时间 <code>2026-07-30T00:00:00Z</code> </p> </div> </footer> <script>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('pb-theme', next); } catch (e) {}
+        });
+      })();
+    </script> </body> </html>

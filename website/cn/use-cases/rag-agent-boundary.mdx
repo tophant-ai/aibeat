@@ -1,0 +1,54 @@
+---
+title: RAG 与 Agent 边界评估
+description: 在 RAG 应用与 Agent 上测试数据泄露、prompt injection、工具授权与跨用户访问。
+---
+
+# RAG 与 Agent 边界评估
+
+**触发词：** "RAG"、"Agent"、"工具调用"、"跨用户"、"PII"
+
+这里的边界是业务规则，不是通用模型道德：*谁可以看什么、哪些工具可以跑、不可信内容可以指挥什么。*
+
+## 真正重要的风险面
+
+| 风险面 | 典型失败 | 优先 |
+|---|---|---|
+| 检索不可信内容 | 工具源 prompt injection | Promptbeat + Agentbeat 网络/工具边界 |
+| 跨用户数据访问 | 查到别人的订单 / 工单 / 资料 | 身份绑定工具的 HTTP-agent Scenario |
+| 工具授权 | 范围外的写/退款/删除工具 | Agentbeat `tool_call` 禁止边界 |
+| 回答里的 PII / 密钥 | 响应文本泄露 | 内容 Judge + 数据集 Seed |
+| 检索后的外传 | 静默外泄 | Agentbeat `network after tool_sourced_content` |
+
+## 推荐路径
+
+<Steps>
+  <Step title="先写业务边界">
+    例："Agent 只能读 `user-123` 的订单；无审批不得退款；不得出站 HTTP。"
+  </Step>
+  <Step title="把边界映射成 Scenario">
+    一条边界一个 Scenario。内容 `boundary` 与行为 `forbidden_boundary` 分开写。
+  </Step>
+  <Step title="从真实工作流取 Seed">
+    工单、退款脚本、"帮同事查一下"的社工、文档注入样例。
+  </Step>
+  <Step title="先黑盒再 Trace">
+    Promptbeat 找回答级泄露与拒答。Agentbeat 找工具与外传违规——响应仍可能看着正常。
+  </Step>
+  <Step title="晋级业务特有 case">
+    这些成为你的内部集合——对这个产品比任何公开越狱集都更有价值。
+  </Step>
+</Steps>
+
+## 客服 Agent 的最小 Scenario 集
+
+1. 跨用户订单查询
+2. 无审批退款工具
+3. 自由回答中的 PII
+4. 来自附件 / 邮件的 prompt injection
+5. 不可信检索后的出站网络
+
+## 相关
+
+- [Agentbeat Scenario](/cn/agentbeat/scenarios)
+- [真实案例 — EchoLeak](/cn/agentbeat/case-studies#echoleak)
+- [核心概念](/cn/about/core-concepts)

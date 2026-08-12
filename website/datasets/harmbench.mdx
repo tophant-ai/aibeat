@@ -1,4 +1,4 @@
----
+﻿---
 title: HarmBench example
 description: Start a Promptbeat evaluation from HarmBench seeds.
 ---
@@ -137,17 +137,14 @@ tests:
 ## Run a small slice
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config examples/codex_agent/promptbeat.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 5 \
-  --output-dir examples/codex_agent/artifacts/dataset-harmbench/generate
+  --output examples/codex_agent/artifacts/dataset-harmbench/generated_cases.json
 
-uv run promptbeat eval \
-  --config examples/codex_agent/artifacts/dataset-harmbench/generate/generated_redteam.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --output-dir examples/codex_agent/artifacts/dataset-harmbench/eval
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir examples/codex_agent/artifacts/dataset-harmbench/run
 ```
 
 Existing saved artifacts from the current validation run:

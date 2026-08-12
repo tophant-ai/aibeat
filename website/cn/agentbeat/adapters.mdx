@@ -1,0 +1,143 @@
+---
+title: Adapters
+description: Agentbeat 如何接入 Codex、Claude Code、OpenClaw、HTTP Agent 和自定义 runtime。
+---
+
+# Adapters
+
+Adapter 是 Agentbeat 观察模型与具体 Agent 运行时之间的桥。CLI 仍是 Promptbeat；说话的是 adapter。
+
+## Adapter 必须暴露什么
+
+| 契约 | 是否必须 | 说明 |
+|---|---|---|
+| 请求 / 响应 | 是 | 与 Promptbeat provider 相同 |
+| 工具调用日志 | Agent Scenario 必须 | 名称、参数、返回、时间戳 |
+| 文件操作 | 推荐 | 路径、mode、字节数 |
+| 环境读取 | 推荐 | 变量名和来源 |
+| 网络调用 | 推荐 | URL、method、body 大小 |
+| 审批事件 | Agent 有策略层时 | 弹窗 / 通过 / 绕过 |
+| 状态快照钩子 | 可选 | 运行前后 workspace 或 DB |
+
+缺什么就判不了什么。只开 Scenario 需要的——Trace 涨得很快。
+
+## 内建与一等 adapter
+
+### Codex CLI（`openai:codex-sdk`）
+
+```yaml
+target:
+  id: codex-cli
+  kind: coding-agent
+  provider: openai:codex-sdk
+  observation:
+    trace: true
+    env_deltas: true
+    file_operations: true
+    tool_calls: true
+```
+
+完整工具 Trace、文件操作、环境读取、终端输出。这是 [快速上手](/cn/agentbeat/quickstart) 用的已验证路径。
+
+### Claude Code / OpenClaw（CLI adapter）
+
+```yaml
+target:
+  id: claude-code
+  kind: coding-agent
+  provider: cli:claude-code
+  observation:
+    trace: true
+    file_operations: true
+    tool_calls: true
+```
+
+Session 记录 + 工具调用日志 + 文件操作。环境与网络覆盖取决于 CLI 自身日志深度。
+
+### HTTP Agent（provider + Trace 钩子）
+
+```yaml
+target:
+  id: support-agent
+  kind: http-agent
+  provider: http:
+    url: https://internal.example.com/agent/v1
+    method: POST
+  observation:
+    tool_calls: true     # 要求 Agent 自己发出工具调用事件
+    env_deltas: false
+```
+
+HTTP Agent 只暴露自身 API 返回的东西。Agent 不发工具调用事件，Agentbeat 也编不出来。
+
+### Inspect solver / Terminal-Bench
+
+```yaml
+target:
+  id: terminal-bench-task
+  kind: coding-agent
+  provider: inspect:terminal-bench
+  observation:
+    trace: true
+    file_operations: true
+    state_deltas: true
+```
+
+Scenario 需要真实任务环境、隐藏测试和 scorer 时优先。Adapter 负责 workspace 准备、服务启动、就绪检查、评分和清理。Promptbeat 把结果归一回公共报告契约。
+
+## 分层职责
+
+| 层 | 负责 |
+|---|---|
+| Promptbeat CLI | Target 画像、Scenario、Seed、报告、Trace 归一化 |
+| Agent 应用 | CLI / SDK 生命周期、策略、模型、工具 |
+| Environment adapter | Workspace、任务准备、服务启动、隐藏测试、评分、清理 |
+| Inspect（可选） | Solver 执行、沙箱、日志、artifact |
+| Promptfoo（可选） | 生成、assertion、provider 桥、报告兼容 |
+
+不要把 Agent 藏进任务 runtime。把它当作一等应用管理，再把环境挂上去。
+
+## 什么时候用哪个
+
+| 需求 | 优先 |
+|---|---|
+| 快速黑盒检查 | 只用 Promptbeat provider（不开 observation） |
+| 有真实工具的 Coding Agent | Codex SDK 或 Claude Code CLI adapter |
+| 带隐藏测试的 benchmark 任务 | Inspect + Terminal-Bench adapter |
+| 有自有 Trace API 的企业 Agent | HTTP provider + 自定义 Trace 钩子 |
+| 完全自定义 runtime | Provider file + 自写 adapter |
+
+## 自定义 adapter
+
+自定义 adapter 是一份实现 observation 契约、并输出 [Trace schema](/cn/agentbeat/observation-model#trace-contract) 的 provider file。最小面：
+
+1. 接收候选输入并在 Agent 上执行。
+2. 把工具调用、文件、环境、网络事件流式或批量写成公共 schema。
+3. 返回响应 + Trace + 可选环境 diff。
+
+Adapter 一旦说这套 schema，现有 Judge、报告、数据集都不用改。
+
+## Adapter 的 Preflight
+
+广度 Agentbeat 运行前：
+
+- Adapter 是真的（不是 mock）且能连上 Agent
+- Observation 块与 adapter 实际支持的能力匹配
+- Working directory / 沙箱路径能解析
+- 审批策略可复现（除非有意，不要"一律允许"）
+- Trace 深度足以做证据级报告，又不会把磁盘淹了
+
+```bash
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="Evidence" icon="file-shield" href="/cn/agentbeat/evidence">
+    带着完整 Trace 的 Finding。
+  </Card>
+  <Card title="真实案例" icon="clipboard-list" href="/cn/agentbeat/case-studies">
+    塑造这些 adapter 的真实事件。
+  </Card>
+</CardGroup>

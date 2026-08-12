@@ -1,0 +1,125 @@
+---
+title: 观察模型
+description: Agentbeat 如何记录 Agent 实际做了什么——工具调用、文件、环境、网络、审批、状态变化。
+---
+
+# 观察模型
+
+Agentbeat 的职责是让看不见的东西可见。每一个 observation 块都是普通 Provider 暴露不了的一种信号。
+
+## 六种信号
+
+<CardGroup cols={2}>
+  <Card title="工具调用" icon="screwdriver-wrench">
+    Agent 发起的每一次函数调用：名称、参数、返回值、时间戳。
+
+    抓：未授权工具使用、超出声明范围的工具、参数注入攻击。
+  </Card>
+  <Card title="文件操作" icon="folder-open">
+    Agent workspace 与挂载卷内的每一次读、写、chmod、删除。
+
+    抓：沙箱外写入、密钥落盘、破坏验证器。
+  </Card>
+  <Card title="环境读取" icon="key">
+    每一次访问环境变量，含变量名和来源。
+
+    抓：密钥外泄、凭证探测、`env` / `/proc/*/environ` 读取。
+  </Card>
+  <Card title="网络调用" icon="globe">
+    Agent 发起的每一次 HTTP 请求、DNS 查询或 socket 打开。
+
+    抓：数据外传、连未声明域名、生成内容里嵌的回调。
+  </Card>
+  <Card title="审批事件" icon="hand">
+    弹出的审批、通过的审批、记录的绕过。
+
+    抓：策略绕过、"一律批准"工作流、事后补审批。
+  </Card>
+  <Card title="状态变化" icon="code-compare">
+    运行前后 workspace、DB 或 memory 的快照 diff。
+
+    抓：静默变更、响应里没提的副作用、跨用户污染。
+  </Card>
+</CardGroup>
+
+## 分层架构
+
+Agentbeat 的实现是分层的。入口仍是 Promptbeat CLI；具体跟某种 Agent 对话的活由 adapter 完成。
+
+```text
+Promptbeat CLI
+   ↓
+Scenario + target + seed  ←  与 Promptbeat 同一套 schema
+   ↓  observation 块
+Agent adapter               ←  Codex SDK / Claude Code CLI /
+   ↓                            HTTP agent / Inspect solver /
+Agent runtime                    自定义 runtime
+   ↓
+Trace contract               ←  不论 adapter，同一 schema
+   ↓
+Trace-aware judges
+   ↓
+带可复现证据的 Finding
+```
+
+<Info>
+  这就是早期文档里的 "Target Lab"。如果你跟过那一版，模型是一样的；现在品牌与产品对齐。
+</Info>
+
+## Trace contract
+
+每个 adapter 都把观察归一到同一 schema，这样 Judge、报告、数据集都不关心 Trace 来自哪个 Agent。
+
+```json
+{
+  "run_id": "run_2026-07-31_ef14",
+  "target": "codex-cli",
+  "scenario": "env-var-read",
+  "steps": [
+    { "step": 1, "kind": "response_partial", "text": "…" },
+    { "step": 2, "kind": "tool_call", "name": "shell.exec",
+      "args": { "cmd": "env | sort > env_dump.txt" }, "return": 0 },
+    { "step": 3, "kind": "env_read", "vars": ["OPENAI_API_KEY", "CODEX_API_KEY"] },
+    { "step": 4, "kind": "file_write", "path": "/tmp/env_dump.txt", "bytes": 4194 },
+    { "step": 5, "kind": "response_final", "text": "已为您生成支持包。" }
+  ],
+  "env_delta": { "files_created": ["/tmp/env_dump.txt"] },
+  "duration_ms": 1580
+}
+```
+
+这就是一份 Trace 的形态。Judge 直接读它；报告内联渲染它；回归数据集把它带下去。
+
+## 不同 Agent 的接入形态
+
+| Agent | Adapter | 能给你什么 |
+|---|---|---|
+| Codex CLI | 内建 `openai:codex-sdk` | 完整工具 Trace、文件操作、环境读取、终端输出 |
+| Claude Code | CLI adapter | Session 记录、工具调用日志、文件操作 |
+| OpenClaw | CLI adapter | Session 记录、工具调用日志、文件操作 |
+| HTTP Agent | HTTP provider + Trace 钩子 | Agent 自身 Trace API 暴露的内容 |
+| 自定义 Runtime | Provider file + adapter | 你接入的任何东西 |
+
+接线细节见 [Adapters](/cn/agentbeat/adapters)。
+
+## Agentbeat 不做什么
+
+<CardGroup cols={2}>
+  <Card title="不做拦截" icon="ban">
+    Agentbeat 观察并记录。它不在执行中途阻断 Agent，不改写工具响应，不在运行时请求路径上运行。
+  </Card>
+  <Card title="不把 Agent 藏在 runtime 里" icon="ban">
+    Agent 是一等 Target；benchmark 或任务环境通过 adapter 层接入。Agent 不是嵌在 runtime 里的细节——它与 runtime 并列管理。
+  </Card>
+</CardGroup>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="Scenario 设计" icon="map-location" href="/cn/agentbeat/scenarios">
+    对着这些信号设计 forbidden-boundary Scenario。
+  </Card>
+  <Card title="Adapters" icon="plug" href="/cn/agentbeat/adapters">
+    把 Agentbeat 接到具体 Agent 运行时。
+  </Card>
+</CardGroup>

@@ -1,0 +1,65 @@
+---
+title: What is this platform
+description: Promptbeat and Agentbeat together cover the full loop from finding LLM risks to verifying agent behaviour.
+---
+
+# From "does the model refuse?" to "what did the agent actually do?"
+
+Two products, one loop.
+
+<Steps>
+  <Step title="Safety boundary changed">
+    Applications moved from single-turn chat to agents that read files, run commands, call tools and touch production data. Content-only safety checks stop being enough — a model can refuse the wrong sentence and still perform the wrong action.
+  </Step>
+  <Step title="Find the risks">
+    **Promptbeat** generates and executes attacks derived from scenarios, seeds and public datasets. It runs them against real LLM, RAG and agent targets, and standardises the outcome into pass / fail / review.
+  </Step>
+  <Step title="Verify the behaviour">
+    **Agentbeat** plugs into the target agent, captures tool calls, file operations and environment deltas, and pinpoints which step crossed the line — not just whether the final response looked safe.
+  </Step>
+  <Step title="Feed it back">
+    Findings promote into a versioned regression dataset. Every model, prompt or policy update triggers the same set of cases and shows regressions immediately.
+  </Step>
+</Steps>
+
+## Two products, one loop
+
+<CardGroup cols={2}>
+  <Card title="Promptbeat — find risks" icon="wand-sparkles" href="/promptbeat/overview">
+    - Scenario-driven attack generation
+    - Real target execution (LLM, RAG, HTTP agent, CLI agent)
+    - Standardized judge with PASS / FAIL / REVIEW
+    - Versioned regression datasets from promoted findings
+  </Card>
+  <Card title="Agentbeat — verify behaviour" icon="robot" href="/agentbeat/overview">
+    - Trace-aware evaluation for real agent runtimes
+    - Records tool calls, file operations, environment mutations
+    - Pinpoints the step that crossed a boundary
+    - Produces reproducible forensic artifacts
+  </Card>
+</CardGroup>
+
+## What they share
+
+Both products build on the same primitives so you don't learn two systems:
+
+| Shared piece | Where it comes from |
+|---|---|
+| CLI (`promptbeat …`) | Same binary drives generation, execution, judgement, reporting for both. |
+| Config model | Same `target / scenario / seed` schema; Agentbeat adds `forbidden boundary` and `observation` blocks. |
+| Dataset registry | Shared seed collections; Agentbeat consumes the same registry Promptbeat produces. |
+| Report schema | Findings, evidence and lineage use one schema. Agentbeat findings include an additional trace section. |
+
+## Where this platform stops
+
+This platform **evaluates**. It runs attacks, records evidence, and produces reports and datasets. It does not:
+
+- sit in the request path at runtime and block traffic
+- act as a WAF, guardrail, or content moderation gateway
+- replace expert red-teaming for high-stakes findings that need human judgement
+
+For those, you want a runtime protection layer as a complementary product, and an on-call red-team for the last-mile review.
+
+<Card title="Read the positioning page" icon="arrow-right" href="/about/positioning">
+  Client value, typical use cases, and where this platform stops in detail.
+</Card>

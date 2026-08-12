@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Promptbeat Jailbreak Baseline · Promptbeat Seed Community</title><meta name="description" content="Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts."><meta name="generator" content="Astro v5.5.5"><link rel="alternate" hreflang="zh-CN" href="/community/zh/collections/jailbreak-baseline/"><link rel="icon" href="/community/favicon.svg" type="image/svg+xml"><link rel="alternate icon" href="/community/favicon.ico" sizes="any"><script>
+      // Dark-first: default to dark for new visitors (security-tooling context
+      // reads more serious in dark) and remember the user's toggle across
+      // sessions. Inlined so no light flash before first paint.
+      try {
+        var saved = localStorage.getItem('pb-theme');
+        var theme = saved === 'light' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script><link rel="stylesheet" href="/community/_astro/_id_.BEwJqQPF.css"></head> <body> <a class="skip-link" href="#main">Skip to content</a> <header class="site-header"> <div class="shell site-header-inner"> <a class="brand" href="/community/"> <span class="brand-mark" aria-hidden="true">  <svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true"> <rect width="40" height="40" rx="9" class="brand-mark-bg"></rect> <path d="M9 24 18 7h14l-9 15h9L15 36l5-12z" class="brand-mark-bolt"></path> </svg> </span> <span>Promptbeat Seed Community</span> </a> <div class="header-actions"> <a class="header-link" href="/" rel="noreferrer">Documentation</a> <a class="header-link" href="/community/zh/collections/jailbreak-baseline/" hreflang="zh-CN" aria-label="Switch to Chinese"> 中文 </a> <button class="icon-button" type="button" id="theme-toggle" aria-label="Toggle dark mode"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="12" cy="12" r="4.5"></circle> <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path> </svg> </button> </div> </div> </header> <main id="main">  <section class="detail-head shell"> <a class="back-link" href="/community/">← All seed collections</a> <div class="card-status"> <span class="pill pill-staging pill-dot">staging</span> <span class="pill pill-neutral">sampled review</span> <span class="pill pill-care">controlled</span> </div> <h1 class="detail-title">Promptbeat Jailbreak Baseline</h1> <p class="detail-lede">Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original curated prompts.</p> <div class="specs"> <div class="spec"><p class="spec-key">Collection ID</p><p class="spec-val spec-val-mono">jailbreak-baseline</p></div> <div class="spec"><p class="spec-key">Version</p><p class="spec-val spec-val-mono">0.1.0</p></div> <div class="spec"><p class="spec-key">Status</p><p class="spec-val">staging</p></div> <div class="spec"><p class="spec-key">Review status</p><p class="spec-val">sampled</p></div> <div class="spec"><p class="spec-key">Sensitivity</p><p class="spec-val">controlled</p></div> <div class="spec"><p class="spec-key">Items</p><p class="spec-val spec-val-mono">499</p></div> <div class="spec"><p class="spec-key">Languages</p><p class="spec-val">zh</p></div> <div class="spec"><p class="spec-key">Targets</p><p class="spec-val">llm</p></div> <div class="spec"><p class="spec-key">License</p><p class="spec-val">LicenseRef-Promptbeat-Seed-Collection-Review (pending review)</p></div> </div> </section> <section class="section shell"> <h2 class="section-label" id="files">Files</h2> <div class="table-wrap"> <table class="data"> <thead> <tr><th>Path</th><th>Media type</th><th class="num">Size</th><th>SHA-256</th></tr> </thead> <tbody> <tr> <td class="mono-cell">seeds.jsonl</td> <td>application/x-ndjson</td> <td class="num">1316560</td> <td class="mono-cell">b1f3331cef7323b76ed1836a8f0617dd0d95530556be839dcc25466e5e65eb32</td> </tr><tr> <td class="mono-cell">bundle.tar.gz</td> <td>application/gzip</td> <td class="num">58247</td> <td class="mono-cell">092058af14a961249ca11261ab48904be4796e3b1d04791983cdd819bf0123b3</td> </tr> </tbody> </table> </div> </section> <section class="section shell"> <h2 class="section-label" id="provenance">Provenance</h2> <div class="table-wrap"> <table class="data"> <thead> <tr> <th>Source</th><th>Version</th><th>Location</th> <th>Location kind</th><th>License</th> </tr> </thead> <tbody> <tr> <td class="mono-cell">jailbreak_bench_zh</td> <td class="mono-cell">0.2.0</td> <td class="mono-cell"> <a href="https://github.com/STAIR-BUPT/JailBench" rel="noreferrer">https://github.com/STAIR-BUPT/JailBench</a> </td> <td>public URL</td> <td>MIT for JailBench-derived cases; ALERT/original redistribution pending owner approval</td> </tr> </tbody> </table> </div>  </section> <section class="section shell"> <h2 class="section-label" id="schema">Record schema</h2> <p class="section-note">Each line of seeds.jsonl is one JSON object with these fields.</p> <div class="table-wrap"> <table class="data"> <thead> <tr><th>Field</th><th>Type</th><th>Description</th></tr> </thead> <tbody> <tr> <td class="mono-cell">id</td> <td>string</td> <td>Stable seed ID, unique within the collection</td> </tr><tr> <td class="mono-cell">risk_type</td> <td>string</td> <td>Normalized Cisco risk type used by validation gates</td> </tr><tr> <td class="mono-cell">technique_id</td> <td>string</td> <td>Attack technique or native risk subtype</td> </tr><tr> <td class="mono-cell">lang</td> <td>string</td> <td>Seed language, zh or en</td> </tr><tr> <td class="mono-cell">template</td> <td>string</td> <td>The prompt sent to the target</td> </tr><tr> <td class="mono-cell">expected_action</td> <td>string</td> <td>Required target behavior, e.g. refuse</td> </tr><tr> <td class="mono-cell">expected_behavior</td> <td>string</td> <td>Prose description of a safe response</td> </tr><tr> <td class="mono-cell">failure_condition</td> <td>string</td> <td>What counts as an unsafe response</td> </tr><tr> <td class="mono-cell">judge_rubric</td> <td>string</td> <td>Rubric text for an LLM judge</td> </tr><tr> <td class="mono-cell">attack_type</td> <td>string</td> <td>Delivery style of the attack</td> </tr><tr> <td class="mono-cell">source_dataset</td> <td>string</td> <td>Upstream dataset name, preserved for lineage</td> </tr><tr> <td class="mono-cell">source_id</td> <td>string</td> <td>Upstream record ID, preserved for lineage</td> </tr><tr> <td class="mono-cell">dataset_version</td> <td>string</td> <td>Collection version this seed was built for</td> </tr><tr> <td class="mono-cell">metadata</td> <td>object</td> <td>Native labels, target types, sensitivity, and owasp_asi_id when applicable</td> </tr> </tbody> </table> </div> <p class="section-note" style="margin-top:1.25rem">Example record from this collection, with template redacted because this collection is controlled sensitivity and the raw prompts are attack payloads.</p> <div class="code-block" data-code-block> <pre><code class="language-json">{
+  &quot;id&quot;: &quot;JB-ZH-0001&quot;,
+  &quot;risk_type&quot;: &quot;illegal_harmful_content&quot;,
+  &quot;technique_id&quot;: &quot;jailbreak_no_rules_world&quot;,
+  &quot;lang&quot;: &quot;zh&quot;,
+  &quot;template&quot;: &quot;&lt;redacted attack prompt — present in the downloaded seeds.jsonl&gt;&quot;,
+  &quot;metadata&quot;: {
+    &quot;collection_id&quot;: &quot;jailbreak-baseline&quot;,
+    &quot;target_types&quot;: [
+      &quot;llm&quot;
+    ],
+    &quot;sensitivity&quot;: &quot;controlled&quot;,
+    &quot;native_risk_type&quot;: &quot;violent_crime&quot;,
+    &quot;native_risk_subtype&quot;: &quot;murder_instruction&quot;,
+    &quot;native_risk_category&quot;: &quot;越狱攻击&quot;,
+    &quot;native_risk_subcategory&quot;: &quot;无规则世界&quot;,
+    &quot;dataset_id&quot;: &quot;jailbreak_bench_zh&quot;,
+    &quot;risk_category&quot;: &quot;越狱攻击&quot;,
+    &quot;risk_subcategory&quot;: &quot;无规则世界&quot;,
+    &quot;risk_type&quot;: &quot;violent_crime&quot;,
+    &quot;risk_subtype&quot;: &quot;murder_instruction&quot;,
+    &quot;difficulty&quot;: 2,
+    &quot;tags&quot;: [
+      &quot;no_rules_world&quot;,
+      &quot;violent_crime&quot;
+    ],
+    &quot;expected&quot;: &quot;1&quot;,
+    &quot;remediation_priority&quot;: &quot;P1&quot;,
+    &quot;remediation_advice&quot;: &quot;建议补充无规则世界类越狱场景的拒答样本，强化对应风险类别的对齐训练。&quot;
+  },
+  &quot;expected_action&quot;: &quot;refuse&quot;,
+  &quot;expected_behavior&quot;: &quot;&lt;prose description&gt;&quot;,
+  &quot;failure_condition&quot;: &quot;&lt;prose description&gt;&quot;,
+  &quot;judge_rubric&quot;: &quot;&lt;rubric text&gt;&quot;,
+  &quot;attack_type&quot;: &quot;jailbreak_no_rules_world&quot;,
+  &quot;source_dataset&quot;: &quot;alert_adversarial&quot;,
+  &quot;source_id&quot;: &quot;23926&quot;,
+  &quot;dataset_version&quot;: &quot;0.1.0&quot;
+}</code></pre> <button class="copy-button" type="button" data-copy hidden data-copied="Copied">Copy</button> </div> <script>
+  (function () {
+    if (!navigator.clipboard) return;
+    document.querySelectorAll('[data-code-block]').forEach(function (block) {
+      var btn = block.querySelector('[data-copy]');
+      var code = block.querySelector('code');
+      if (!btn || !code || btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.hidden = false;
+      var label = btn.textContent;
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(code.textContent || '').then(function () {
+          btn.textContent = btn.dataset.copied || 'Copied';
+          setTimeout(function () { btn.textContent = label; }, 1400);
+        });
+      });
+    });
+  })();
+</script> </section> <section class="section shell"> <h2 class="section-label" id="risk-types">Cisco risk types</h2> <div class="table-wrap"> <table class="data"> <thead><tr><th>Risk type</th><th class="num">Items</th></tr></thead> <tbody> <tr><td><strong>illegal_harmful_content</strong></td><td class="num">499</td></tr> </tbody> </table> </div> </section> <section class="section shell"> <h2 class="section-label" id="native-risk">Native source risk groups</h2> <p class="section-note">The upstream datasets&#39; own labels, kept unmapped so lineage back to the source record survives.</p> <div class="table-wrap"> <table class="data"> <thead><tr><th>Native risk</th><th class="num">Items</th></tr></thead> <tbody> <tr><td class="mono-cell">biological_weapon</td><td class="num">1</td></tr><tr><td class="mono-cell">chemical_weapon</td><td class="num">3</td></tr><tr><td class="mono-cell">cybercrime</td><td class="num">62</td></tr><tr><td class="mono-cell">disinformation</td><td class="num">52</td></tr><tr><td class="mono-cell">environmental_crime</td><td class="num">1</td></tr><tr><td class="mono-cell">fraud</td><td class="num">106</td></tr><tr><td class="mono-cell">hate_speech</td><td class="num">183</td></tr><tr><td class="mono-cell">illegal_activity</td><td class="num">20</td></tr><tr><td class="mono-cell">illegal_drug</td><td class="num">3</td></tr><tr><td class="mono-cell">mass_violence</td><td class="num">1</td></tr><tr><td class="mono-cell">privacy_violation</td><td class="num">38</td></tr><tr><td class="mono-cell">violent_crime</td><td class="num">28</td></tr><tr><td class="mono-cell">weapon_modification</td><td class="num">1</td></tr> </tbody> </table> </div> </section> <section class="section shell"> <h2 class="section-label" id="quality">Quality</h2> <div class="specs" style="margin-top:0;margin-bottom:1.5rem"> <div class="spec"><p class="spec-key">Review status</p><p class="spec-val spec-val-mono">sampled</p></div> <div class="spec"><p class="spec-key">Smoke status</p><p class="spec-val spec-val-mono">not_run</p></div>   <div class="spec"><p class="spec-key">Duplicate rate</p><p class="spec-val spec-val-mono">0% (499 / 500 from source)</p></div> </div>  <h3 class="section-label">Known limitations</h3> <ul class="limits"> <li>Human review sampling plan is generated, but final manual approval is not recorded for this Wave 1 build.</li><li>One child safety related case is excluded from the public collection before sampling.</li><li>Cisco risk_type is normalized to illegal_harmful_content while upstream risk labels are preserved in metadata.</li> </ul> </section> <section class="section shell"> <h2 class="section-label" id="install">Install</h2> <p class="section-note">This collection is currently distributed from the Promptbeat source repository only. There is no public hosted registry URL yet, so --registry must point at a local checkout of registry/seed-registry/v1. Clone the repository first, then run the command below from its root.</p> <p class="notice" style="margin-bottom:1.25rem">TODO: replace --registry ./registry/seed-registry/v1 with the public hosted registry URL once public distribution is approved. Publication requires separate license and release approval.</p> <div class="code-block" data-code-block> <pre><code class="language-bash">promptbeat seed pull jailbreak-baseline@0.1.0 \
+  --registry ./registry/seed-registry/v1 \
+  --output-dir ./.promptbeat/seeds/jailbreak-baseline/0.1.0</code></pre> <button class="copy-button" type="button" data-copy hidden data-copied="Copied">Copy</button> </div> <script>
+  (function () {
+    if (!navigator.clipboard) return;
+    document.querySelectorAll('[data-code-block]').forEach(function (block) {
+      var btn = block.querySelector('[data-copy]');
+      var code = block.querySelector('code');
+      if (!btn || !code || btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.hidden = false;
+      var label = btn.textContent;
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(code.textContent || '').then(function () {
+          btn.textContent = btn.dataset.copied || 'Copied';
+          setTimeout(function () { btn.textContent = label; }, 1400);
+        });
+      });
+    });
+  })();
+</script> <p class="section-note" style="margin-top:0.5rem">Then reference the pulled file from your Promptbeat config:</p> <div class="code-block" data-code-block> <pre><code class="language-yaml">seeds:
+  files:
+    - ./.promptbeat/seeds/jailbreak-baseline/0.1.0/seeds.jsonl</code></pre> <button class="copy-button" type="button" data-copy hidden data-copied="Copied">Copy</button> </div> <script>
+  (function () {
+    if (!navigator.clipboard) return;
+    document.querySelectorAll('[data-code-block]').forEach(function (block) {
+      var btn = block.querySelector('[data-copy]');
+      var code = block.querySelector('code');
+      if (!btn || !code || btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.hidden = false;
+      var label = btn.textContent;
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(code.textContent || '').then(function () {
+          btn.textContent = btn.dataset.copied || 'Copied';
+          setTimeout(function () { btn.textContent = label; }, 1400);
+        });
+      });
+    });
+  })();
+</script> </section>  </main> <footer class="site-footer"> <div class="shell"> <p>Static site generated at build time from the Promptbeat seed registry.</p> <p> Generated from registry/seed-registry/v1/index.json at <code>2026-07-30T00:00:00Z</code> </p> </div> </footer> <script>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('pb-theme', next); } catch (e) {}
+        });
+      })();
+    </script> </body> </html>

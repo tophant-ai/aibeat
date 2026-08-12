@@ -1,0 +1,47 @@
+---
+title: Providers 概览
+description: Promptbeat 与 Agentbeat 如何接入 LLM、HTTP Agent、Codex 与自定义 runtime。
+---
+
+# Providers 概览
+
+**Provider** 是平台与目标对话的方式。Promptbeat 用它做黑盒请求/响应；Agentbeat 在同一 Provider（或专用 adapter）上叠加 observation。
+
+## 目录
+
+| 类型 | 配置形态 | 典型用途 | 深入文档 |
+|---|---|---|---|
+| OpenAI 兼容模型 | `openai:openai/gpt-5.4` | Chat / 指令模型 | [Agent 目标](/zh/targets/agent-targets) |
+| Codex SDK | `openai:codex-sdk` | Codex CLI Agent | [Codex SDK](/zh/targets/codex-sdk) |
+| HTTP 端点 | `http:` + 请求模板 | RAG、自定义 HTTP Agent | [Agent 配置示例](/zh/targets/agent-configuration-examples) |
+| Provider file | `providers/<name>.yaml` | 自定义 adapter | [Provider files](/zh/targets/provider-files) |
+| Inspect / Terminal-Bench | `inspect:…` | Benchmark 任务、隐藏测试 | [Agentbeat adapters](/zh/agentbeat/adapters) |
+
+## 角色 vs Provider
+
+不要把 **Provider 类型** 和 **模型角色** 混在一起：
+
+| 角色 | 问题 | 示例 |
+|---|---|---|
+| Generator | 谁写攻击候选？ | `openai:openai/gpt-5.5` |
+| Target | 谁被测？ | `openai:codex-sdk` |
+| Judge | 谁打分？ | 模型 Judge 或 assertion |
+
+同一个 OpenAI 兼容字符串可以当生成也可以当目标——角色由它在配置里的位置决定。
+
+## Agent observation
+
+行为评测时在 target 上打开 observation 块。见：
+
+- [Agentbeat 观察模型](/zh/agentbeat/observation-model)
+- [Agentbeat adapters](/zh/agentbeat/adapters)
+
+## 典型 Agent 应用
+
+Coding、Browser、客服、数据、DevOps 等类别地图见 [典型 Agent 应用](/zh/targets/typical-agent-apps)。
+
+## 相关
+
+- [真实执行](/zh/promptbeat/execution)
+- [配置模型](/zh/concepts/configuration-model)
+- [Preflight](/zh/concepts/preflight-checks)

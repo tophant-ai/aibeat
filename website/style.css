@@ -1,0 +1,43 @@
+/* Promptbeat docs UX overrides */
+
+/* CJK-capable stack (also configured via docs.json fonts = Noto Sans SC) */
+html, body, button, input, textarea, .sidebar-title, article, main, nav {
+  font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    Inter, ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Hide floating Ask-AI composer so it stops dominating the bottom-left and sidebar footer */
+.chat-assistant-floating-input,
+.chat-assistant-input,
+.chat-assistant-send-button,
+[class*="chat-assistant-floating"],
+[class*="chat-assistant-input"],
+[class*="group\/assistant-bar"],
+[class*="assistant-bar"],
+form:has(.chat-assistant-input),
+div:has(> .chat-assistant-floating-input) {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Compact the bottom language control (sidebar footer) */
+nav.fixed div[class*="border-t"] button,
+nav.fixed div[class*="mt-auto"] button,
+nav[class*="fixed"] > div:last-child button {
+  max-width: 8.5rem !important;
+  height: 2rem !important;
+  min-height: 2rem !important;
+  font-size: 0.8125rem !important;
+  border-radius: 999px !important;
+  padding-inline: 0.75rem !important;
+}
+
+/* Tighter left nav density */
+.sidebar-group-header { margin-bottom: 0.35rem !important; }
+.sidebar-group { margin-bottom: 0.65rem !important; }

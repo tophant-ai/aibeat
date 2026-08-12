@@ -20,7 +20,7 @@
     <a href="#我该用哪个"><b>我该用哪个</b></a> ·
     <a href="#数据集"><b>数据集</b></a> ·
     <a href="#社区"><b>社区</b></a> ·
-    <a href="https://promptbeat.mintlify.app/introduction"><b>文档</b></a> ·
+    <a href="https://promptbeat.mintlify.app/"><b>文档</b></a> ·
     <a href="README.md"><b>English</b></a>
   </p>
 
@@ -393,4 +393,3 @@ AI Beat 面向发布前验收、持续回归和证据化发现。它是一套**�
   <br />
   <sub>PromptBeat 找到风险 · AgentBeat 证明那一步 · 复测让每次 AI 更新都经得起检验</sub>
 </div>
-

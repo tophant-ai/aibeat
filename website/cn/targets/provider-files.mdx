@@ -1,0 +1,30 @@
+---
+title: Provider 文件
+description: 把 target 配置和场景/生成配置分离。
+---
+
+# Provider 文件
+
+Provider 文件定义真实被测系统。
+
+```yaml
+providers:
+  - id: openai:codex-sdk
+    label: Codex SDK target
+    config:
+      model: openai/gpt-5.4
+      working_dir: agent-workspace
+```
+
+Provider 文件的价值：
+
+- target 执行配置和 scenario 分离。
+- 同一批 generated cases 可以复评不同 target。
+- 避免把 secret 写进 generated config。
+- 保留 provider-specific 配置。
+
+Promptbeat 会把 `working_dir` / `cwd` 相对路径按 provider 文件所在目录解析。
+
+## 更多示例
+
+查看 [Agent 配置示例](/cn/targets/agent-configuration-examples)，包括 Codex、Codex app-server、Claude Code、OpenCode、OpenClaw、Browser agent、客服 agent、数据分析 agent、DevOps agent、安全研判 agent 和企业内部 agent。

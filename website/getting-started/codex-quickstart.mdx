@@ -1,65 +1,11 @@
 ---
-title: Codex quickstart
-description: Run a real Codex target through Promptbeat.
+title: Codex quickstart (moved)
+description: This page has moved to Promptbeat quickstart.
 ---
 
-# Codex quickstart
+# This page has moved
 
-This quickstart runs Promptbeat against a real Codex CLI target through the `openai:codex-sdk` provider.
+The Codex end-to-end walkthrough now lives at:
 
-## Prerequisites
-
-Use a shell with Node and Codex credentials available.
-
-```bash
-export OPENAI_BASE_URL="https://api.openai.com/v1"
-export OPENAI_API_KEY="sk-..."
-export CODEX_API_KEY="sk-..."
-export CODEX_HOME="$HOME/.codex"
-```
-
-Do not commit real secrets. For local smoke tests, `inherit_process_env: true` is convenient. For production reports, prefer an allowlisted `cli_env`.
-
-## Validate config
-
-```bash
-uv run promptbeat validate --config examples/codex_agent/promptbeat.yaml
-```
-
-## Generate attacks
-
-```bash
-uv run promptbeat generate \
-  --config examples/codex_agent/promptbeat.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
-  --count 5 \
-  --output-dir examples/codex_agent/artifacts/generate
-```
-
-The generator is the attacker model. The Codex target is configured separately in the provider file.
-
-## Evaluate Codex
-
-```bash
-uv run promptbeat eval \
-  --config examples/codex_agent/artifacts/generate/generated_redteam.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --output-dir examples/codex_agent/artifacts/eval
-```
-
-## Generate a report
-
-```bash
-uv run promptbeat report \
-  --eval-result examples/codex_agent/artifacts/eval/evaluation_result.json
-```
-
-## Common issues
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `working_dir does not exist` | provider path is relative to the wrong directory | use provider-file path normalization or an absolute path |
-| auth error | key is missing or cannot access the selected model | check `OPENAI_API_KEY`, `CODEX_API_KEY`, and model name |
-| Codex home error | `CODEX_HOME` is missing or invalid | export a valid `CODEX_HOME` |
-| weak evidence | tracing is off | enable deeper traces for final reports |
+- [Promptbeat quickstart](/promptbeat/quickstart)
+- [Agentbeat quickstart](/agentbeat/quickstart) — when you need trace-backed boundaries

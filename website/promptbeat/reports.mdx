@@ -1,0 +1,116 @@
+---
+title: Reports
+description: Findings, aggregates and diffs in JSON, HTML and Markdown — the shape a Promptbeat run turns into for sharing.
+---
+
+# Reports
+
+A run produces a JSON `evaluation_result.json`. Reports turn that into shareable artifacts for engineering, incident response, and executive review.
+
+```bash
+./bin/promptbeat report \
+  --eval-result examples/codex_agent/artifacts/run/evaluation_result.json
+```
+
+## The three layers
+
+<CardGroup cols={3}>
+  <Card title="Findings" icon="magnifying-glass">
+    One row per failure. Engineering-facing. Includes request, response, judge verdict, reasoning and — for agent runs — trace and env delta.
+  </Card>
+  <Card title="Aggregate report" icon="chart-column">
+    One document per run. Coverage, attack success rate, verdict distribution by risk, worst offenders. Executive-facing.
+  </Card>
+  <Card title="Diff report" icon="code-compare">
+    Two runs side by side. What regressed, what improved, what stayed the same. Upgrade-facing.
+  </Card>
+</CardGroup>
+
+## Finding — anatomy
+
+Every finding is self-contained.
+
+| Section | Contents |
+|---|---|
+| Header | Target, scenario, risk type, severity, judge version, finding id, timestamp |
+| Input | The candidate that was executed, plus its lineage (seed, generation round, rewrite trail) |
+| Response | Full target response (with any tool-call metadata) |
+| Verdict | `PASS` / `FAIL` / `REVIEW` plus judge reasoning |
+| Evidence | Extracted signals: leaked value, disallowed tool call, boundary quote |
+| Reproduction | Everything needed to re-run: config version, dataset version, provider config |
+
+Findings are the unit of shareable output. If you can hand someone a finding, they can act on it.
+
+## Aggregate report
+
+Aggregates roll findings into a picture. Structure:
+
+- **Coverage** — which scenarios ran, how many candidates per scenario, which risks are represented
+- **Verdict distribution** — PASS / FAIL / REVIEW per risk, per scenario, per target
+- **Attack success rate** — FAIL / total for each risk
+- **Worst offenders** — top-N failures ordered by severity × frequency
+- **Findings list** — every FAIL and REVIEW with links to the full finding
+
+Output formats:
+
+| Format | For |
+|---|---|
+| JSON | Machine-readable, tooling integration, custom dashboards |
+| HTML | Browser review, sharing internally, sales enablement |
+| Comprehensive Markdown | Long-form review with evidence excerpts, print-friendly |
+
+## Diff report
+
+Compare two runs of the same regression set — different model versions, different system prompts, different policy configurations.
+
+| Column | Meaning |
+|---|---|
+| Regressed | Case that passed in run A, failed in run B |
+| Improved | Case that failed in run A, passed in run B |
+| Unchanged FAIL | Case that failed in both — persistent risk |
+| Unchanged PASS | Case that passed in both — confirmed safe |
+| Verdict shift | PASS ↔ REVIEW or REVIEW ↔ FAIL transitions |
+
+Diffs are what turns "the new model is better" into a defensible statement.
+
+## Artifact layout
+
+Every run has a directory with everything you need to re-execute:
+
+```text
+artifacts/
+  run/
+    evaluation_result.json     # the source-of-truth blob
+    findings/                  # one JSON per FAIL/REVIEW
+    reports/
+      report.html
+      report.md
+      report.json
+    lineage/                   # candidate → seed → dataset trace
+    trace/                     # per-candidate trace (deep)
+  regression-dataset-v0.3.0/   # promoted findings
+```
+
+Artifacts are hash-verifiable and versioned; a report can be re-generated from `evaluation_result.json` without re-running anything against the target.
+
+## Sharing safely
+
+<Info>
+  Reports may include real requests, real responses and real trace data. Treat them like production logs.
+</Info>
+
+- Strip live secrets from provider config before sharing an aggregate report externally
+- Redact response snippets when the finding leaks PII or business data
+- Trace excerpts may reveal internal endpoint structure — sanitize before external share
+- Sales enablement should use anonymized findings from the seed community collections, not customer runs
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Dataset loop" icon="rotate" href="/promptbeat/dataset-loop">
+    From FAIL / REVIEW to a versioned regression set.
+  </Card>
+  <Card title="Reference: report schema" icon="file-code" href="/reports/report-schema">
+    The exact JSON shape.
+  </Card>
+</CardGroup>
