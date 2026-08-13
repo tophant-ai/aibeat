@@ -466,6 +466,11 @@ export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat-raw-corpora
 `promptbeat-connect-coding-agent` 接入编码 Agent 目标 ·
 `promptbeat-debug-run` 排查配置与运行时问题
 
+把 5 个目录复制到编码 Agent 的 Skills 目录，启动新会话，然后直接用自然语言说明目标，
+例如：“使用 `promptbeat-getting-started`，带我从这个发布包完成第一次 LLM 安全测试。”
+完整的安装命令、提问示例、预期输出和排错方式见
+[Promptbeat Skills 使用指南](promptbeat-skills/README.md)。
+
 ## 适用边界
 
 AI Beat 面向发布前验收、持续回归和证据化发现。它是一套**离线评测框架，不是运行时网关**——

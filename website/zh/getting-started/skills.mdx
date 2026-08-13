@@ -8,6 +8,9 @@ description: 将 Promptbeat skills 加载到编码 Agent 运行时，并验证�
 Promptbeat skills 是面向常见产品工作流的 Agent playbook：从入门、接入编码
 Agent、选择风险内容、运行第一次评测，到排查失败运行。
 
+它们不会增加新的 Promptbeat CLI 命令，而是教编码 Agent 如何选择包内已有示例、
+区分 Promptbeat 项目配置与生成出的 Promptfoo 配置、运行正确命令，并解释最终产物。
+
 ## 下载
 
 可以从两个来源获取：
@@ -30,35 +33,76 @@ Agent、选择风险内容、运行第一次评测，到排查失败运行。
 ## 加载
 
 复制整个 skill 目录，包括 `SKILL.md` 和可能存在的 `references/` 目录。
+下面的命令会一次安装全部 5 个公开 Skill。
 
 Claude Code：
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.claude/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.claude/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.claude/skills/
+done
 ```
 
 Codex CLI：
 
 ```bash
 mkdir -p ~/.codex/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.codex/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.codex/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.codex/skills/
+done
 ```
 
 OpenCode：
 
 ```bash
 mkdir -p ~/.config/opencode/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.config/opencode/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.config/opencode/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.config/opencode/skills/
+done
 ```
+
+Windows PowerShell 以 Codex CLI 为例：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.codex\skills" | Out-Null
+Get-ChildItem .\promptbeat-skills -Directory -Filter 'promptbeat-*' |
+  Copy-Item -Destination "$HOME\.codex\skills" -Recurse -Force
+```
+
+Claude Code 用户将 `.codex\skills` 换成 `.claude\skills`。
 
 如果运行时支持项目级 skill 目录，并且你只希望 Promptbeat 指南作用于当前 workspace，
 可以改用项目级目录。
 
-## 使用并验证
+## 如何提问
+
+安装后启动新的 Agent 会话。直接用自然语言描述目标，并尽量带上发布包路径、
+被测目标类型或错误信息；想强制走某个工作流时，也可以直接写出 Skill 名称。
+
+| 你可以这样说 | 应触发的 Skill | Agent 应该提供什么 |
+| --- | --- | --- |
+| “Promptbeat 解压在 `/opt/promptbeat`，帮我完成第一次 LLM 安全测试。” | `promptbeat-getting-started` | 选择合适示例、检查环境变量、给出首批命令并说明报告路径。 |
+| “把这个 Codex workspace 接成被测目标，并保留 trace 证据。” | `promptbeat-connect-coding-agent` | 检查运行时、工作区、沙箱、凭证、provider 接线和 trace。 |
+| “校验这个配置，先跑 5 条，然后告诉我报告在哪里。” | `promptbeat-run-quick-eval` | 根据输入类型选择 validate、generate、run、eval 或 report 链路。 |
+| “先选一个包含越权和提示词注入的小规模冒烟范围。” | `promptbeat-select-risk-pack` | 复用包内场景或订阅，先预览 5 条生成用例。 |
+| “出现 `working_dir does not exist`，不要先改凭证，帮我定位。” | `promptbeat-debug-run` | 先确定失败边界，再给最小安全修复。 |
+
+Agent 只有在运行时和你的审批策略允许时才会直接执行命令；否则应该返回可复制的
+命令，并说明每条命令会生成什么。
+
+## 一次完整对话示例
+
+```text
+用户：Promptbeat 解压在 /opt/promptbeat，帮我测试一个普通 LLM。
+Agent：这是普通 LLM 路径，我会使用包内 llm-basic 示例。
+用户：先生成 5 条让我看，不要立刻请求被测模型。
+Agent：我会用 promptbeat-select-risk-pack，把预览写入 artifacts/。
+用户：用例没问题，开始评测并告诉我 report.html 在哪里。
+Agent：我会用 promptbeat-run-quick-eval 执行，并汇报所有产物路径。
+```
+
+## 验证是否生效
 
 复制后启动新的 Agent 会话，然后提问：
 
@@ -75,3 +119,12 @@ cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.config/opencode/skills/
 
 如果 Agent 给出仅适用于源码 checkout 的命令，或引用包内不存在的路径，
 重新加载 skill 目录，并在下一次提问里带上你的发布包根目录。
+
+如果没有自动触发，可以直接指定名称：
+
+```text
+使用 promptbeat-debug-run 排查这个错误：<删除密钥后的错误信息>。
+```
+
+更新时，用新发布包中的目录覆盖现有副本并重启会话；停用某个 Skill 时，只删除
+运行时 Skills 目录下对应的单个目录即可。

@@ -9,6 +9,10 @@ Promptbeat skills are agent playbooks for common product workflows: getting star
 connecting coding agents, choosing risk content, running a first evaluation, and
 debugging failed runs.
 
+They do not add new Promptbeat CLI commands. They teach your coding agent how to
+choose an existing package example, distinguish project configs from generated
+Promptfoo configs, run the right command, and explain the resulting artifacts.
+
 ## Download
 
 Use either source:
@@ -31,35 +35,77 @@ The public skill set includes:
 ## Load
 
 Copy the whole skill directory, including `SKILL.md` and any `references/` directory.
+These commands install all five public skills.
 
 Claude Code:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.claude/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.claude/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.claude/skills/
+done
 ```
 
 Codex CLI:
 
 ```bash
 mkdir -p ~/.codex/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.codex/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.codex/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.codex/skills/
+done
 ```
 
 OpenCode:
 
 ```bash
 mkdir -p ~/.config/opencode/skills
-cp -R promptbeat-skills/promptbeat-getting-started ~/.config/opencode/skills/
-cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.config/opencode/skills/
+for skill in promptbeat-skills/promptbeat-*; do
+  [ -d "$skill" ] && cp -R "$skill" ~/.config/opencode/skills/
+done
 ```
+
+On Windows PowerShell, for example with Codex CLI:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.codex\skills" | Out-Null
+Get-ChildItem .\promptbeat-skills -Directory -Filter 'promptbeat-*' |
+  Copy-Item -Destination "$HOME\.codex\skills" -Recurse -Force
+```
+
+Replace `.codex\skills` with `.claude\skills` for Claude Code.
 
 Use a project-local skill directory instead when your runtime supports one and the
 Promptbeat guidance should apply only to that workspace.
 
-## Use and Verify
+## Ask the agent
+
+Start a fresh agent session after installation. Ask for an outcome in natural
+language and include the package path, target type, or error when you know it.
+You can also mention a skill by name to force that workflow.
+
+| Example request | Expected skill | Expected help |
+| --- | --- | --- |
+| “I unpacked Promptbeat in `/opt/promptbeat`. Help me run my first LLM safety check.” | `promptbeat-getting-started` | Select an example, check required environment variables, give the first commands, and identify the report path. |
+| “Connect this Codex workspace as a target and preserve trace evidence.” | `promptbeat-connect-coding-agent` | Check runtime, workspace, sandbox, credentials, provider wiring, and trace capture. |
+| “Validate this config, run five cases, and show me the report.” | `promptbeat-run-quick-eval` | Select the correct validate, generate, run, eval, or report path for the input type. |
+| “Choose a small authorization and prompt-injection smoke scope.” | `promptbeat-select-risk-pack` | Reuse a packaged scenario or subscription and preview five generated cases. |
+| “Diagnose `working_dir does not exist` without changing credentials.” | `promptbeat-debug-run` | Locate the failing boundary and propose the smallest safe fix. |
+
+The agent runs commands only when its runtime and your approval policy permit it.
+Otherwise, it should return copyable commands and explain their outputs.
+
+## Example workflow
+
+```text
+User: I unpacked Promptbeat at /opt/promptbeat. Help me test a normal LLM.
+Agent: This is the normal-LLM path. I’ll use the packaged llm-basic example.
+User: Generate five cases first so I can review them before calling the target.
+Agent: I’ll preview them under artifacts/ using promptbeat-select-risk-pack.
+User: They look right. Run the evaluation and find report.html.
+Agent: I’ll use promptbeat-run-quick-eval and report the resulting artifact paths.
+```
+
+## Verify
 
 Start a fresh agent session after copying the files, then ask:
 
@@ -76,3 +122,13 @@ The expected response should:
 
 If the agent suggests source-only commands or paths that are not in the package,
 reload the skill directory and include your package root in the next question.
+
+If automatic selection does not happen, use the exact skill name:
+
+```text
+Use promptbeat-debug-run to diagnose this error: <error with secrets removed>.
+```
+
+To update, copy the directories from a newer release over the installed copies and
+start a new session. To disable a skill, remove only its directory from the runtime's
+skills folder.

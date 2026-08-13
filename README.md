@@ -473,6 +473,12 @@ AI coding assistant instead of memorising flags:
 `promptbeat-connect-coding-agent` wire up a coding-agent target ·
 `promptbeat-debug-run` diagnose config and runtime problems
 
+Copy the five directories into your agent's skills folder, start a fresh session,
+then ask for the outcome in natural language—for example, “Use
+`promptbeat-getting-started` to run my first LLM safety check from this package.”
+See the [complete installation, prompt examples, expected outputs, and troubleshooting
+guide](promptbeat-skills/README.md).
+
 ## Scope
 
 AI Beat is built for pre-release acceptance, continuous regression, and evidence-grade
