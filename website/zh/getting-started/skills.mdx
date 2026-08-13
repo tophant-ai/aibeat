@@ -1,0 +1,77 @@
+---
+title: Promptbeat Skills
+description: 将 Promptbeat skills 加载到编码 Agent 运行时，并验证它能正确处理安装、评测、风险选择和调试问题。
+---
+
+# Promptbeat Skills
+
+Promptbeat skills 是面向常见产品工作流的 Agent playbook：从入门、接入编码
+Agent、选择风险内容、运行第一次评测，到排查失败运行。
+
+## 下载
+
+可以从两个来源获取：
+
+| 来源 | 什么时候用 |
+| --- | --- |
+| 发布包 | 从 [GitHub Releases](https://github.com/tophant-ai/aibeat/releases) 下载，并在发布包包含 `promptbeat-skills/` 时直接使用。 |
+| 仓库 checkout | 使用本仓库里的 `promptbeat-skills/` 目录。 |
+
+公开 skill 集包含：
+
+| Skill | 用途 |
+| --- | --- |
+| `promptbeat-getting-started` | 把新用户路由到合适的包内示例和第一组命令。 |
+| `promptbeat-connect-coding-agent` | 接入 Codex、Claude Code、OpenCode、OpenClaw 等编码 Agent target。 |
+| `promptbeat-run-quick-eval` | 选择正确的 validate、generate、run、eval 或 report 命令。 |
+| `promptbeat-select-risk-pack` | 选择 scenario、seed、dataset subscription 或小规模 smoke 范围。 |
+| `promptbeat-debug-run` | 排查 config、provider、runtime、artifact 和 report 失败。 |
+
+## 加载
+
+复制整个 skill 目录，包括 `SKILL.md` 和可能存在的 `references/` 目录。
+
+Claude Code：
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.claude/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.claude/skills/
+```
+
+Codex CLI：
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.codex/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.codex/skills/
+```
+
+OpenCode：
+
+```bash
+mkdir -p ~/.config/opencode/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.config/opencode/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.config/opencode/skills/
+```
+
+如果运行时支持项目级 skill 目录，并且你只希望 Promptbeat 指南作用于当前 workspace，
+可以改用项目级目录。
+
+## 使用并验证
+
+复制后启动新的 Agent 会话，然后提问：
+
+```text
+我已经下载了 Promptbeat。帮我运行 examples/bootstrap 评测并找到报告。
+```
+
+预期回答应该：
+
+- 触发 `promptbeat-getting-started` 或 `promptbeat-run-quick-eval`。
+- 要求你在发布包根目录运行命令。
+- 使用 `examples/bootstrap/promptbeat.yaml`。
+- 把结果指向 `artifacts/` 下的报告路径。
+
+如果 Agent 给出仅适用于源码 checkout 的命令，或引用包内不存在的路径，
+重新加载 skill 目录，并在下一次提问里带上你的发布包根目录。

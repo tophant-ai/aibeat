@@ -67,6 +67,121 @@ https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
 
 </p>
 
+## Install
+
+Download and unpack the release package for your platform, then run Promptbeat from the
+package root. The release page is <https://github.com/tophant-ai/aibeat/releases>.
+
+### 1. Download
+
+| Asset | Platform | Format | Size | SHA-256 |
+| --- | --- | --- | --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
+
+### 2. Unpack
+
+macOS or Linux:
+
+```bash
+tar xf promptbeat-<version>-<platform>.tar.gz
+```
+
+Windows PowerShell:
+
+```powershell
+Expand-Archive .\promptbeat-<version>-windows-x64.zip -DestinationPath .
+```
+
+### 3. Enter Package Root
+
+macOS or Linux:
+
+```bash
+cd promptbeat-<version>-<platform>
+```
+
+Windows PowerShell:
+
+```powershell
+cd .\promptbeat-<version>-windows-x64
+```
+
+### 4. Verify
+
+macOS or Linux:
+
+```bash
+./bin/promptbeat --version
+```
+
+Windows PowerShell:
+
+```powershell
+.\bin\promptbeat.cmd --version
+```
+
+### 5. Configure Provider Credentials
+
+The bootstrap example uses three provider roles: attacker, judge, and target.
+
+```bash
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="sk-..."
+
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="$ATTACKER_BASE_URL"
+export JUDGE_API_KEY="$ATTACKER_API_KEY"
+
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="$ATTACKER_BASE_URL"
+export TARGET_API_KEY="$ATTACKER_API_KEY"
+```
+
+Windows PowerShell:
+
+```powershell
+$env:ATTACKER_MODEL_NAME = "openai:gpt-4o"
+$env:ATTACKER_BASE_URL = "https://api.openai.com/v1"
+$env:ATTACKER_API_KEY = "sk-..."
+
+$env:JUDGE_MODEL_NAME = "openai:gpt-4o"
+$env:JUDGE_BASE_URL = $env:ATTACKER_BASE_URL
+$env:JUDGE_API_KEY = $env:ATTACKER_API_KEY
+
+$env:TARGET_MODEL_NAME = "openai:gpt-4o-mini"
+$env:TARGET_BASE_URL = $env:ATTACKER_BASE_URL
+$env:TARGET_API_KEY = $env:ATTACKER_API_KEY
+```
+
+### 6. Run First Example
+
+`examples/bootstrap/` is the shortest end-to-end path.
+
+```bash
+./bin/promptbeat pipeline run \
+  --config examples/bootstrap/promptbeat.yaml \
+  --output-dir artifacts/bootstrap \
+  --progress tui
+```
+
+Windows PowerShell:
+
+```powershell
+.\bin\promptbeat.cmd pipeline run `
+  --config examples\bootstrap\promptbeat.yaml `
+  --output-dir artifacts\bootstrap `
+  --progress tui
+```
+
+### 7. View Results
+
+Open `artifacts/bootstrap/report.html`. Keep the generated directory when you need
+to attach evidence, compare later runs, or promote cases into a regression corpus.
+
 ## Quick start
 
 Grab a [release](https://github.com/tophant-ai/aibeat/releases) for your platform and unpack it.
@@ -77,14 +192,16 @@ It bundles its own Node runtime, so there is nothing else to install.
 | `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon |
 | `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel |
 | `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 |
 
 ```bash
 tar xf promptbeat-<version>-<platform>.tar.gz
 ./promptbeat-<version>-<platform>/bin/promptbeat --version
 ```
 
+On Windows, use `Expand-Archive` and `.\bin\promptbeat.cmd --version`.
+
 Current release packages typically bundle **Node.js 22.22.x** and **promptfoo 0.121.x** with the Go CLI.
-How to build packages from source: [docs/release-packaging.md](docs/release-packaging.md).
 
 `examples/bootstrap/` is the shortest end-to-end path — an e-commerce support agent with
 three risk scenarios already wired up.
@@ -132,8 +249,8 @@ attach it to a ticket.
 ./bin/promptbeat report --input artifacts/eval/run-001/evaluation_result.json \
   --output artifacts/eval/run-001/report.html
 
-# from source
-cd core/go && go run ./cmd/promptbeat -- validate --config ../../examples/bootstrap/promptbeat.yaml
+# from a release package root
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
 ```
 
 For the standalone commands above, output paths resolve relative to your current directory,
@@ -302,7 +419,7 @@ seeds:
 Raw benchmark corpora are not bundled — point at a local copy when you need one:
 
 ```bash
-export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
+export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat-raw-corpora
 ```
 
 ## Examples
@@ -315,13 +432,10 @@ Copy the closest shape, then swap in your providers and scenarios.
 | `llm-basic/` | Single-model safety eval |
 | `multi-llm/` | Side-by-side provider comparison |
 | `dataset-subscriptions/` | Starting from reusable dataset subscriptions |
-| `dataset-cycle/` | Growing a corpus via promote / rewrite / reject |
 | `http-agent/` | A business agent behind an HTTP endpoint |
 | `codex_agent/` | Coding agent with runtime traces |
 | `agent-adapters/` | Wiring a custom agent runtime |
-| `china-compliance/` | Risk taxonomy and compliance walkthrough |
 | `scc_waf/` | SCC / AI-WAF oriented scenarios |
-| `l1-benchmark/` | Reproducing a curated L1 benchmark |
 
 ## Targets
 
@@ -368,13 +482,10 @@ critical findings, and no evaluation set should be read as proof of "complete" c
 
 ## API image (optional)
 
-If you need the HTTP API container rather than the CLI tarball:
-
-```bash
-./deploy/buildImage.sh -v 1.0.0 -s harbor.tophant.com -p tophant
-# copy api/.env.server.example → api/.env.server, then:
-./deploy/runImage.sh -i harbor.tophant.com/tophant/promptbeat-api:1.0.0
-```
+The public repository focuses on release packages, runnable examples, and documentation.
+Use the CLI package for local evaluations. API service endpoints are documented in
+[API service](website/reference/api-service.mdx); container build scripts and deployment
+environment templates are not shipped in this public example repository.
 
 ## Community
 
@@ -403,4 +514,3 @@ occasional community rewards.
   <br />
   <sub>PromptBeat finds the risk · AgentBeat proves the step · retest keeps every AI update honest</sub>
 </div>
-

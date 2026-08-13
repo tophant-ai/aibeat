@@ -51,7 +51,8 @@
             "pages": [
               "getting-started/overview",
               "getting-started/scenario-driven-evaluation",
-              "getting-started/codex-quickstart"
+              "getting-started/codex-quickstart",
+              "getting-started/skills"
             ]
           },
           {
@@ -125,7 +126,8 @@
             "pages": [
               "zh/getting-started/overview",
               "zh/getting-started/scenario-driven-evaluation",
-              "zh/getting-started/codex-quickstart"
+              "zh/getting-started/codex-quickstart",
+              "zh/getting-started/skills"
             ]
           },
           {

@@ -66,6 +66,121 @@ https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
 
 </p>
 
+## 安装
+
+到 <https://github.com/tophant-ai/aibeat/releases> 下载对应平台的发布包，
+解压后在发布包根目录运行 Promptbeat。
+
+### 1. 下载
+
+| 产物 | 平台 | 格式 | 体积 | SHA-256 |
+| --- | --- | --- | --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
+
+### 2. 解压
+
+macOS 或 Linux：
+
+```bash
+tar xf promptbeat-<version>-<platform>.tar.gz
+```
+
+Windows PowerShell：
+
+```powershell
+Expand-Archive .\promptbeat-<version>-windows-x64.zip -DestinationPath .
+```
+
+### 3. 进入发布包根目录
+
+macOS 或 Linux：
+
+```bash
+cd promptbeat-<version>-<platform>
+```
+
+Windows PowerShell：
+
+```powershell
+cd .\promptbeat-<version>-windows-x64
+```
+
+### 4. 验证
+
+macOS 或 Linux：
+
+```bash
+./bin/promptbeat --version
+```
+
+Windows PowerShell：
+
+```powershell
+.\bin\promptbeat.cmd --version
+```
+
+### 5. 配置 Provider 凭据
+
+bootstrap 示例使用 attacker、judge、target 三个 provider 角色。
+
+```bash
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="sk-..."
+
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="$ATTACKER_BASE_URL"
+export JUDGE_API_KEY="$ATTACKER_API_KEY"
+
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="$ATTACKER_BASE_URL"
+export TARGET_API_KEY="$ATTACKER_API_KEY"
+```
+
+Windows PowerShell：
+
+```powershell
+$env:ATTACKER_MODEL_NAME = "openai:gpt-4o"
+$env:ATTACKER_BASE_URL = "https://api.openai.com/v1"
+$env:ATTACKER_API_KEY = "sk-..."
+
+$env:JUDGE_MODEL_NAME = "openai:gpt-4o"
+$env:JUDGE_BASE_URL = $env:ATTACKER_BASE_URL
+$env:JUDGE_API_KEY = $env:ATTACKER_API_KEY
+
+$env:TARGET_MODEL_NAME = "openai:gpt-4o-mini"
+$env:TARGET_BASE_URL = $env:ATTACKER_BASE_URL
+$env:TARGET_API_KEY = $env:ATTACKER_API_KEY
+```
+
+### 6. 运行第一个示例
+
+`examples/bootstrap/` 是最短的完整闭环。
+
+```bash
+./bin/promptbeat pipeline run \
+  --config examples/bootstrap/promptbeat.yaml \
+  --output-dir artifacts/bootstrap \
+  --progress tui
+```
+
+Windows PowerShell：
+
+```powershell
+.\bin\promptbeat.cmd pipeline run `
+  --config examples\bootstrap\promptbeat.yaml `
+  --output-dir artifacts\bootstrap `
+  --progress tui
+```
+
+### 7. 查看结果
+
+打开 `artifacts/bootstrap/report.html`。需要附证据、对比后续运行或把用例晋级为回归集时，
+保留生成出的目录。
+
 ## 快速开始
 
 到 [Releases](https://github.com/tophant-ai/aibeat/releases) 下载对应平台的包并解压。
@@ -76,14 +191,16 @@ https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
 | `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon |
 | `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel |
 | `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 |
 
 ```bash
 tar xf promptbeat-<version>-<platform>.tar.gz
 ./promptbeat-<version>-<platform>/bin/promptbeat --version
 ```
 
+Windows 使用 `Expand-Archive` 解压，并运行 `.\bin\promptbeat.cmd --version`。
+
 当前发布包通常捆绑 **Node.js 22.22.x** 与 **promptfoo 0.121.x**（外加 Go CLI）。
-从源码打包装说明见 [docs/release-packaging.md](docs/release-packaging.md)。
 
 `examples/bootstrap/` 是最短的完整闭环——一个电商客服助手，三个风险场景已经配好了。
 
@@ -129,8 +246,8 @@ export TARGET_API_KEY="$ATTACKER_API_KEY"
 ./bin/promptbeat report --input artifacts/eval/run-001/evaluation_result.json \
   --output artifacts/eval/run-001/report.html
 
-# 从源码运行
-cd core/go && go run ./cmd/promptbeat -- validate --config ../../examples/bootstrap/promptbeat.yaml
+# 从发布包根目录运行
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
 ```
 
 上面这些独立命令的输出路径相对于你当前所在目录解析，不是相对于配置文件所在目录；
@@ -296,7 +413,7 @@ seeds:
 原始 benchmark 语料体积较大，不随包分发——需要时指向本地副本：
 
 ```bash
-export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
+export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat-raw-corpora
 ```
 
 ## 示例
@@ -309,13 +426,10 @@ export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat/datasets/raw
 | `llm-basic/` | 单模型安全评测 |
 | `multi-llm/` | 多家 provider 横向对比 |
 | `dataset-subscriptions/` | 从可复用的数据集订阅开始 |
-| `dataset-cycle/` | 用晋级 / 改写 / 丢弃扩充语料 |
 | `http-agent/` | HTTP 接口后面的业务 Agent |
 | `codex_agent/` | 带运行时轨迹的编码 Agent |
 | `agent-adapters/` | 接入自定义 Agent 运行时 |
-| `china-compliance/` | 风险分类与合规演练 |
 | `scc_waf/` | SCC / AI-WAF 方向的场景 |
-| `l1-benchmark/` | 复现精选 L1 benchmark |
 
 ## 支持的目标形态
 
@@ -360,13 +474,9 @@ AI Beat 面向发布前验收、持续回归和证据化发现。它是一套**�
 
 ## API 镜像（可选）
 
-如果需要的是 HTTP API 容器而不是 CLI 压缩包：
-
-```bash
-./deploy/buildImage.sh -v 1.0.0 -s harbor.tophant.com -p tophant
-# 复制 api/.env.server.example → api/.env.server，然后：
-./deploy/runImage.sh -i harbor.tophant.com/tophant/promptbeat-api:1.0.0
-```
+公开仓库聚焦发布包、可运行示例和文档。本地评测请使用 CLI 发布包。
+API 服务端点见 [API service](website/zh/reference/api-service.mdx)；
+容器构建脚本和部署环境模板不随这个公开示例仓库分发。
 
 ## 社区
 
@@ -393,4 +503,3 @@ AI Beat 面向发布前验收、持续回归和证据化发现。它是一套**�
   <br />
   <sub>PromptBeat 找到风险 · AgentBeat 证明那一步 · 复测让每次 AI 更新都经得起检验</sub>
 </div>
-

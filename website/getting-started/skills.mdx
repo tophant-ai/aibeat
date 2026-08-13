@@ -1,0 +1,78 @@
+---
+title: Promptbeat skills
+description: Load Promptbeat skills into a coding-agent runtime and verify that they route setup, eval, risk, and debugging questions correctly.
+---
+
+# Promptbeat skills
+
+Promptbeat skills are agent playbooks for common product workflows: getting started,
+connecting coding agents, choosing risk content, running a first evaluation, and
+debugging failed runs.
+
+## Download
+
+Use either source:
+
+| Source | When to use it |
+| --- | --- |
+| Release package | Download from [GitHub Releases](https://github.com/tophant-ai/aibeat/releases) and use the bundled `promptbeat-skills/` directory when present. |
+| Repository checkout | Use the `promptbeat-skills/` directory in this repository. |
+
+The public skill set includes:
+
+| Skill | Purpose |
+| --- | --- |
+| `promptbeat-getting-started` | Route a new user to the right package example and first command path. |
+| `promptbeat-connect-coding-agent` | Wire Codex, Claude Code, OpenCode, or OpenClaw style coding-agent targets. |
+| `promptbeat-run-quick-eval` | Pick the right validate, generate, run, eval, or report command. |
+| `promptbeat-select-risk-pack` | Choose scenarios, seeds, dataset subscriptions, or a small smoke scope. |
+| `promptbeat-debug-run` | Diagnose config, provider, runtime, artifact, and report failures. |
+
+## Load
+
+Copy the whole skill directory, including `SKILL.md` and any `references/` directory.
+
+Claude Code:
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.claude/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.claude/skills/
+```
+
+Codex CLI:
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.codex/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.codex/skills/
+```
+
+OpenCode:
+
+```bash
+mkdir -p ~/.config/opencode/skills
+cp -R promptbeat-skills/promptbeat-getting-started ~/.config/opencode/skills/
+cp -R promptbeat-skills/promptbeat-run-quick-eval ~/.config/opencode/skills/
+```
+
+Use a project-local skill directory instead when your runtime supports one and the
+Promptbeat guidance should apply only to that workspace.
+
+## Use and Verify
+
+Start a fresh agent session after copying the files, then ask:
+
+```text
+I downloaded Promptbeat. Help me run the examples/bootstrap evaluation and find the report.
+```
+
+The expected response should:
+
+- Use `promptbeat-getting-started` or `promptbeat-run-quick-eval`.
+- Tell you to run commands from the release package root.
+- Use `examples/bootstrap/promptbeat.yaml`.
+- Point the result to an `artifacts/` report path.
+
+If the agent suggests source-only commands or paths that are not in the package,
+reload the skill directory and include your package root in the next question.
