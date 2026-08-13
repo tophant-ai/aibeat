@@ -73,12 +73,12 @@ https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
 
 ### 1. 下载
 
-| 产物 | 平台 | 格式 | 体积 | SHA-256 |
-| --- | --- | --- | --- | --- |
-| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
-| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
-| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
-| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` | TBD - 待 HOL-89 提供实测发布资产值 | TBD - 待 HOL-89 提供实测发布资产值 |
+| 产物 | 平台 | 格式 |
+| --- | --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` |
 
 ### 2. 解压
 

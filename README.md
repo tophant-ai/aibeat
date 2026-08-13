@@ -74,12 +74,12 @@ package root. The release page is <https://github.com/tophant-ai/aibeat/releases
 
 ### 1. Download
 
-| Asset | Platform | Format | Size | SHA-256 |
-| --- | --- | --- | --- | --- |
-| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
-| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
-| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
-| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` | TBD - pending measured release asset values from HOL-89 | TBD - pending measured release asset values from HOL-89 |
+| Asset | Platform | Format |
+| --- | --- | --- |
+| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` |
+| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` |
+| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` |
+| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` |
 
 ### 2. Unpack
 
