@@ -94,7 +94,142 @@ You can also mention a skill by name to force that workflow.
 The agent runs commands only when its runtime and your approval policy permit it.
 Otherwise, it should return copyable commands and explain their outputs.
 
-## Example workflow
+## Complete walkthrough: package to report
+
+This walkthrough uses the packaged `examples/bootstrap/` project. The response
+wording may vary; check the commands, paths, cost boundary, and artifacts.
+
+### 1. Choose the path
+
+Ask:
+
+```text
+Promptbeat is unpacked at /opt/promptbeat. Use promptbeat-getting-started to help
+me test a normal LLM. Inspect first and do not make paid model calls yet.
+```
+
+Expected response:
+
+```text
+This is the normal-LLM path. I’ll work from /opt/promptbeat and use
+examples/bootstrap/promptbeat.yaml. I’ll check the package and provider variables,
+then run validate, which does not make model calls.
+```
+
+The agent should stay in the release package and keep secrets out of chat and YAML.
+
+### 2. Prepare providers
+
+Ask the agent to show a placeholder-only environment template and explain the three
+roles. It should keep the real values local:
+
+```bash
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="<set-locally>"
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="$ATTACKER_BASE_URL"
+export JUDGE_API_KEY="$ATTACKER_API_KEY"
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="$ATTACKER_BASE_URL"
+export TARGET_API_KEY="$ATTACKER_API_KEY"
+```
+
+Change model names and the endpoint for your OpenAI-compatible provider.
+
+### 3. Validate without model calls
+
+Ask:
+
+```text
+Validate the bootstrap project. If execution is not allowed, give me the exact
+command and explain its expected output.
+```
+
+Expected command:
+
+```bash
+cd /opt/promptbeat
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
+```
+
+The agent should report whether validation passed and identify missing paths or
+variables. It should not claim that the target was tested.
+
+### 4. Preview five cases
+
+Ask:
+
+```text
+Use promptbeat-select-risk-pack. Keep the bootstrap scenarios, generate five cases
+under artifacts/bootstrap-preview, and do not call the target. Tell me first whether
+generation can call the attacker model.
+```
+
+Expected response and command:
+
+```text
+Generation does not call the target, but it may call the configured attacker model
+and incur provider cost. I’ll reuse the packaged scenarios.
+```
+
+```bash
+./bin/promptbeat generate \
+  --config examples/bootstrap/promptbeat.yaml \
+  --count 5 \
+  --output artifacts/bootstrap-preview/generated_cases.json
+```
+
+Review that JSON before approving target execution.
+
+### 5. Run and find the report
+
+Ask:
+
+```text
+The five cases are approved. Use promptbeat-run-quick-eval to run the bootstrap
+pipeline with TUI progress. Keep outputs under artifacts/bootstrap and report the
+real paths without exposing credentials.
+```
+
+Expected command:
+
+```bash
+./bin/promptbeat pipeline run \
+  --config examples/bootstrap/promptbeat.yaml \
+  --output-dir artifacts/bootstrap \
+  --progress tui
+```
+
+The agent should check the exit status and artifact files before reporting success,
+then point you to `artifacts/bootstrap/report.html` and summarize the run.
+
+### 6. Recover from a failure
+
+Ask:
+
+```text
+Use promptbeat-debug-run. Classify this as a config, path, provider, Promptfoo,
+target runtime, parsing, or report failure. Preserve artifacts and do not rotate
+credentials unless the evidence shows authentication failed.
+
+<redacted error>
+```
+
+The response should cite evidence, propose the smallest reversible fix, and continue
+the same workflow after the fix.
+
+### Done means
+
+- Commands came from the release package root.
+- Secrets stayed in environment variables.
+- Validation ran before model execution.
+- You reviewed a small generated sample and understood its cost boundary.
+- The target ran only after approval.
+- The agent verified and reported existing artifacts.
+- `artifacts/bootstrap/report.html` opens successfully.
+
+## Short conversation
 
 ```text
 User: I unpacked Promptbeat at /opt/promptbeat. Help me test a normal LLM.

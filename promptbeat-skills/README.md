@@ -103,6 +103,169 @@ Agent: I’ll use promptbeat-run-quick-eval, run the project config, and report 
 The agent may execute commands only when its runtime and your approval policy allow
 it. Otherwise it should give copyable commands and explain what each one will create.
 
+## Complete Walkthrough: From Package to Report
+
+This walkthrough uses the packaged `examples/bootstrap/` project. It shows both
+what to ask and what a good agent response should contain. Agent wording can vary;
+verify the paths, commands, cost boundary, and artifacts instead of exact prose.
+
+### 1. Route the Request
+
+Ask:
+
+```text
+Promptbeat is unpacked at /opt/promptbeat. Use promptbeat-getting-started to help
+me test a normal LLM. Inspect first and do not make paid model calls yet.
+```
+
+A good response looks like:
+
+```text
+This is the normal-LLM path. I’ll work from /opt/promptbeat and use
+examples/bootstrap/promptbeat.yaml for the shortest complete walkthrough.
+I’ll first check the package layout and provider environment variables, then run
+validate. Validation checks configuration and wiring without making model calls.
+```
+
+The agent should not switch to a source checkout, invent a config, or ask you to
+paste API keys into chat.
+
+### 2. Configure Providers Safely
+
+Ask:
+
+```text
+Show me which provider environment variables this example needs. Use placeholders;
+do not print, store, or commit my real API keys.
+```
+
+A good response should give an environment-variable template similar to:
+
+```bash
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="<set-locally>"
+
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="$ATTACKER_BASE_URL"
+export JUDGE_API_KEY="$ATTACKER_API_KEY"
+
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="$ATTACKER_BASE_URL"
+export TARGET_API_KEY="$ATTACKER_API_KEY"
+```
+
+The exact model names and endpoint may differ for your OpenAI-compatible provider.
+The response should keep secrets in environment variables and explain the attacker,
+judge, and target roles.
+
+### 3. Validate Before Spending Tokens
+
+Ask:
+
+```text
+Validate the bootstrap project. If you cannot execute commands, give me the exact
+command and explain the expected result.
+```
+
+A good response should run or provide:
+
+```bash
+cd /opt/promptbeat
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
+```
+
+It should say whether validation passed and identify any missing path or environment
+variable. It should not claim that validation exercised the target model.
+
+### 4. Preview a Small Risk Scope
+
+Ask:
+
+```text
+Use promptbeat-select-risk-pack. Keep the packaged bootstrap scenarios, generate
+only five cases under artifacts/bootstrap-preview, and do not call the target yet.
+Before executing, tell me whether this step can call an attacker model.
+```
+
+A good response looks like:
+
+```text
+I’ll reuse the packaged scenarios rather than inventing a risk pack. Generation
+does not call the target, but it may call the configured attacker model and incur
+provider cost. I’ll write five reviewable cases under artifacts/.
+```
+
+It should then run or provide a command shaped like:
+
+```bash
+./bin/promptbeat generate \
+  --config examples/bootstrap/promptbeat.yaml \
+  --count 5 \
+  --output artifacts/bootstrap-preview/generated_cases.json
+```
+
+Review `generated_cases.json` before authorizing execution against the target.
+
+### 5. Run the Evaluation
+
+Ask:
+
+```text
+The five cases are approved. Use promptbeat-run-quick-eval to run the bootstrap
+pipeline with TUI progress. Keep all outputs under artifacts/bootstrap and report
+the final paths without exposing credentials.
+```
+
+A good response should run or provide:
+
+```bash
+./bin/promptbeat pipeline run \
+  --config examples/bootstrap/promptbeat.yaml \
+  --output-dir artifacts/bootstrap \
+  --progress tui
+```
+
+After completion, it should report real paths that exist, especially:
+
+```text
+artifacts/bootstrap/report.html
+```
+
+It should also summarize how many cases ran, which provider roles were used, and
+whether anything failed. It must not claim success before checking the exit status
+and artifacts.
+
+### 6. Diagnose a Failure Without Losing Context
+
+If a step fails, ask:
+
+```text
+Use promptbeat-debug-run to diagnose the error below. First classify the failing
+boundary as config, path, provider, Promptfoo, target runtime, result parsing, or
+report rendering. Preserve the current artifacts and do not rotate credentials
+unless the evidence points to authentication.
+
+<paste the redacted error>
+```
+
+A good response should identify the boundary, cite the command or artifact that
+supports the diagnosis, and propose the smallest reversible fix. Continue the same
+conversation after the fix so the agent retains the selected target, risk scope,
+and artifact directory.
+
+### Completion Checklist
+
+A successful guided run ends with all of the following:
+
+- The agent used package-root commands, not source-only commands.
+- Provider secrets stayed in environment variables.
+- Validation completed before model execution.
+- You reviewed a small generated sample and understood its cost boundary.
+- The target was called only after approval.
+- The agent checked the exit status and reported existing artifact paths.
+- `artifacts/bootstrap/report.html` opens as the final human-readable report.
+
 ## Verify
 
 Ask a Promptbeat-specific question in a fresh session:

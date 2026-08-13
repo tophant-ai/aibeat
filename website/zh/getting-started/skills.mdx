@@ -91,7 +91,156 @@ Claude Code 用户将 `.codex\skills` 换成 `.claude\skills`。
 Agent 只有在运行时和你的审批策略允许时才会直接执行命令；否则应该返回可复制的
 命令，并说明每条命令会生成什么。
 
-## 一次完整对话示例
+## 完整实战：从发布包到报告
+
+下面使用发布包内的 `examples/bootstrap/` 项目。Agent 的具体措辞可以不同，
+验收时重点核对路径、命令、费用边界和实际产物。
+
+### 第一步：判断评测路线
+
+你说：
+
+```text
+Promptbeat 解压在 /opt/promptbeat。使用 promptbeat-getting-started 帮我测试
+一个普通 LLM。先检查，不要执行会产生模型费用的调用。
+```
+
+合格的 Agent 回答应类似：
+
+```text
+这是普通 LLM 路线。我会在 /opt/promptbeat 中使用最短的完整示例
+examples/bootstrap/promptbeat.yaml。先检查发布包和 provider 环境变量，
+再执行 validate；校验配置不会调用模型。
+```
+
+Agent 不应切换到源码仓库、不应凭空创建配置，也不应要求你把 API Key 发到对话里。
+
+### 第二步：安全配置 Provider
+
+你说：
+
+```text
+告诉我这个示例需要哪些 provider 环境变量。只使用占位符，不能打印、保存或提交
+我的真实 API Key，并解释 attacker、judge、target 分别负责什么。
+```
+
+合格回答应提供类似下面的模板：
+
+```bash
+export ATTACKER_MODEL_NAME="openai:gpt-4o"
+export ATTACKER_BASE_URL="https://api.openai.com/v1"
+export ATTACKER_API_KEY="<在本地设置>"
+
+export JUDGE_MODEL_NAME="openai:gpt-4o"
+export JUDGE_BASE_URL="$ATTACKER_BASE_URL"
+export JUDGE_API_KEY="$ATTACKER_API_KEY"
+
+export TARGET_MODEL_NAME="openai:gpt-4o-mini"
+export TARGET_BASE_URL="$ATTACKER_BASE_URL"
+export TARGET_API_KEY="$ATTACKER_API_KEY"
+```
+
+使用公司或其他 OpenAI 兼容服务时，替换模型名和 endpoint 即可。真实密钥只留在
+本地环境变量中。
+
+### 第三步：零模型调用校验
+
+你说：
+
+```text
+校验 bootstrap 项目。如果你没有执行权限，就给我准确命令并解释预期结果。
+```
+
+合格回答应该执行或给出：
+
+```bash
+cd /opt/promptbeat
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
+```
+
+Agent 应说明校验是否通过，并指出缺失的路径或环境变量；不能把“配置校验成功”说成
+“被测模型已经验证成功”。
+
+### 第四步：预览 5 条用例
+
+你说：
+
+```text
+使用 promptbeat-select-risk-pack。保留 bootstrap 自带场景，只生成 5 条，
+写到 artifacts/bootstrap-preview，暂时不要调用 target。执行前先告诉我这一步
+是否可能调用 attacker 模型。
+```
+
+合格回答应先说明：
+
+```text
+generate 不调用 target，但可能调用配置的 attacker 模型并产生供应商费用。
+我会复用包内场景，不会虚构新的 risk pack。
+```
+
+然后执行或提供：
+
+```bash
+./bin/promptbeat generate \
+  --config examples/bootstrap/promptbeat.yaml \
+  --count 5 \
+  --output artifacts/bootstrap-preview/generated_cases.json
+```
+
+你应先查看 `generated_cases.json`，确认用例质量和范围，再授权调用 target。
+
+### 第五步：执行评测并找到报告
+
+你说：
+
+```text
+这 5 条用例可以。使用 promptbeat-run-quick-eval，以 TUI 显示进度运行 bootstrap
+pipeline，把产物都写入 artifacts/bootstrap。完成后汇报实际存在的文件，不能泄露凭证。
+```
+
+合格回答应该执行或给出：
+
+```bash
+./bin/promptbeat pipeline run \
+  --config examples/bootstrap/promptbeat.yaml \
+  --output-dir artifacts/bootstrap \
+  --progress tui
+```
+
+Agent 必须检查退出状态和产物后才能宣布成功，并至少指向：
+
+```text
+artifacts/bootstrap/report.html
+```
+
+同时应概括实际运行用例数、使用了哪些 provider 角色，以及是否存在失败项。
+
+### 第六步：失败后原地恢复
+
+你说：
+
+```text
+使用 promptbeat-debug-run 排查下面的错误。先判断失败边界属于 config、路径、
+provider、Promptfoo、target runtime、结果解析还是报告渲染。保留现有产物，
+除非证据显示认证失败，否则不要轮换凭证。
+
+<粘贴脱敏后的错误>
+```
+
+合格回答应引用命令或产物作为判断证据，给出最小且可回退的修复，然后在同一会话
+继续执行，使 Agent 保留已经确定的目标、风险范围和产物目录。
+
+### 怎样才算完成
+
+- 使用的是发布包根目录下的命令，而非仅适用于源码仓库的命令。
+- 密钥始终保存在环境变量中。
+- 调用模型前已完成配置校验。
+- 已预览少量生成用例，并理解 generate 的费用边界。
+- 只有在确认后才调用 target。
+- Agent 检查了退出状态，并汇报实际存在的产物。
+- `artifacts/bootstrap/report.html` 可以正常打开。
+
+## 简短对话示例
 
 ```text
 用户：Promptbeat 解压在 /opt/promptbeat，帮我测试一个普通 LLM。
