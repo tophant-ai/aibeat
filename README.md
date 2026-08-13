@@ -16,6 +16,7 @@
 
   <p>
     <a href="#quick-start"><b>Quick start</b></a> ·
+    <a href="#use-with-claude-code-or-codex"><b>AI Skills</b></a> ·
     <a href="#what-can-you-do-with-ai-beat"><b>What can you do</b></a> ·
     <a href="#which-one-do-i-need"><b>Which one do I need</b></a> ·
     <a href="#datasets"><b>Datasets</b></a> ·
@@ -76,10 +77,10 @@ package root. The release page is <https://github.com/tophant-ai/aibeat/releases
 
 | Asset | Platform | Format |
 | --- | --- | --- |
-| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` |
-| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` |
-| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` |
-| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` |
+| [`promptbeat-0.2-darwin-arm64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-darwin-arm64.tar.gz) | macOS Apple Silicon | `.tar.gz` |
+| [`promptbeat-0.2-darwin-x64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-darwin-x64.tar.gz) | macOS Intel | `.tar.gz` |
+| [`promptbeat-0.2-linux-x64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-linux-x64.tar.gz) | Linux x86_64 | `.tar.gz` |
+| [`promptbeat-0.2-windows-x64.zip`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-windows-x64.zip) | Windows x86_64 | `.zip` |
 
 ### 2. Unpack
 
@@ -181,6 +182,39 @@ Windows PowerShell:
 
 Open `artifacts/bootstrap/report.html`. Keep the generated directory when you need
 to attach evidence, compare later runs, or promote cases into a regression corpus.
+
+## Use with Claude Code or Codex
+
+The v0.2 packages include five Promptbeat Skills. Install them once, start a fresh
+coding-agent session, and describe the evaluation outcome you want instead of
+memorising every CLI flag.
+
+Claude Code:
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R promptbeat-skills/promptbeat-* ~/.claude/skills/
+```
+
+Codex CLI:
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R promptbeat-skills/promptbeat-* ~/.codex/skills/
+```
+
+Then ask:
+
+```text
+Use promptbeat-getting-started. Promptbeat is unpacked in this directory.
+Help me run my first LLM safety check, preview five cases before calling the target,
+and tell me where the final report is written.
+```
+
+The agent should route the task through setup, risk selection, a small preview,
+evaluation, artifact inspection, and debugging when needed. See the
+[complete Skills guide](promptbeat-skills/README.md) for Windows installation,
+all five Skills, expected Agent responses, and a package-to-report walkthrough.
 
 ## Quick start
 

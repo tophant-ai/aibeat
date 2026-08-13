@@ -16,6 +16,7 @@
 
   <p>
     <a href="#快速开始"><b>快速开始</b></a> ·
+    <a href="#在-claude-code-或-codex-中使用"><b>AI Skills</b></a> ·
     <a href="#ai-beat-能做什么"><b>能做什么</b></a> ·
     <a href="#我该用哪个"><b>我该用哪个</b></a> ·
     <a href="#数据集"><b>数据集</b></a> ·
@@ -75,10 +76,10 @@ https://github.com/user-attachments/assets/e0e1cd56-c71f-4f3d-87dc-03a2fd08ea9f
 
 | 产物 | 平台 | 格式 |
 | --- | --- | --- |
-| `promptbeat-<version>-darwin-arm64.tar.gz` | macOS Apple Silicon | `.tar.gz` |
-| `promptbeat-<version>-darwin-x64.tar.gz` | macOS Intel | `.tar.gz` |
-| `promptbeat-<version>-linux-x64.tar.gz` | Linux x86_64 | `.tar.gz` |
-| `promptbeat-<version>-windows-x64.zip` | Windows x86_64 | `.zip` |
+| [`promptbeat-0.2-darwin-arm64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-darwin-arm64.tar.gz) | macOS Apple Silicon | `.tar.gz` |
+| [`promptbeat-0.2-darwin-x64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-darwin-x64.tar.gz) | macOS Intel | `.tar.gz` |
+| [`promptbeat-0.2-linux-x64.tar.gz`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-linux-x64.tar.gz) | Linux x86_64 | `.tar.gz` |
+| [`promptbeat-0.2-windows-x64.zip`](https://github.com/tophant-ai/aibeat/releases/download/v0.2/promptbeat-0.2-windows-x64.zip) | Windows x86_64 | `.zip` |
 
 ### 2. 解压
 
@@ -180,6 +181,37 @@ Windows PowerShell：
 
 打开 `artifacts/bootstrap/report.html`。需要附证据、对比后续运行或把用例晋级为回归集时，
 保留生成出的目录。
+
+## 在 Claude Code 或 Codex 中使用
+
+v0.2 发布包包含 5 个 Promptbeat Skills。安装一次并启动新的编码 Agent 会话后，
+你可以直接描述评测目标，不必记住所有 CLI 参数。
+
+Claude Code：
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R promptbeat-skills/promptbeat-* ~/.claude/skills/
+```
+
+Codex CLI：
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R promptbeat-skills/promptbeat-* ~/.codex/skills/
+```
+
+然后直接说：
+
+```text
+使用 promptbeat-getting-started。Promptbeat 已经解压在当前目录。
+帮我完成第一次 LLM 安全测试；调用 target 前先预览 5 条用例，
+最后告诉我报告写到了哪里。
+```
+
+Agent 应依次协助完成路线判断、风险选择、小规模预览、正式评测、产物检查和故障排查。
+Windows 安装方式、5 个 Skills 的完整用途、合格回答示例以及从发布包到报告的实战，
+见 [Promptbeat Skills 使用指南](promptbeat-skills/README.md)。
 
 ## 快速开始
 
