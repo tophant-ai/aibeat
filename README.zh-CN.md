@@ -122,37 +122,32 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` 是 Go 原生编排命令：它使用缓存的 Node.js 加载版本化 SDK adapter，管理 adapter 生命周期，并将场景执行与报告生成交给已安装的 PromptBeat 引擎。SDK 和 adapter 保持独立接入层，可以在不改变 CLI 的前提下持续迭代。
+`agentbeat` 管理 adapter 生命周期，并将场景执行与报告生成交给共享的
+PromptBeat 引擎。Adapter 通过语言无关的注册清单和 EvalRun HTTP 协议接入。
 
-按上文配置 attacker 与 judge 后，指定要评测的 Codex runtime：
+先验证接入契约，不需要模型密钥或外部 Agent：
 
 ```bash
-export CODEX_APP_SERVER_BIN="$(command -v codex)"
-export CODEX_MODEL="gpt-5"
-export CODEX_HOME="$HOME/.codex"
+agentbeat adapter check \
+  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
 ```
 
-一条命令负责 adapter 生命周期、评测与报告生成：
+[Python 与 Go](examples/agent-adapters/minimal/README.md) 也提供了等价的零依赖
+示例。检查命令会启动已注册进程，核对身份与能力，提交一次 EvalRun，验证响应，
+最后清理进程。
+
+完整评测时，让注册清单启动你的 runtime 实现，并提供 PromptBeat 项目配置：
 
 ```bash
 agentbeat run \
-  --adapter examples/codex_agent/app-server-adapter/adapter.mjs \
-  --config examples/codex_agent/promptbeat.app-server.yaml \
-  --output-dir artifacts/agentbeat-run
-```
-
-结果写入 `artifacts/agentbeat-run/`，包括归一化评测结果、HTML 报告，以及运行时提供的轨迹证据。无论评测成功或失败，本次启动的 adapter 都会被清理。
-
-接入其他 Agent runtime 时，传入一个导出 `createEvalServer()` 的 adapter 模块：
-
-```bash
-agentbeat run \
-  --adapter /absolute/path/to/my-adapter.mjs \
+  --adapter /absolute/path/to/agentbeat-adapter.json \
   --config path/to/promptbeat.yaml \
   --output-dir artifacts/my-agent
 ```
 
-接入契约见 [AgentBeat adapter](website/zh/agentbeat/adapters.mdx)，完整实现可参考 [Codex 示例](examples/codex_agent/README.md)。
+注册契约见 [typed SDK](sdk/agentbeat-sdk-js/README.md) 与
+[最小 adapter](examples/agent-adapters/minimal/README.md)。为兼容已有接入，
+导出 `createEvalServer()` 的 JavaScript 模块仍可继续使用。
 
 ## 不止于分数
 

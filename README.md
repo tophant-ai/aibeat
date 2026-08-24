@@ -136,45 +136,36 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` is a Go orchestration command. It loads a versioned SDK adapter with
-the cached Node.js runtime, owns its lifecycle, and delegates scenario execution
-and reporting to the installed PromptBeat engine. The SDK and adapters remain
-independent integration packages, so they can evolve without changing the CLI.
+`agentbeat` owns an adapter's lifecycle and delegates scenario execution and
+reporting to the shared PromptBeat engine. Adapters register through a
+language-neutral manifest and EvalRun HTTP protocol.
 
-Configure the attacker and judge roles as above, then select the Codex runtime:
+Try the contract first, without model credentials or an external agent:
 
 ```bash
-export CODEX_APP_SERVER_BIN="$(command -v codex)"
-export CODEX_MODEL="gpt-5"
-export CODEX_HOME="$HOME/.codex"
+agentbeat adapter check \
+  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
 ```
 
-One command owns the adapter lifecycle, evaluation, and report:
+Equivalent zero-dependency examples are included for
+[Python and Go](examples/agent-adapters/minimal/README.md). The check starts
+the registered process, verifies its identity and capabilities, submits one
+EvalRun, validates the response, and stops the process.
+
+For a full evaluation, point the manifest at your runtime implementation and
+provide a PromptBeat project config:
 
 ```bash
 agentbeat run \
-  --adapter examples/codex_agent/app-server-adapter/adapter.mjs \
-  --config examples/codex_agent/promptbeat.app-server.yaml \
-  --output-dir artifacts/agentbeat-run
-```
-
-The result is written to `artifacts/agentbeat-run/`, including the normalized
-evaluation result, HTML report, and any trace artifacts emitted by the runtime.
-The adapter process is stopped on both success and failure.
-
-For another agent runtime, provide an adapter module that exports
-`createEvalServer()`:
-
-```bash
-agentbeat run \
-  --adapter /absolute/path/to/my-adapter.mjs \
+  --adapter /absolute/path/to/agentbeat-adapter.json \
   --config path/to/promptbeat.yaml \
   --output-dir artifacts/my-agent
 ```
 
-See [AgentBeat adapters](website/agentbeat/adapters.mdx) for the integration
-contract and [the Codex example](examples/codex_agent/README.md) for a complete
-reference adapter.
+See the [typed SDK](sdk/agentbeat-sdk-js/README.md) and
+[minimal adapters](examples/agent-adapters/minimal/README.md) for the
+registration contract. Legacy JavaScript modules exporting
+`createEvalServer()` remain supported.
 
 ## Evidence, not just a score
 

@@ -1,0 +1,26 @@
+{
+  "name": "agentbeat-sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SDK for agent developers to report trace_events/tool_call/file_diff/env_change observability data that conforms to the Promptbeat trace-event-v1 schema, and to expose a standard EvalRun HTTP server for their own agent runtimes.",
+  "main": "src/index.mjs",
+  "types": "src/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.mts",
+      "import": "./src/index.mjs"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

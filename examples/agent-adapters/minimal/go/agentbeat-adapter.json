@@ -1,0 +1,16 @@
+{
+  "schema_version": "agentbeat.adapter.v1",
+  "id": "example/minimal-go",
+  "version": "1.0.0",
+  "capabilities": [
+    "text",
+    "trace-events"
+  ],
+  "launch": {
+    "command": [
+      "go",
+      "run",
+      "adapter.go"
+    ]
+  }
+}

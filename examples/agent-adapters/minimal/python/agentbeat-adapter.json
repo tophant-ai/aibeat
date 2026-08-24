@@ -1,0 +1,15 @@
+{
+  "schema_version": "agentbeat.adapter.v1",
+  "id": "example/minimal-python",
+  "version": "1.0.0",
+  "capabilities": [
+    "text",
+    "trace-events"
+  ],
+  "launch": {
+    "command": [
+      "python3",
+      "adapter.py"
+    ]
+  }
+}

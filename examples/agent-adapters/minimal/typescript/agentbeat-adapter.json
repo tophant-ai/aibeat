@@ -1,0 +1,15 @@
+{
+  "schema_version": "agentbeat.adapter.v1",
+  "id": "example/minimal-typescript",
+  "version": "1.0.0",
+  "capabilities": [
+    "text",
+    "trace-events"
+  ],
+  "launch": {
+    "command": [
+      "node",
+      "adapter.ts"
+    ]
+  }
+}
