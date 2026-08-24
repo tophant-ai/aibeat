@@ -1,0 +1,114 @@
+---
+title: 攻击生成
+description: 从 Seed 和 Scenario 到攻击候选，带 Rewrite 迭代和质量门槛。
+---
+
+# 攻击生成
+
+生成把 Seed 和 Scenario 转成候选。用生成模型（攻击方）扩充攻击表达，并在花 target token 前把噪声过滤掉。
+
+```text
+seeds + scenarios + capability sources
+  → 生成模型产出候选
+  → 质量门槛（schema、去重、风险匹配）
+  → 候选集（JSON 落地，可审）
+```
+
+## 生成模型
+
+生成模型是攻击方。它只看 Seed、Scenario 和 Rewrite 提示，永远看不到目标的响应。
+
+```yaml
+generation:
+  generator_provider: openai:openai/gpt-5.5
+```
+
+生成模型的版本要独立于目标。目标 A vs 目标 B 的比较过程中如果生成模型换了，就不能算比较。
+
+## Capability source
+
+Capability source 提供生成逻辑。Promptbeat 是场景优先的，Scenario 决定用哪些 source。
+
+| Source | 贡献 | 场合 |
+|---|---|---|
+| **Promptfoo plugin** | 内建攻击策略（越狱、注入、PII、工具授权） | LLM 和 RAG target 的默认 |
+| **Inspect solver** | 带隐藏验证的任务型攻击 | Benchmark 型 target |
+| **Terminal-Bench task** | Coding Agent 任务 + 隐藏测试文件 | Coding / CLI Agent |
+| **自定义生成器** | 团队特有的攻击食谱 | 反复出现的业务风险 |
+| **Dataset subscription** | 公开或私有数据集 | 常见风险的基线 |
+
+如何把 Capability source 挂到 Target 上，见 [Providers](/cn/providers/overview)。
+
+## Rewrite 迭代
+
+一个 Seed 很少能一次产出最强的攻击。Rewrite 让生成器结合 Judge 反馈复审弱候选——被判 `REVIEW`、被指出表达不到位、或者接近失败但没越线的那些。
+
+<Steps>
+  <Step title="第一轮">
+    生成器从 Seed 和 Scenario 产出 N 个候选。
+  </Step>
+  <Step title="执行 + 判定">
+    候选在目标上运行；每个得到 `PASS`、`FAIL` 或 `REVIEW`。
+  </Step>
+  <Step title="Rewrite 一轮">
+    有效信号（差一点失败、表达偏弱、部分成功）带着 Rewrite 提示回炉；无望的丢弃；确凿失败的晋级。
+  </Step>
+  <Step title="按预算重复">
+    Rewrite 迭代到预算上限或提升阈值。
+  </Step>
+</Steps>
+
+## 质量门槛
+
+候选进入运行之前要过门槛，不合格的直接丢弃，不花 target 的钱。
+
+| 门槛 | 检查 |
+|---|---|
+| Schema 校验 | 候选符合预期的 payload 结构 |
+| Risk-type 匹配 | 候选的风险标签与 Scenario 的 `risk_type` 一致 |
+| 去重 | 语义相同的候选合并 |
+| 长度 / 内容过滤 | 只会触发内容过滤而不触发被测风险的候选被剔除 |
+| 边界合理性 | 候选针对声明的边界，不是别的能力 |
+
+## 候选数量
+
+Promptfoo 的 `--count` 可能按 plugin 计。8 个 plugin + `--count 16` 会到 128 个候选，乘上 Rewrite 迭代和 target 侧的多次运行，数量涨得很快。
+
+```bash
+./bin/promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --count 5 \
+  --output examples/codex_agent/artifacts/generated_cases.json
+```
+
+<Info>
+  广度或有预算的运行，先小样（子集 Scenario + `--count 3`），审 JSON，再放大。成本控制模式见 [Execution](/cn/promptbeat/execution)。
+</Info>
+
+## 用数据集做 Seed
+
+公开或私有数据集充当预加载 Seed 源。常见选择：
+
+| 数据集 | 风险方向 |
+|---|---|
+| HarmBench | 有害内容、多轮越狱 |
+| JBB Behaviors | 分类越狱行为 |
+| ALERT | 对抗性红队 prompt |
+| SimpleSafetyTests | 广度优先的安全覆盖 |
+| Forbidden Questions | 拒答边界探测 |
+| JADE-DB | 中文越狱 / 有害内容 Seed |
+| BeaverTails | 细粒度有害分类 |
+| SALAD-Bench | 跨风险族的安全基准 |
+
+数据集需要先做 Risk mapping 才能支持 Scenario 级别的报告。见 [Risk taxonomy](/cn/datasets/risk-taxonomy) 与 [Datasets overview](/cn/datasets/overview)。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="Execution" icon="server" href="/cn/promptbeat/execution">
+    真实目标执行、Provider、Preflight。
+  </Card>
+  <Card title="Judgement" icon="scale-balanced" href="/cn/promptbeat/judgment">
+    PASS / FAIL / REVIEW 如何写出来。
+  </Card>
+</CardGroup>

@@ -29,6 +29,6 @@ redteam:
   - bfla
   strategies:
   - jailbreak
-  - jailbreak:composite
+  - jailbreak:hydra
   - id: crescendo
     config: {}

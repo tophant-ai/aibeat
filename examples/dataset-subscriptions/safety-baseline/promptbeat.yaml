@@ -14,10 +14,12 @@ seeds:
       safety-baseline:
         limit: 5
 
+providers:
+  targets:
+    - provider: openai:gpt-4o-mini
+
 backend:
   promptfoo:
-    targets:
-      - provider: openai:gpt-4o-mini
     num_tests: 3
     output: artifacts/promptfoo.redteam.yaml
     cases_output: artifacts/generated_cases.json

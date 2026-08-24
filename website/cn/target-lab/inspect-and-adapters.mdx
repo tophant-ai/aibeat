@@ -1,0 +1,14 @@
+---
+title: Inspect 与 Adapter
+description: Promptbeat 如何连接 Inspect、Terminal-Bench 和外部 agent harness。
+---
+
+# Inspect 与 Adapter
+
+当场景需要真实环境控制时，Inspect 是优先执行层。
+
+Benchmark adapter 应暴露：task instruction、workspace、setup/reset、hidden tests、scorer output、artifact collection、timeout/resource policy。
+
+Terminal-Bench 是 programming assistant 场景的第一批 benchmark source，因为它已经提供 terminal tasks、tests 和 scoring。
+
+Promptfoo 仍可用于生成 red-team cases、coding-agent assertions、provider targets 和报告兼容。

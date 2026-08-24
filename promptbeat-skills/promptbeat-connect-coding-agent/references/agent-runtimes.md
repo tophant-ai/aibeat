@@ -75,6 +75,28 @@ Unix equivalent:
 ./bin/promptbeat compile promptfoo --config examples/codex_agent/promptbeat.yaml --output <generated-promptfoo.yaml>
 ```
 
+## Codex App-Server Adapter
+
+Use `examples/codex_agent/promptbeat.app-server.yaml` when evaluating Codex
+through an HTTP target backed by app-server protocol.
+
+Mock app-server smoke:
+
+```powershell
+$env:CODEX_APP_SERVER_BIN = ".\runtime\node\node.exe"
+$env:CODEX_APP_SERVER_ARGS_JSON = '["examples/codex_agent/app-server-adapter/mock-codex-app-server.mjs"]'
+$env:CODEX_MODEL = "mock-codex-model"
+.\runtime\node\node.exe examples\codex_agent\app-server-adapter\adapter.mjs
+```
+
+Then run Promptbeat from another shell with generator and judge credentials:
+
+```powershell
+.\bin\promptbeat.cmd run `
+  --config examples\codex_agent\promptbeat.app-server.yaml `
+  --output-dir examples\codex_agent\artifacts\codex-app-server
+```
+
 ## Claude Code Template
 
 Start from:
@@ -143,3 +165,9 @@ The gateway should return final answer, tool trace, command trace, artifacts, an
 policy denials when available. The provider wrapper should preserve that trace
 schema so Promptbeat can evaluate unsafe commands, file reads, diffs, and policy
 denials, not only the final answer.
+
+## Target Lab
+
+Use `agent_examples/target_lab/` only for advanced benchmark or Inspect harness
+work. It models Codex, Claude Code, and OpenClaw as Inspect-managed Agent Apps
+and expects sandbox-local CLI runtime binaries for formal runs.

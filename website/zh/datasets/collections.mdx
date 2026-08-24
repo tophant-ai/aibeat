@@ -1,0 +1,75 @@
+---
+title: 种子集合
+description: 从 Promptbeat seed registry 构建的、带版本和审核记录的种子集合，在种子社区站浏览。
+---
+
+{/*
+  只做简短说明。完整目录在同域 /community/，构建时由 registry 生成。
+*/}
+
+Promptbeat 通过 `registry/seed-registry/v1/` 下的 seed registry 分发带版本、
+经过哈希校验的种子集合。每个集合都是用 CLI 拉取的 bundle，让团队在跑第一次
+真实评测前，不必从零手工整理攻击 seed pool。
+
+## 在哪里浏览
+
+集合列表、单个集合的详情（文件、来源、记录 schema、Cisco 风险类型与 OWASP ASI
+覆盖、审核状态、已知限制），以及按风险类型、语言、目标类型、敏感级别的筛选，
+都在 **Promptbeat 种子社区站**上。该站与文档站同域部署，路径前缀为 `/community/`。
+
+<CardGroup cols={2}>
+  <Card title="打开种子社区" icon="layer-group" href="/community/zh/">
+    中文界面的集合浏览、筛选与搜索。
+  </Card>
+  <Card title="English community" icon="language" href="/community/">
+    同一 registry 数据的英文界面。
+  </Card>
+</CardGroup>
+
+<Info>
+  本地 `mint dev` 只托管 Mintlify 文档路由。社区站是另一棵静态树：执行
+  `npm run build:community` 后，由包含 `public/community/` 的静态宿主一起提供；
+  或单独预览社区站端口。生产环境用 nginx / OSS+CDN 同域挂载即可。
+</Info>
+
+| 集合 | 社区页 |
+| --- | --- |
+| `jailbreak-baseline@0.1.0` | [/community/zh/collections/jailbreak-baseline/](/community/zh/collections/jailbreak-baseline/) |
+| `agent-safety-baseline@0.1.0` | [/community/zh/collections/agent-safety-baseline/](/community/zh/collections/agent-safety-baseline/) |
+
+## registry 现在有什么
+
+| 集合 | 条目数 | 语言 | 目标类型 |
+| --- | --- | --- | --- |
+| `jailbreak-baseline@0.1.0` | 499 | zh | llm |
+| `agent-safety-baseline@0.1.0` | 110 | en, zh | agent, http-agent, coding-agent |
+
+数字来自 `registry/seed-registry/v1/index.json`。社区站每次构建都会重新从
+registry 计算，所以两边如果不一致，以 registry 为准。
+
+## 如何拉取
+
+目前只从源码仓库分发，还没有公开的 hosted registry URL，因此 `--registry`
+需要指向本地 checkout。在仓库根目录执行：
+
+<Info>
+  TODO：一旦公开分发获批，把 `--registry ./registry/seed-registry/v1` 换成公开的
+  hosted registry URL。发布前需要单独完成 license 和 release 审批。
+</Info>
+
+```bash
+promptbeat seed pull jailbreak-baseline@0.1.0 \
+  --registry ./registry/seed-registry/v1 \
+  --output-dir ./.promptbeat/seeds/jailbreak-baseline/0.1.0
+```
+
+然后在场景里引用下载下来的文件：
+
+```yaml
+seeds:
+  files:
+    - ./.promptbeat/seeds/jailbreak-baseline/0.1.0/seeds.jsonl
+```
+
+两个集合都是 `staging` 状态、`controlled` 敏感级别：里面是可用的攻击 prompt。
+下载得到的 `seeds.jsonl` 请按处理其他攻击测试语料的方式对待。

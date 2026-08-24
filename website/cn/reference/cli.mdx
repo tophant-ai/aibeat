@@ -1,0 +1,56 @@
+﻿---
+title: CLI 鍙傝€?
+description: 甯哥敤 Promptbeat 鍛戒护銆?
+---
+
+# CLI 鍙傝€?
+
+Promptbeat CLI now uses the native Go binary from the release package.
+Run commands from the package or repository root with `./bin/promptbeat`.
+When developing from source, run the same CLI from `core/go` with `go run ./cmd/promptbeat`.
+
+## Validate
+
+```bash
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## Generate Cases
+
+```bash
+./bin/promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --count 5 \
+  --output artifacts/generate/generated_cases.json
+```
+
+## Compile Promptfoo
+
+```bash
+./bin/promptbeat compile promptfoo \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output artifacts/generate/promptfoo.redteam.yaml
+```
+
+## Eval
+
+```bash
+./bin/promptbeat eval \
+  --config artifacts/generate/promptfoo.redteam.yaml \
+  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
+  --output-dir artifacts/eval
+```
+
+## Full Run
+
+```bash
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir artifacts/run
+```
+
+## Report
+
+```bash
+./bin/promptbeat report --eval-result artifacts/eval/evaluation_result.json
+```

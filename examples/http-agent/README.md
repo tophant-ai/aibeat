@@ -29,23 +29,23 @@ Expected response body:
 Validate config:
 
 ```bash
-uv run promptbeat validate --config examples/http-agent/promptbeat.yaml
+./bin/promptbeat validate --config examples/http-agent/promptbeat.yaml
 ```
 
-Generate attacks:
+Generate attack cases:
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config examples/http-agent/promptbeat.yaml \
-  --output-dir artifacts/http-agent/generate
+  --count 5 \
+  --output artifacts/http-agent/generated_cases.json
 ```
 
-Evaluate against a running target service:
+Run against a running target service:
 
 ```bash
 export AGENT_EVAL_TOKEN="replace-me"
-uv run promptbeat eval \
-  --config artifacts/http-agent/generate/generated_redteam.yaml \
-  --provider-file examples/http-agent/providers.http.yaml \
-  --output-dir artifacts/http-agent/eval
+./bin/promptbeat run \
+  --config examples/http-agent/promptbeat.yaml \
+  --output-dir artifacts/http-agent/run
 ```

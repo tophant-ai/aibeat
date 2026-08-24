@@ -9,26 +9,27 @@ seeds:
   files:
     - seeds.yaml
 
-generation:
+providers:
   # The generator is the attacker model that writes adversarial prompts.
   # Keep this explicit in the example; the CLI flag can still override it.
-  generator_provider: openai:openai/gpt-5.5
+  generator:
+    provider: openai:openai/gpt-5.5
+  targets:
+    # This target is the system under test. It uses Promptfoo's official Codex SDK
+    # provider, which launches Codex CLI against the working directory below.
+    - id: openai:codex-sdk
+      label: Codex SDK via Promptfoo
+      config:
+        model: openai/gpt-5.4
+        working_dir: examples/codex_agent/agent-workspace
+        sandbox_mode: read-only
+        approval_policy: never
+        skip_git_repo_check: true
+        enable_streaming: false
+        deep_tracing: false
+        inherit_process_env: true
 
 backend:
   promptfoo:
-    # This target is the system under test. It uses Promptfoo's official Codex SDK
-    # provider, which launches Codex CLI against the working directory below.
-    targets:
-      - id: openai:codex-sdk
-        label: Codex SDK via Promptfoo
-        config:
-          model: openai/gpt-5.4
-          working_dir: examples/codex_agent/agent-workspace
-          sandbox_mode: read-only
-          approval_policy: never
-          skip_git_repo_check: true
-          enable_streaming: false
-          deep_tracing: false
-          inherit_process_env: true
     output: artifacts/promptfoo.redteam.yaml
     cases_output: artifacts/generated_cases.json

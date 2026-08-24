@@ -19,12 +19,14 @@ one risk, rewrite it using the package examples below.
 
 | Need | Use |
 | --- | --- |
+| Normal LLM safety baseline | `examples\llm-safety-baseline\promptbeat.yaml` |
 | Small hand-written LLM smoke / learning config | `examples\llm-basic\promptbeat.yaml` |
 | HTTP business-agent authorization or refund abuse | `examples\http-agent\promptbeat.yaml` |
 | Public safety dataset seeds | `examples\dataset-subscriptions\safety-baseline\promptbeat.yaml` |
 | Reusable subscription catalog | `subscriptions\safety-baseline.yaml` |
-| SCC / AI-WAF-oriented scenarios | `examples\scc_waf\promptbeat.yaml` |
+| China compliance profile examples | `examples\china-compliance\promptbeat.yaml` |
 | Coding-agent safety project | `examples\codex_agent\promptbeat.yaml` |
+| Prebuilt coding-agent Promptfoo YAML | `examples\codex_agent\promptfoo.effective-agent-safety.yaml` |
 
 ## Selection Flow
 
@@ -48,10 +50,11 @@ briefly only when useful.
 
 | User intent | Recommend | Notes |
 | --- | --- | --- |
+| "Basic safety baseline for a normal LLM" | `examples\llm-safety-baseline` | Direct jailbreak and system-prompt leak seeds; use this before dataset baselines. |
 | "Smallest example so I understand Promptbeat" | `examples\llm-basic` | Hand-written `t-007`, `t-002`, and `t-001` smoke seeds. |
 | "HTTP support agent / business workflow" | `examples\http-agent` | `support-cross-user-access` (`t-001`) and `support-refund-abuse` (`t-008`). |
 | "Public benchmark-style safety seeds" | `examples\dataset-subscriptions\safety-baseline` | Requires separate raw dataset files. |
-| "SCC / AI-WAF-oriented scenarios" | `examples\scc_waf` | Start with `config inspect`, then generate a small case sample. |
+| "China compliance / regulatory profile" | `examples\china-compliance` | Includes `cisco_leaderboard` and `cn_generative_ai_basic`; start with `config inspect`. |
 | "Coding agent safety" | `examples\codex_agent\promptbeat.yaml` plus `promptbeat-connect-coding-agent` | Use the skill for runtime/provider wiring; use prebuilt Promptfoo YAML only with `promptbeat-run-quick-eval` / `eval`. |
 
 ## Command Rules
@@ -99,17 +102,17 @@ command. It is a source-checkout helper only if the user has the source repo.
 
 ## First Commands
 
-Normal LLM smoke:
+Normal LLM safety baseline:
 
 ```powershell
 cd C:\tools\promptbeat
 
-.\bin\promptbeat.cmd validate --config examples\llm-basic\promptbeat.yaml
+.\bin\promptbeat.cmd validate --config examples\llm-safety-baseline\promptbeat.yaml
 
 .\bin\promptbeat.cmd generate `
-  --config examples\llm-basic\promptbeat.yaml `
+  --config examples\llm-safety-baseline\promptbeat.yaml `
   --count 5 `
-  --output artifacts\llm-basic\generated_cases.json
+  --output artifacts\llm-safety-baseline\generated_cases.json
 ```
 
 HTTP business agent:
@@ -140,17 +143,17 @@ $env:PROMPTBEAT_DATASETS_DIR = "C:\tools\promptbeat-datasets\raw"
   --output artifacts\dataset-subscriptions\safety-baseline\generated_cases.json
 ```
 
-SCC / AI-WAF:
+China compliance:
 
 ```powershell
 cd C:\tools\promptbeat
 
-.\bin\promptbeat.cmd config inspect --config examples\scc_waf\promptbeat.yaml
+.\bin\promptbeat.cmd config inspect --config examples\china-compliance\promptbeat.yaml
 
 .\bin\promptbeat.cmd generate `
-  --config examples\scc_waf\promptbeat.yaml `
+  --config examples\china-compliance\promptbeat.yaml `
   --count 5 `
-  --output artifacts\scc_waf\generated_cases.json
+  --output artifacts\china-compliance\generated_cases.json
 ```
 
 Coding-agent project risk content:

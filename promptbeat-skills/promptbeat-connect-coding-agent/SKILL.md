@@ -20,9 +20,11 @@ equivalent when useful.
 | Runtime | Starting point | Status |
 | --- | --- | --- |
 | Codex SDK / Codex CLI | `examples/codex_agent/` | Runnable example. |
+| Codex app-server | `examples/codex_agent/promptbeat.app-server.yaml` | Preferred HTTP adapter shape for Codex app-server. |
 | Claude Code | `examples/agent-adapters/claude-code/` | Template requiring real runtime wiring. |
 | OpenCode | `examples/agent-adapters/opencode/` | Template requiring SDK/server wiring. |
 | OpenClaw | `examples/agent-adapters/openclaw/` | Template requiring gateway URL, key, and agent id. |
+| Inspect / benchmark harness | `agent_examples/target_lab/` | Advanced source-checkout path, not a full-package first step. |
 
 Route users in this order:
 
@@ -31,6 +33,8 @@ Route users in this order:
 2. Use Claude Code, OpenCode, and OpenClaw provider files as templates only.
    Before eval, require a real runtime wrapper, SDK, or server; credentials;
    an intended workspace; sandbox and approval policy; and trace capture.
+3. Use Target Lab only for advanced benchmark or Inspect harness work when the
+   user is intentionally working outside the downloaded full package.
 
 ## Required Checks
 

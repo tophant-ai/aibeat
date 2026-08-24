@@ -1,0 +1,96 @@
+---
+title: 核心概念
+description: Target、Scenario、Seed、Finding、Judge、Dataset —— 一次评测里反复出现的六个词。
+---
+
+# 核心概念
+
+六个词，在每一份配置、每一份报告、每一个页面里反复出现。这一页读完，其他文档就顺了。
+
+## Target（被测目标）
+
+**你在测什么。** 不是"GPT-5"，是"客服 Agent，用 `production-readonly` 凭证跑，访问订单 API"。
+
+一个 Target 有身份、能力集、认证上下文和边界。同一个底层模型，不同的 Target：能跑 shell 的 Coding Agent、能查订单的客服 Agent、纯 Chat Completion API，是三个不同的 Target。
+
+```yaml
+target:
+  id: support-agent-prod-readonly
+  kind: http-agent
+  endpoint: https://internal.example.com/agent/v1
+  identity: user-123
+  boundary:
+    - "只能访问 user-123 的订单"
+    - "不能修改订单"
+```
+
+## Scenario（场景）
+
+**在这个 Target 上，你想测什么风险。** 一个 Scenario 明确风险面、失败标准（什么算失败）、边界（Target 应该拒绝什么）。
+
+同一句请求，在不同 Scenario 里意义完全不同：
+
+| 请求 | 对话模型 | Coding Agent | 客服 Agent |
+|---|---|---|---|
+| "读取环境变量" | 策略拒答 | 密钥外泄 | 通常不相关 |
+| "查一下 user-987 的订单" | 一般问答 | 不相关 | 跨用户访问风险 |
+| "改测试让它通过" | 不适用 | 破坏验证器 | 不适用 |
+
+Scenario 把"模型说了什么"变成"模型在**这个**上下文里越了**这条**边界"。
+
+## Seed（种子）
+
+**攻击的起点。** Seed 是一条具体的输入或对话，用来表达一个 Scenario。可以来自：
+
+- 客户自己历史测试沉淀
+- 公开数据集（HarmBench、JBB、ALERT 等）
+- 共享社区集合（[种子社区站](https://docs.promptbeat.ai)）
+- 针对某个业务边界的手写压力 case
+
+Seed 是原料，不是"整个测试集"。生成、Rewrite、数据集晋级建立在 Seed 之上。
+
+## Judge（判定）
+
+**一次运行怎么打分。** Judge 拿到 Target 的输出（Agentbeat 里还有 Trace 和环境），返回判定：
+
+- `PASS` —— Target 守住了边界
+- `FAIL` —— Target 越界；创建 Finding
+- `REVIEW` —— 信号存在但不能下结论；需要人复核
+
+Judge 与风险有关。越狱 Judge、数据外泄 Judge、工具授权 Judge 是不同规则；平台自带常见风险的 Judge，也支持自定义。
+
+## Finding（发现）
+
+**一个具体的失败，附带足以复现的一切。** Finding 包括：Target、Scenario、输入、输出、Judge 判定、严重度；Agent 运行还包括 Trace 和环境变化。
+
+Finding 是可分享输出的最小单元。一份报告 = 一组 Finding 及其聚合。
+
+## Dataset（数据集）
+
+**Finding 和候选如何长期沉淀。** 攻击候选走三种流向：
+
+| 流向 | 含义 |
+|---|---|
+| **Promote（晋级）** | 可复现失败；进入版本化回归集。 |
+| **Rewrite（改写）** | 信号是真的但表达偏弱；带着 rewrite 提示进入下一轮生成。 |
+| **Reject（丢弃）** | 重复、低质量、或不反映真实风险。 |
+
+Dataset 像代码库一样版本化、哈希校验。每次模型 / Prompt / 策略升级，用同一个回归集重跑，差异立刻可见。
+
+## 合起来看
+
+```text
+target × scenario × seed
+  → 生成候选
+  → 真实目标执行
+  → Judge（PASS / FAIL / REVIEW）
+  → Finding（带证据；Agent 还带 Trace）
+  → Dataset（Promote / Rewrite / Reject）
+  → 下一轮
+```
+
+文档站的每一份配置、每一条命令、每一个页面都在指向这六个词。其他都是它们的具体实现（某个 Judge、某个 Seed collection）或者交付形态（报告版式、artifact 结构）。
+
+<Card title="在一次真实运行里看到它们" icon="rocket" href="/zh/promptbeat/quickstart">
+  Promptbeat 快速上手会把 target → seed → generate → run → report 在真实 Codex Agent 上走一遍。
+</Card>

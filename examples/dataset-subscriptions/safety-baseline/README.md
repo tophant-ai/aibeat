@@ -18,13 +18,22 @@ uv run python scripts/download_datasets.py --only harmbench jbb_behaviors do_not
 Validate the project:
 
 ```bash
-uv run promptbeat validate --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml
+./bin/promptbeat validate --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml
 ```
 
-Generate attacks:
+Generate attack cases:
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml \
-  --output-dir artifacts/dataset-subscriptions/safety-baseline/generate
+  --count 5 \
+  --output artifacts/dataset-subscriptions/safety-baseline/generated_cases.json
+```
+
+Run the full Promptbeat + Promptfoo path:
+
+```bash
+./bin/promptbeat run \
+  --config examples/dataset-subscriptions/safety-baseline/promptbeat.yaml \
+  --output-dir artifacts/dataset-subscriptions/safety-baseline/run
 ```

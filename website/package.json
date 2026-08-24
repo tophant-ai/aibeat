@@ -5,7 +5,9 @@
   "description": "Promptbeat documentation and marketing site built with Mintlify.",
   "scripts": {
     "dev": "mint dev",
-    "check": "mint broken-links"
+    "check": "mint broken-links",
+    "build:community": "npm --prefix ../community-site run build && rm -rf public/community && mkdir -p public && cp -a ../community-site/dist public/community",
+    "build": "npm run build:community"
   },
   "devDependencies": {
     "mintlify": "4.2.587"

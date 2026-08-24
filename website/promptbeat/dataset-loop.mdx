@@ -1,0 +1,140 @@
+---
+title: Dataset loop
+description: Promote, rewrite, reject — how Promptbeat findings become a versioned regression baseline.
+---
+
+# Dataset loop
+
+A run's findings are useful once. A versioned regression dataset is useful forever. The dataset loop is what turns the first into the second.
+
+```text
+generated candidates
+  → executed on target
+  → judged (PASS / FAIL / REVIEW)
+  → promote / rewrite / reject
+      ↳ promoted findings → versioned regression dataset
+      ↳ rewrite hints → next generation round
+      ↳ rejected → dropped, kept in lineage
+  → replay dataset on every model / prompt / policy upgrade
+```
+
+## Three outcomes
+
+<CardGroup cols={3}>
+  <Card title="Promote" icon="circle-arrow-up">
+    Reproducible FAIL, useful signal, boundary crossed cleanly. The finding enters the versioned regression dataset. It will be replayed on every upgrade.
+  </Card>
+  <Card title="Rewrite" icon="rotate-right">
+    REVIEW or a near-miss FAIL with weak phrasing. Not ready for the dataset. Sent back to the generator with hints on how to sharpen it.
+  </Card>
+  <Card title="Reject" icon="trash-can">
+    Duplicate, low quality, or does not reflect a real risk. Kept in lineage so the same candidate does not resurface, but not carried forward.
+  </Card>
+</CardGroup>
+
+## What "promoted" actually means
+
+A promoted finding is:
+
+- **Versioned**: pinned to a `collection@version` (e.g. `agent-safety-baseline@0.1.0`)
+- **Hash-verified**: sha256 over the payload, so drift is detectable
+- **Reproducible**: config, provider, seed, generator version all recorded
+- **Judged**: verdict and rubric captured, not just "this is a bad prompt"
+- **Metadata-tagged**: risk type, target kind, language, severity, owner
+
+That's what makes a dataset comparable across runs and defensible in an incident review.
+
+## Dataset shape
+
+The dataset is a file tree, laid out like a small registry.
+
+```text
+registry/seed-registry/v1/
+  index.json                                # collection index
+  collections/
+    agent-safety-baseline/
+      0.1.0/
+        manifest.json                       # provenance, license, review
+        seeds.jsonl                         # one seed per line
+        VALIDATION_REPORT.json              # what shipped and why
+    jailbreak-baseline/
+      0.1.0/
+        manifest.json
+        seeds.jsonl
+```
+
+Each `seeds.jsonl` record carries the same shape you'd find in a `finding` — because a promoted finding *is* a seed for the next generation cycle.
+
+## The registry protocol
+
+Once a collection is versioned it becomes something you can pull:
+
+```bash
+promptbeat seed pull agent-safety-baseline@0.1.0 \
+  --registry ./registry/seed-registry/v1 \
+  --output-dir ./.promptbeat/seeds/agent-safety-baseline/0.1.0
+```
+
+```yaml
+seeds:
+  files:
+    - ./.promptbeat/seeds/agent-safety-baseline/0.1.0/seeds.jsonl
+```
+
+<Info>
+  Distribution is from the source repository for now — there is no hosted registry URL yet. `--registry` points at a local checkout. See the [seed community site](https://docs.promptbeat.ai) for the browsable collection index.
+</Info>
+
+## Continuous regression
+
+Every model, prompt or policy upgrade is a chance to lose safety silently. The dataset loop makes that visible:
+
+<Steps>
+  <Step title="Pin the dataset version">
+    Regression uses `collection@version`, not "latest". A dataset that changes underneath is not a baseline.
+  </Step>
+  <Step title="Re-run">
+    Same dataset, same scenarios, new target version.
+  </Step>
+  <Step title="Diff">
+    Compare the two runs. Regressions light up immediately. See [Reports — Diff](/promptbeat/reports#diff-report).
+  </Step>
+  <Step title="Feed back">
+    New failures from the upgrade get their own promote / rewrite / reject cycle. The regression set grows over time.
+  </Step>
+</Steps>
+
+## Data assets that pay their way
+
+Over time, the dataset stops being a byproduct and starts being an asset:
+
+- Same regression set covers model swaps, vendor comparisons, prompt refactors
+- Difficult cases accumulate — the cases most likely to reveal new failures cluster in versioned collections
+- Custom, business-specific boundaries turn into internal collections alongside public ones
+- Lineage lets the team explain where every case came from — useful for audits and post-incident reviews
+
+## Where the seed collections live
+
+Two shared collections are shipped with the platform:
+
+<CardGroup cols={2}>
+  <Card title="agent-safety-baseline" icon="robot">
+    Trace-aware tool-using agent safety seeds derived from AgentDojo, InjecAgent, AgentHarm, ToolEmu and adversarial cases. 110 seeds, en+zh, agent / http-agent / coding-agent targets.
+  </Card>
+  <Card title="jailbreak-baseline" icon="shield-halved">
+    Chinese jailbreak and harmful-content refusal seeds adapted from JailBench, ALERT adversarial cases, and original constructions. 499 seeds, zh, llm targets.
+  </Card>
+</CardGroup>
+
+Both are `staging` and `controlled` sensitivity — they contain working attack prompts. Handle the downloaded `seeds.jsonl` accordingly.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Datasets" icon="database" href="/datasets/overview">
+    Full catalog, risk taxonomy, dataset-started evaluation.
+  </Card>
+  <Card title="Use cases" icon="briefcase" href="/use-cases/post-upgrade-regression">
+    The regression story from the customer's angle.
+  </Card>
+</CardGroup>

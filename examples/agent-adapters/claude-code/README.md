@@ -6,7 +6,7 @@ It is not marked as a verified runtime in this repository until a real Claude Co
 Use with generated cases:
 
 ```bash
-uv run promptbeat eval \
+./bin/promptbeat eval \
   --config artifacts/coding-agent/generate/generated_redteam.yaml \
   --provider-file examples/agent-adapters/claude-code/providers.claude-code.yaml \
   --output-dir artifacts/claude-code/eval

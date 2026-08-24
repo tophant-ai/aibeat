@@ -6,7 +6,7 @@ Promptbeat sends generated cases to the gateway; the gateway should return the f
 Use with generated cases:
 
 ```bash
-uv run promptbeat eval \
+./bin/promptbeat eval \
   --config artifacts/coding-agent/generate/generated_redteam.yaml \
   --provider-file examples/agent-adapters/openclaw/providers.openclaw.yaml \
   --output-dir artifacts/openclaw/eval

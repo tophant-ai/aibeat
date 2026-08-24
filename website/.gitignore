@@ -2,3 +2,4 @@ node_modules/
 .mintlify/
 .next/
 dist/
+public/community/

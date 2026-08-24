@@ -1,36 +1,36 @@
+﻿---
+title: Agent 閰嶇疆绀轰緥
+description: 鍏稿瀷 Promptbeat Agent 搴旂敤鐨?target 閰嶇疆鍜屽彲杩愯閾捐矾銆?
 ---
-title: Agent 配置示例
-description: 典型 Promptbeat Agent 应用的 target 配置和可运行链路。
----
 
-# Agent 配置示例
+# Agent 閰嶇疆绀轰緥
 
-Promptbeat 的 target 是具体 agent 应用。一个 target 真正有用，需要具备调用方式、workspace 或服务环境、权限模型、trace 输出，以及能把行为转成 pass/fail 的断言。
+Promptbeat 鐨?target 鏄叿浣?agent 搴旂敤銆備竴涓?target 鐪熸鏈夌敤锛岄渶瑕佸叿澶囪皟鐢ㄦ柟寮忋€亀orkspace 鎴栨湇鍔＄幆澧冦€佹潈闄愭ā鍨嬨€乼race 杈撳嚭锛屼互鍙婅兘鎶婅涓鸿浆鎴?pass/fail 鐨勬柇瑷€銆?
 
-本页先给两条实用路径：
+鏈〉鍏堢粰涓ゆ潯瀹炵敤璺緞锛?
 
-1. Codex 可运行路径，对齐当前已经保存的 Promptbeat 证据。
-2. HTTP/custom-agent 通用路径，适合大多数应用型 agent 改造。
+1. Codex 鍙繍琛岃矾寰勶紝瀵归綈褰撳墠宸茬粡淇濆瓨鐨?Promptbeat 璇佹嵁銆?
+2. HTTP/custom-agent 閫氱敤璺緞锛岄€傚悎澶у鏁板簲鐢ㄥ瀷 agent 鏀归€犮€?
 
-## Target 模式
+## Target 妯″紡
 
-| Agent app | 状态 | Provider / adapter | 说明 |
+| Agent app | 鐘舵€?| Provider / adapter | 璇存槑 |
 |---|---|---|---|
-| Codex SDK | 现在可运行 | `openai:codex-sdk` | 已通过 Promptbeat broad Codex report 验证。 |
-| Codex app-server | 适配器接入模式 | `openai:codex-app-server` / `openai:codex-desktop` | 当 app/server events 和 approval requests 重要时使用。 |
-| Claude Agent SDK / Claude Code-like workflows | 适配器接入模式 | `anthropic:claude-agent-sdk` | 需要 Claude Code SDK/runtime 凭据和 workspace。 |
-| OpenCode | 适配器接入模式 | `opencode:sdk` | 可以启动 OpenCode 或连接现有 server。 |
-| OpenClaw | 适配器接入模式 | `openclaw:main` / `openclaw:agent:main` | 需要运行中的 OpenClaw gateway。 |
-| Browser agent | 适配器接入模式 | HTTP/custom provider 或 Target Lab browser adapter | Promptbeat 负责 browser startup 和 DOM trace 时使用 Target Lab。 |
-| Customer support agent | 适配器接入模式 | HTTP/custom provider 或 OpenAI Agents/ChatKit wrapper | 需要 tenant/user fixtures 和 action audit logs。 |
-| Data analysis agent | 适配器接入模式 | Python/JavaScript custom provider、notebook runner、Inspect solver | 需要 database/notebook fixtures 和 artifact capture。 |
-| DevOps agent | 适配器接入模式 | Script/custom provider 或 Target Lab adapter | 只应跑在 dry-run 或一次性环境。 |
-| Security triage agent | 适配器接入模式 | 连接 triage backend 的 HTTP/custom provider | 需要 alert/ticket/enrichment trace capture。 |
-| 企业内部 agent | 适配器接入模式 | Custom provider、script provider 或私有 harness adapter | 明确 auth 和 trace contract。 |
+| Codex SDK | 鐜板湪鍙繍琛?| `openai:codex-sdk` | 宸查€氳繃 Promptbeat broad Codex report 楠岃瘉銆?|
+| Codex app-server | 閫傞厤鍣ㄦ帴鍏ユā寮?| `openai:codex-app-server` / `openai:codex-desktop` | 褰?app/server events 鍜?approval requests 閲嶈鏃朵娇鐢ㄣ€?|
+| Claude Agent SDK / Claude Code-like workflows | 閫傞厤鍣ㄦ帴鍏ユā寮?| `anthropic:claude-agent-sdk` | 闇€瑕?Claude Code SDK/runtime 鍑嵁鍜?workspace銆?|
+| OpenCode | 閫傞厤鍣ㄦ帴鍏ユā寮?| `opencode:sdk` | 鍙互鍚姩 OpenCode 鎴栬繛鎺ョ幇鏈?server銆?|
+| OpenClaw | 閫傞厤鍣ㄦ帴鍏ユā寮?| `openclaw:main` / `openclaw:agent:main` | 闇€瑕佽繍琛屼腑鐨?OpenClaw gateway銆?|
+| Browser agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| HTTP/custom provider 鎴?Target Lab browser adapter | Promptbeat 璐熻矗 browser startup 鍜?DOM trace 鏃朵娇鐢?Target Lab銆?|
+| Customer support agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| HTTP/custom provider 鎴?OpenAI Agents/ChatKit wrapper | 闇€瑕?tenant/user fixtures 鍜?action audit logs銆?|
+| Data analysis agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| Python/JavaScript custom provider銆乶otebook runner銆両nspect solver | 闇€瑕?database/notebook fixtures 鍜?artifact capture銆?|
+| DevOps agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| Script/custom provider 鎴?Target Lab adapter | 鍙簲璺戝湪 dry-run 鎴栦竴娆℃€х幆澧冦€?|
+| Security triage agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| 杩炴帴 triage backend 鐨?HTTP/custom provider | 闇€瑕?alert/ticket/enrichment trace capture銆?|
+| 浼佷笟鍐呴儴 agent | 閫傞厤鍣ㄦ帴鍏ユā寮?| Custom provider銆乻cript provider 鎴栫鏈?harness adapter | 鏄庣‘ auth 鍜?trace contract銆?|
 
-## Walkthrough：Codex coding-agent target
+## Walkthrough锛欳odex coding-agent target
 
-当 target 是运行在仓库 workspace 内的 Codex coding agent 时，使用这条路径。
+褰?target 鏄繍琛屽湪浠撳簱 workspace 鍐呯殑 Codex coding agent 鏃讹紝浣跨敤杩欐潯璺緞銆?
 
 ### 1. Project config
 
@@ -123,40 +123,37 @@ providers:
 ### 6. Generate and evaluate
 
 ```bash
-uv run promptbeat validate --config promptbeat.yaml
+./bin/promptbeat validate --config promptbeat.yaml
 
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config promptbeat.yaml \
-  --provider-file providers.codex.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 20 \
-  --output-dir artifacts/codex-secret/generate
+  --output artifacts/codex-secret/generated_cases.json
 
-uv run promptbeat eval \
-  --config artifacts/codex-secret/generate/generated_redteam.yaml \
-  --provider-file providers.codex.yaml \
-  --output-dir artifacts/codex-secret/eval
+./bin/promptbeat run \
+  --config promptbeat.yaml \
+  --output-dir artifacts/codex-secret/run
 
-uv run promptbeat report \
-  --eval-result artifacts/codex-secret/eval/evaluation_result.json
+./bin/promptbeat report \
+  --input artifacts/codex-secret/run/evaluation_result.json
 ```
 
-### 7. 检查结果
+### 7. 妫€鏌ョ粨鏋?
 
-一次有用的运行应该留下这些 artifacts：
+涓€娆℃湁鐢ㄧ殑杩愯搴旇鐣欎笅杩欎簺 artifacts锛?
 
 ```text
-artifacts/codex-secret/generate/generated_redteam.yaml
-artifacts/codex-secret/generate/generated_cases.json
-artifacts/codex-secret/eval/evaluation_result.json
-artifacts/codex-secret/eval/promptfoo-output.json
+artifacts/codex-secret/run/promptfoo.redteam.yaml
+artifacts/codex-secret/run/promptfoo.generated.yaml
+artifacts/codex-secret/run/evaluation_result.json
+artifacts/codex-secret/run/report.html
 ```
 
-Review 时重点看直接 secret 泄露，以及不安全绕行建议，比如建议 dump 环境变量或把受保护文件复制进 workspace。
+Review 鏃堕噸鐐圭湅鐩存帴 secret 娉勯湶锛屼互鍙婁笉瀹夊叏缁曡寤鸿锛屾瘮濡傚缓璁?dump 鐜鍙橀噺鎴栨妸鍙椾繚鎶ゆ枃浠跺鍒惰繘 workspace銆?
 
-## Walkthrough：HTTP custom agent target
+## Walkthrough锛欻TTP custom agent target
 
-当 agent 已经作为服务运行时，使用这条路径：Browser agent、客服 agent、安全研判 agent、内部助手，或者 CLI agent 前面的 gateway。
+褰?agent 宸茬粡浣滀负鏈嶅姟杩愯鏃讹紝浣跨敤杩欐潯璺緞锛欱rowser agent銆佸鏈?agent銆佸畨鍏ㄧ爺鍒?agent銆佸唴閮ㄥ姪鎵嬶紝鎴栬€?CLI agent 鍓嶉潰鐨?gateway銆?
 
 ### 1. Provider file
 
@@ -213,22 +210,19 @@ seeds:
 ### 4. Generate and evaluate
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config promptbeat.support.yaml \
-  --provider-file providers.http-agent.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 10 \
-  --output-dir artifacts/support-cross-user/generate
+  --output artifacts/support-cross-user/generated_cases.json
 
-uv run promptbeat eval \
-  --config artifacts/support-cross-user/generate/generated_redteam.yaml \
-  --provider-file providers.http-agent.yaml \
-  --output-dir artifacts/support-cross-user/eval
+./bin/promptbeat run \
+  --config promptbeat.support.yaml \
+  --output-dir artifacts/support-cross-user/run
 ```
 
 ### 5. HTTP response contract
 
-尽量返回 final answer 和 trace metadata。
+灏介噺杩斿洖 final answer 鍜?trace metadata銆?
 
 ```json
 {
@@ -241,9 +235,9 @@ uv run promptbeat eval \
 }
 ```
 
-如果服务暂时不能返回 trace metadata，Promptbeat 仍然可以判断 answer text，但报告证据会更弱。更好的模式是返回 tool calls、触达记录、action audit id 和 policy decision。
+濡傛灉鏈嶅姟鏆傛椂涓嶈兘杩斿洖 trace metadata锛孭romptbeat 浠嶇劧鍙互鍒ゆ柇 answer text锛屼絾鎶ュ憡璇佹嵁浼氭洿寮便€傛洿濂界殑妯″紡鏄繑鍥?tool calls銆佽Е杈捐褰曘€乤ction audit id 鍜?policy decision銆?
 
-## 其他 Agent 配置片段
+## 鍏朵粬 Agent 閰嶇疆鐗囨
 
 ### Browser agent
 
@@ -263,7 +257,7 @@ providers:
       transformResponse: json.finalAnswer
 ```
 
-当 Promptbeat 需要启动浏览器、种植页面、捕获 DOM trace，并对导航或外传事件评分时，使用 Target Lab。
+褰?Promptbeat 闇€瑕佸惎鍔ㄦ祻瑙堝櫒銆佺妞嶉〉闈€佹崟鑾?DOM trace锛屽苟瀵瑰鑸垨澶栦紶浜嬩欢璇勫垎鏃讹紝浣跨敤 Target Lab銆?
 
 ### Data analysis agent
 
@@ -277,7 +271,7 @@ providers:
       allow_network: false
 ```
 
-Adapter 应捕获 SQL queries、notebook cells、生成文件和 final answer。
+Adapter 搴旀崟鑾?SQL queries銆乶otebook cells銆佺敓鎴愭枃浠跺拰 final answer銆?
 
 ### DevOps agent
 
@@ -293,9 +287,9 @@ providers:
       network_policy: deny
 ```
 
-破坏性或连接云资源的 eval 只应运行在一次性账号或模拟环境中。
+鐮村潖鎬ф垨杩炴帴浜戣祫婧愮殑 eval 鍙簲杩愯鍦ㄤ竴娆℃€ц处鍙锋垨妯℃嫙鐜涓€?
 
-### 企业内部 agent
+### 浼佷笟鍐呴儴 agent
 
 ```yaml
 providers:
@@ -308,7 +302,7 @@ providers:
       trace_dir: '{{traceDir}}'
 ```
 
-Provider 实现草图：
+Provider 瀹炵幇鑽夊浘锛?
 
 ```js
 export default class InternalAgentProvider {
@@ -335,16 +329,16 @@ export default class InternalAgentProvider {
 }
 ```
 
-## Target-ready 规则
+## Target-ready 瑙勫垯
 
-Provider file 至少应该回答这些问题：
+Provider file 鑷冲皯搴旇鍥炵瓟杩欎簺闂锛?
 
 ```text
-Agent 如何被调用？
-准备了什么 workspace、service 或 browser state？
-授予了哪些权限？
-采集哪些 trace fields？
-支持哪些 scenario risks？
-哪些 assertions 或 scorers 决定 pass/fail？
-Artifacts 写到哪里？
+Agent 濡備綍琚皟鐢紵
+鍑嗗浜嗕粈涔?workspace銆乻ervice 鎴?browser state锛?
+鎺堜簣浜嗗摢浜涙潈闄愶紵
+閲囬泦鍝簺 trace fields锛?
+鏀寔鍝簺 scenario risks锛?
+鍝簺 assertions 鎴?scorers 鍐冲畾 pass/fail锛?
+Artifacts 鍐欏埌鍝噷锛?
 ```

@@ -1,0 +1,55 @@
+target:
+  file: target.yaml
+
+scenarios:
+  files:
+    - scenarios.yaml
+
+seeds:
+  files:
+    - seeds.yaml
+
+providers:
+  generator:
+    provider: "{{env.ATTACKER_MODEL_NAME}}"
+    config:
+      apiBaseUrl: "{{env.ATTACKER_BASE_URL}}"
+      apiKey: "{{env.ATTACKER_API_KEY}}"
+  judge:
+    provider: openai:chat:glm-5
+    config:
+      apiBaseUrl: https://llm.tophant.com
+      apiKey: "{{env.TARGET_API_KEY_0}}"
+      temperature: 0
+      max_tokens: 1024
+  targets:
+    - id: http
+      label: Codex app-server adapter
+      config:
+        url: http://127.0.0.1:8091/v1/eval/runs
+        method: POST
+        headers:
+          content-type: application/json
+        body:
+          target: codex-app-server
+          prompt: "{{prompt}}"
+          scenario_id: "{{scenarioId}}"
+          seed_id: "{{seedId}}"
+          risk_id: "{{risk_id}}"
+          risk_category: "{{risk_category}}"
+          risk_subtype: "{{risk_subtype}}"
+          provider_id: codex_app_server
+          runtime:
+            sandbox_mode: read-only
+            approval_policy: never
+            timeout_ms: 180000
+        transformResponse: json.judge_observation_text
+
+backend:
+  promptfoo:
+    num_tests: 1
+    max_concurrency: 1
+    output: artifacts/codex-app-server-glm5-judge/promptfoo.redteam.yaml
+    cases_output: artifacts/codex-app-server-glm5-judge/generated_cases.json
+    result_output: artifacts/codex-app-server-glm5-judge/promptfoo-result.json
+    report_output: artifacts/codex-app-server-glm5-judge/report.html

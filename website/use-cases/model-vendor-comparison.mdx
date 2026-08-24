@@ -1,0 +1,60 @@
+---
+title: Model and vendor comparison
+description: Evaluate multiple models or vendors on the same scenarios and datasets.
+---
+
+# Model and vendor comparison
+
+**Trigger words:** "vendor selection", "swapping supplier", "which model is safer for us?"
+
+Comparability only exists when the questions stay fixed and only the target changes.
+
+## Rules that make the comparison real
+
+1. **Same candidate set** for every target — generate once, run many.
+2. **Same judges** — version pinned across all runs.
+3. **Same scenarios and risk types** — no per-vendor scenario shopping.
+4. **Same roles** — do not compare a generator model to a target agent.
+5. **Same environment** for agent targets — sandbox, tools, and approval policy held constant.
+
+## Recommended path
+
+<Steps>
+  <Step title="Define the decision">
+    What will the comparison change? Model API pick, coding-agent vendor, or RAG backend. Write the decision first so the suite stays focused.
+  </Step>
+  <Step title="Freeze generation">
+    Generate candidates once. Store `generated_cases.json` and reuse it for every vendor.
+  </Step>
+  <Step title="Run each target with identical config shape">
+    Only provider / model id / endpoint differs. Everything else is shared.
+  </Step>
+  <Step title="Diff pairwise and as a matrix">
+    Pairwise diffs for deep review; matrix for coverage and ASR by risk.
+  </Step>
+  <Step title="Report with role labels">
+    Label generator, judge and target versions explicitly so readers cannot mix roles.
+  </Step>
+</Steps>
+
+## What to put in the decision packet
+
+| Artifact | Why |
+|---|---|
+| Matrix: risk × target × verdict distribution | Executive view |
+| Pairwise diffs for the top two candidates | Engineering depth |
+| Finding samples per risk | Trust in the numbers |
+| Cost / latency notes | Not safety, but often part of the same decision |
+
+## Common mistakes
+
+- Regenerating attacks per vendor (each vendor gets a different test)
+- Using a stronger judge for the preferred vendor
+- Comparing chat models to agents without separating capability classes
+- Omitting Agentbeat when the product under selection is agentic
+
+## Related
+
+- [Execution — multi-model matrix](/promptbeat/execution#multi-model-matrix)
+- [Reports — Diff](/promptbeat/reports#diff-report)
+- [Positioning](/about/positioning)

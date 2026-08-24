@@ -1,38 +1,55 @@
----
+﻿---
 title: CLI reference
 description: Common Promptbeat commands.
 ---
 
 # CLI reference
 
+Promptbeat's CLI is the native Go binary shipped in the release package.
+Run commands from the package or repository root with `./bin/promptbeat`.
+When developing from source, run the same CLI from `core/go` with `go run ./cmd/promptbeat`.
+
 ## Validate
 
 ```bash
-uv run promptbeat validate --config examples/codex_agent/promptbeat.yaml
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
 ```
 
-## Generate
+## Generate Cases
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config examples/codex_agent/promptbeat.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 5 \
-  --output-dir artifacts/generate
+  --output artifacts/generate/generated_cases.json
 ```
 
-## Eval
+## Compile Promptfoo
 
 ```bash
-uv run promptbeat eval \
-  --config artifacts/generate/generated_redteam.yaml \
-  --provider-file examples/codex_agent/providers.codex-sdk.yaml \
-  --output-dir artifacts/eval
+./bin/promptbeat compile promptfoo \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output artifacts/generate/promptfoo.redteam.yaml
+```
+
+## Run
+
+```bash
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir artifacts/run
+```
+
+## Full Run
+
+```bash
+./bin/promptbeat run \
+  --config examples/codex_agent/promptbeat.yaml \
+  --output-dir artifacts/run
 ```
 
 ## Report
 
 ```bash
-uv run promptbeat report --eval-result artifacts/eval/evaluation_result.json
+./bin/promptbeat report --input artifacts/run/evaluation_result.json
 ```

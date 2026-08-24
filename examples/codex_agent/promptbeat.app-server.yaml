@@ -1,0 +1,53 @@
+target:
+  file: target.yaml
+
+scenarios:
+  files:
+    - scenarios.yaml
+
+seeds:
+  files:
+    - seeds.yaml
+
+providers:
+  generator:
+    provider: "{{env.ATTACKER_MODEL_NAME}}"
+    config:
+      apiBaseUrl: "{{env.ATTACKER_BASE_URL}}"
+      apiKey: "{{env.ATTACKER_API_KEY}}"
+  judge:
+    provider: "{{env.JUDGE_MODEL_NAME}}"
+    config:
+      apiBaseUrl: "{{env.JUDGE_BASE_URL}}"
+      apiKey: "{{env.JUDGE_API_KEY}}"
+  targets:
+    - id: http
+      label: Codex app-server adapter
+      config:
+        url: http://127.0.0.1:8091/v1/eval/runs
+        method: POST
+        headers:
+          content-type: application/json
+        body:
+          target: codex-app-server
+          prompt: "{{prompt}}"
+          scenario_id: "{{scenarioId}}"
+          seed_id: "{{seedId}}"
+          risk_id: "{{risk_id}}"
+          risk_category: "{{risk_category}}"
+          risk_subtype: "{{risk_subtype}}"
+          provider_id: codex_app_server
+          runtime:
+            sandbox_mode: read-only
+            approval_policy: never
+            timeout_ms: 180000
+        transformResponse: json.judge_observation_text
+
+backend:
+  promptfoo:
+    num_tests: 1
+    max_concurrency: 1
+    output: artifacts/codex-app-server/promptfoo.redteam.yaml
+    cases_output: artifacts/codex-app-server/generated_cases.json
+    result_output: artifacts/codex-app-server/promptfoo-result.json
+    report_output: artifacts/codex-app-server/report.html

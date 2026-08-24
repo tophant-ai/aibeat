@@ -6,23 +6,24 @@ Use it to compare risk behavior by provider in the final report.
 Validate:
 
 ```bash
-uv run promptbeat validate --config examples/multi-llm/promptbeat.yaml
+./bin/promptbeat validate --config examples/multi-llm/promptbeat.yaml
 ```
 
-Generate attacks:
+Generate attack cases:
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config examples/multi-llm/promptbeat.yaml \
-  --output-dir artifacts/multi-llm/generate
+  --count 5 \
+  --output artifacts/multi-llm/generated_cases.json
 ```
 
-Evaluate:
+Run the full Promptbeat + Promptfoo path:
 
 ```bash
-uv run promptbeat eval \
-  --config artifacts/multi-llm/generate/generated_redteam.yaml \
-  --output-dir artifacts/multi-llm/eval
+./bin/promptbeat run \
+  --config examples/multi-llm/promptbeat.yaml \
+  --output-dir artifacts/multi-llm/run
 ```
 
-The generator model and target models are intentionally separate. Override the generator with `--generator-provider` or `PROMPTBEAT_GENERATOR_PROVIDER`.
+The generator model and target models are intentionally separate in the project config.

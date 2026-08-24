@@ -3,7 +3,6 @@ target:
 
 generation:
   mode: scc-waf
-  generator_provider: openai:openai/gpt-5.4
 
 scenarios:
   files:
@@ -13,13 +12,17 @@ seeds:
   files:
     - seeds.yaml
 
+providers:
+  generator:
+    provider: openai:openai/gpt-5.4
+  targets:
+    - id: http
+      config:
+        url: http://127.0.0.1:8080/chat
+        method: POST
+
 backend:
   promptfoo:
-    targets:
-      - id: http
-        config:
-          url: http://127.0.0.1:8080/chat
-          method: POST
     output: artifacts/scc_waf/promptfoo.redteam.yaml
     cases_output: artifacts/scc_waf/generated_cases.json
     num_tests: 1

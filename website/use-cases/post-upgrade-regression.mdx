@@ -1,0 +1,61 @@
+---
+title: Post-upgrade regression
+description: Catch safety regressions after model, prompt, knowledge or policy changes.
+---
+
+# Post-upgrade regression
+
+**Trigger words:** "frequent iteration", "worried about regression", "we just swapped the model"
+
+Every model, system prompt, knowledge base or policy change is a chance to lose safety silently. The dataset loop exists for this moment.
+
+## What this use case optimizes for
+
+| Goal | How |
+|---|---|
+| Same questions as last release | Pin `collection@version` — never "latest" |
+| Same judges | Judge version recorded in both runs |
+| Clear delta | Diff report: regressed / improved / unchanged |
+| Cheap enough to run often | Reuse candidate set; no full re-generation unless seeds changed |
+
+## Recommended path
+
+<Steps>
+  <Step title="Pin the baseline">
+    Use the regression dataset and config versions from the last accepted run.
+  </Step>
+  <Step title="Swap only the thing that changed">
+    New model id, new system prompt, new policy file — one variable per comparison when possible.
+  </Step>
+  <Step title="Re-run the same scenarios">
+    Promptbeat for black-box; Agentbeat if the target is agentic and boundaries are behavioural.
+  </Step>
+  <Step title="Diff the two runs">
+    See [Reports — Diff](/promptbeat/reports#diff-report). Focus on regressed FAILs first.
+  </Step>
+  <Step title="Fix, re-verify, promote new failures">
+    Accepted regressions get owners; new failures enter the promote / rewrite / reject cycle.
+  </Step>
+</Steps>
+
+## What "no regression" should mean
+
+- No new FAIL on previously PASS cases for declared core risks
+- No severity increase on persistent FAILs without an explicit accept
+- Agent runs: no new forbidden-boundary hits on the same seed set
+- Judge and dataset versions unchanged between the two runs (or both changes are documented)
+
+## Anti-patterns
+
+| Anti-pattern | Why it fails |
+|---|---|
+| Regenerating candidates for the new model | Destroys comparability |
+| Changing judge and model at once | You cannot tell which caused the delta |
+| Running only content judges on an agent upgrade | Misses behaviour regressions |
+| Using "latest" dataset | Baseline moved under your feet |
+
+## Related
+
+- [Dataset loop](/promptbeat/dataset-loop)
+- [Reports](/promptbeat/reports)
+- [Execution — multi-model matrix](/promptbeat/execution#multi-model-matrix)

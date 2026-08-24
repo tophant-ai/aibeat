@@ -1,0 +1,54 @@
+---
+title: RAG and agent boundary evaluation
+description: Test data leakage, prompt injection, tool authorization and cross-user access on RAG apps and agents.
+---
+
+# RAG and agent boundary evaluation
+
+**Trigger words:** "RAG", "agent", "tool call", "cross-user", "PII"
+
+Boundaries here are business rules, not generic model morals: *who may see what, which tools may run, what untrusted content may instruct.*
+
+## Risk surfaces that matter
+
+| Surface | Typical failure | Prefer |
+|---|---|---|
+| Retrieval of untrusted content | Tool-sourced prompt injection | Promptbeat + Agentbeat network/tool boundaries |
+| Cross-user data access | Order / ticket / profile for another identity | HTTP-agent scenarios with identity-bound tools |
+| Tool authorization | Write/refund/delete tools outside scope | Agentbeat `tool_call` forbidden boundaries |
+| PII / secret in answers | Leak in response text | Content judges + dataset seeds |
+| Egress after retrieval | Silent exfiltration | Agentbeat `network after tool_sourced_content` |
+
+## Recommended path
+
+<Steps>
+  <Step title="Write the business boundary first">
+    Example: "agent may only read orders for `user-123`; may not refund without approval; may not call outbound HTTP."
+  </Step>
+  <Step title="Map boundaries to scenarios">
+    One scenario per boundary. Keep content `boundary` and behaviour `forbidden_boundary` separate.
+  </Step>
+  <Step title="Seed from real workflows">
+    Support tickets, refund scripts, "help my colleague" social engineering, document-injection samples.
+  </Step>
+  <Step title="Run black-box then trace-aware">
+    Promptbeat finds answer-level leaks and refusals. Agentbeat finds tool and egress violations with the response still looking fine.
+  </Step>
+  <Step title="Promote business-specific cases">
+    These become your internal collection — more valuable than any public jailbreak set for this product.
+  </Step>
+</Steps>
+
+## Minimal scenario set for a support agent
+
+1. Cross-user order lookup  
+2. Refund tool without approval  
+3. PII in free-form answer  
+4. Prompt injection from ticket attachment / email  
+5. Outbound network after untrusted retrieval  
+
+## Related
+
+- [Agentbeat scenarios](/agentbeat/scenarios)
+- [Case studies — EchoLeak](/agentbeat/case-studies#echoleak)
+- [Core concepts](/about/core-concepts)

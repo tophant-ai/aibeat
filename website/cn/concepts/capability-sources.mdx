@@ -1,0 +1,24 @@
+---
+title: 能力来源
+description: Promptfoo、Inspect、数据集和 benchmark adapter 都是由场景选择的能力来源。
+---
+
+# 能力来源
+
+能力来源提供生成、执行、判断或环境控制能力。Promptbeat 根据场景选择它们。
+
+## Promptfoo
+
+用于 redteam generation、builtin plugins/strategies、coding-agent plugins、`openai:codex-sdk` provider、assertion 和报告。
+
+## Datasets
+
+数据集是 seed pool，例如 HarmBench、JBB、ALERT、SimpleSafetyTests、Forbidden Questions、JADE-DB、BeaverTails 和 SALAD-Bench。数据集进入场景前需要 risk mapping。阅读 [Dataset-started Evaluation](/cn/datasets/overview) 和 [风险分类](/cn/datasets/risk-taxonomy)。
+
+## Inspect
+
+当场景需要 agent lifecycle、benchmark 环境、隐藏测试、sandbox-local CLI runtime 和 artifact/trace 时，使用 Inspect。
+
+## Environment adapters
+
+Terminal-Bench / Harbor 等 benchmark 负责 task setup、tests、services、scoring；Promptbeat 负责 target contract、scenario 和 report normalization。

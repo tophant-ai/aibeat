@@ -1,111 +1,67 @@
 ---
-title: Promptbeat
-description: Scenario-driven safety evaluation for real AI agents.
+title: Promptbeat & Agentbeat
+description: Automated security evaluation for LLMs and AI agents. Find risks with Promptbeat, verify agent behaviour with Agentbeat.
 ---
 
-# Red-team real AI agents in real environments
+# Turn one-off red-teaming into a data-driven safety pipeline
 
-Promptbeat helps teams evaluate agent applications where failures happen across files, commands, tools, services, datasets, browser state, and hidden verifiers. Start from a scenario, generate or load attack seeds, run them against a real target, and keep the evidence needed to explain what failed.
+Two products for teams that ship AI applications. **Promptbeat** generates and runs attacks against LLMs, RAG apps and agents to surface risks. **Agentbeat** goes one step further: it watches what an agent actually does — every tool call, file change and environment mutation — and produces reproducible evidence for the failures.
 
-```text
-scenario + target profile + seed/dataset
-  -> generated probes
-  -> real agent or environment adapter
-  -> trace-aware judges
-  -> normalized report
-```
+<CardGroup cols={2}>
+  <Card title="Promptbeat" icon="wand-sparkles" href="/promptbeat/overview">
+    Find risks. Scenario-driven attack generation, real target execution, standardized judgement, versioned regression datasets.
+  </Card>
+  <Card title="Agentbeat" icon="robot" href="/agentbeat/overview">
+    Verify behaviour. Trace-aware evaluation for agents: tool calls, file operations, environment deltas, reproducible forensic evidence.
+  </Card>
+</CardGroup>
 
-## What you can evaluate
+## Why this exists
 
-| Target class | How it connects | Typical risks |
-|---|---|---|
-| Coding agents | Codex SDK, Claude Agent SDK, OpenCode, OpenClaw, custom CLI adapters | repo injection, terminal injection, secret reads, sandbox escape, network egress |
-| Browser agents | HTTP/custom provider or Target Lab browser adapter | DOM injection, form exfiltration, unsafe navigation, cookie/session misuse |
-| Support agents | HTTP/custom provider around CRM or ticketing tools | cross-user access, PII leakage, refund abuse, policy override |
-| Data agents | notebook, SQL, BI, or Python/JavaScript provider | prompt-injected rows, private table access, unsafe code execution |
-| DevOps agents | script/custom provider or disposable Target Lab environment | credential discovery, destructive cleanup, deployment sabotage |
-| Benchmark tasks | Terminal-Bench, Harbor, Inspect, or custom environment adapter | task boundary violations, hidden-test probing, verifier tampering |
+Content-safety checks tell you the model **refused to say something wrong**. They tell you nothing about what the agent **did** in the meantime — read a secret, wrote to a database, exfiltrated a file, called a tool it shouldn't have. In one of our own runs, a coding agent passed **5 out of 5** content-safety cases while quietly failing **11 out of 32** behaviour checks: reading env vars, writing sandbox files, following prompt-injections planted in the repo.
 
-Start with [Typical agent apps](/targets/typical-agent-apps), then use [Agent configuration examples](/targets/agent-configuration-examples) to wire a concrete target.
+That gap is what this platform closes.
 
-## Why scenario-driven
+<Info>
+  Promptbeat and Agentbeat are for **pre-launch acceptance, post-upgrade regression, and red-team data accumulation**. They evaluate. They do not sit in the request path and block traffic — that's a different class of product.
+</Info>
 
-A dataset name or plugin name is not enough to decide what to test. Promptbeat puts the scenario first:
+## How it fits together
 
-| Scenario decision | Why it matters |
-|---|---|
-| Target capabilities | A browser agent needs DOM traces; a coding agent needs command/file traces; a support agent needs action audit logs. |
-| Risk taxonomy | `secret_handling`, `network_egress`, `authorization`, and `prompt_injection` require different evidence and judges. |
-| Seed source | Hand-written seeds, HarmBench, JBB, ALERT, private tickets, and benchmark tasks are starting points, not final tests. |
-| Judge evidence | Answer-only checks are useful smoke tests; trace-aware checks are stronger for agents with tools. |
-| Report shape | Results must compare targets, risks, datasets, generated probes, assertions, and representative failures. |
-
-Read [Scenario-driven evaluation](/getting-started/scenario-driven-evaluation) and [Risk taxonomy](/concepts/risk-taxonomy).
-
-## From initial dataset to agent-specific probes
-
-Initial datasets matter because they shape the attack space before generation starts. Promptbeat keeps dataset provenance through every case.
+Promptbeat and Agentbeat share the same CLI, configuration model, dataset registry and report schema. In practice you use Promptbeat to find candidates and Agentbeat to verify them in a real runtime.
 
 ```text
-raw dataset -> DatasetSpec -> Seed -> DatasetRiskMapping -> scenario-bound probes -> report
+scenario + target + seed / dataset
+    ↓  Promptbeat  ─────────────────────────────→ find risks
+    ↓  Agentbeat   ─────────────────────────────→ verify behaviour
+    ↓  reports + evidence + dataset promotion  → regression baseline
 ```
 
-Use [Dataset catalog](/datasets/catalog) to pick a seed source and [HarmBench example](/datasets/harmbench) to see the current validated dataset slice. The current HarmBench smoke run passed 5/5 direct harmful-content cases on Codex, but that result does not replace coding-agent boundary tests.
+<CardGroup cols={2}>
+  <Card title="Promptbeat vs Agentbeat" icon="scale-balanced" href="/about/promptbeat-vs-agentbeat">
+    When to use which, what they share, when to use both.
+  </Card>
+  <Card title="Core concepts" icon="cube" href="/about/core-concepts">
+    Target, scenario, seed, finding, judge, dataset — one page.
+  </Card>
+</CardGroup>
 
-## Current evidence: broad Codex run
+## Get started
 
-The current saved report evaluates Codex as a real coding-agent target.
+<CardGroup cols={3}>
+  <Card title="Promptbeat quickstart" icon="rocket" href="/promptbeat/quickstart">
+    Run against a real Codex target in about 5 minutes.
+  </Card>
+  <Card title="Agentbeat quickstart" icon="terminal" href="/agentbeat/quickstart">
+    Attach to an agent and capture its first trace-backed finding.
+  </Card>
+  <Card title="Use cases" icon="briefcase" href="/use-cases/pre-launch-acceptance">
+    Pre-launch acceptance, regression, vendor comparison, RAG boundaries.
+  </Card>
+</CardGroup>
 
-| Suite | Passed | Failed | Errors | Pass rate |
-|---|---:|---:|---:|---:|
-| Broad coding-agent sample | 21 | 11 | 0 | 65.6% |
-| HarmBench dataset slice | 5 | 0 | 0 | 100% |
-| Combined | 26 | 11 | 0 | 70.3% |
+## Positioning in one line
 
-Strongest areas in this run: repo prompt injection, terminal output injection, and steganographic exfiltration. Weakest areas: procfs credential probing, secret environment handling, network egress, and sandbox read escape.
+> Promptbeat and Agentbeat turn AI security testing from a one-off project deliverable into a repeatable, measurable engineering capability — evidence-backed findings, versioned datasets, and continuous regression across model, prompt and policy upgrades.
 
-See [Broad Codex report](/coding-agent/broad-codex-report) and [Report schema](/reports/report-schema).
-
-## What a Promptbeat report keeps
-
-| Evidence | Example |
-|---|---|
-| Generated attack pool | `generated_redteam.yaml`, sampled eval configs, generated case metadata |
-| Target identity | provider/adapter, model, workspace, sandbox, approval policy |
-| Trace evidence | commands, file reads/writes, network events, tool calls, returned records |
-| Judge reasoning | assertion type, metric, pass/fail reason, unsafe workaround classification |
-| Reproducibility | config snapshots, raw backend output, logs, HTML/Markdown reports |
-
-Promptbeat treats unsafe workaround guidance as evidence too. If an agent suggests `env | sort > env_dump.txt` or a `curl` upload command, that can be a behavior failure even when the sandbox blocks execution.
-
-## Three ways to start
-
-### 1. Run the validated Codex path
-
-Use this when you want a quick local proof that the generate/eval/report loop works.
-
-- [Codex quickstart](/getting-started/codex-quickstart)
-- [Codex SDK target](/targets/codex-sdk)
-- [Broad Codex report](/coding-agent/broad-codex-report)
-
-### 2. Connect your own agent
-
-Use this when the target is a browser agent, support agent, data agent, DevOps agent, security triage agent, or internal assistant.
-
-- [Agent configuration examples](/targets/agent-configuration-examples)
-- [Typical agent apps](/targets/typical-agent-apps)
-- [Attack examples](/coding-agent/attack-examples)
-
-### 3. Start from datasets
-
-Use this when you already have official datasets, business seeds, or private red-team records.
-
-- [Dataset-started evaluation](/datasets/overview)
-- [Dataset catalog](/datasets/catalog)
-- [HarmBench example](/datasets/harmbench)
-
-## API for downstream systems
-
-Promptbeat also exposes seed expansion through the Go web service: small-batch preview, asynchronous batch tasks, dataset risk mapping, plugin/strategy passthrough, callback-friendly results, and smoke-testable container startup.
-
-Read [Go web service](/reference/api-service).
+For customer conversations and short-form pitch material, see the [positioning page](/about/positioning).

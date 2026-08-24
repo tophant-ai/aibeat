@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "release": {
+    "version": "0.3-agentbeat-preview",
+    "releaseBaseUrl": "https://github.com/tophant-ai/aibeat/releases/download",
+    "checksumSuffix": ".sha256",
+    "products": {
+      "promptbeat": "promptbeat-{version}-{platform}{extension}",
+      "agentbeat": "agentbeat-{version}-{platform}{extension}"
+    }
+  },
+  "node": {
+    "version": "22.22.2",
+    "baseUrl": "https://nodejs.org/dist/v22.22.2",
+    "assets": {
+      "darwin-arm64": {
+        "file": "node-v22.22.2-darwin-arm64.tar.gz",
+        "sha256": "db4b275b83736df67533529a18cc55de2549a8329ace6c7bcc68f8d22d3c9000"
+      },
+      "darwin-x64": {
+        "file": "node-v22.22.2-darwin-x64.tar.gz",
+        "sha256": "12a6abb9c2902cf48a21120da13f87fde1ed1b71a13330712949e8db818708ba"
+      },
+      "linux-x64": {
+        "file": "node-v22.22.2-linux-x64.tar.gz",
+        "sha256": "978a635eef872fa68beae09f0aad0bbbae6757e444da80b570964a97e62a3"
+      },
+      "windows-x64": {
+        "file": "node-v22.22.2-win-x64.zip",
+        "sha256": "7c93e9d92bf68c07182b471aa187e35ee6cd08ef0f24ab060dfff605fcc1c57c"
+      }
+    }
+  },
+  "promptfoo": {
+    "version": "0.121.9",
+    "tarballUrl": "https://registry.npmjs.org/promptfoo/-/promptfoo-0.121.9.tgz",
+    "sha512": "6fb07170db60eee94625ca3aeca354aa2b727226001a5d7d85c7307815dcaace275ce49f3a1ac4f07936a700e899d78a3835e0ea9e636c9ce0aaaf70048a7bfe"
+  }
+}

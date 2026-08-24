@@ -1,0 +1,143 @@
+---
+title: Adapters
+description: How Agentbeat connects to Codex, Claude Code, OpenClaw, HTTP agents and custom runtimes.
+---
+
+# Adapters
+
+An adapter is the bridge between Agentbeat's observation model and a specific agent runtime. Promptbeat stays the CLI; the adapter does the talking.
+
+## What an adapter must expose
+
+| Contract | Required | Notes |
+|---|---|---|
+| Request / response | Yes | Same as a Promptbeat provider |
+| Tool-call log | Yes for agent scenarios | Name, args, return, timing |
+| File operations | Preferred | Path, mode, byte count |
+| Env reads | Preferred | Variable name and origin |
+| Network calls | Preferred | URL, method, body size |
+| Approval events | When the agent has a policy layer | Prompt / grant / bypass |
+| State snapshot hooks | Optional | Before / after workspace or DB |
+
+Anything missing simply cannot be judged. Enable only what the scenario needs — traces grow fast.
+
+## Built-in and first-class adapters
+
+### Codex CLI (`openai:codex-sdk`)
+
+```yaml
+target:
+  id: codex-cli
+  kind: coding-agent
+  provider: openai:codex-sdk
+  observation:
+    trace: true
+    env_deltas: true
+    file_operations: true
+    tool_calls: true
+```
+
+Gives full tool trace, file ops, env reads and terminal output. This is the validated path used in the [quickstart](/agentbeat/quickstart).
+
+### Claude Code / OpenClaw (CLI adapter)
+
+```yaml
+target:
+  id: claude-code
+  kind: coding-agent
+  provider: cli:claude-code
+  observation:
+    trace: true
+    file_operations: true
+    tool_calls: true
+```
+
+Session transcript + tool-call log + file operations. Env and network coverage depends on the CLI's own logging depth.
+
+### HTTP agent (provider + trace hooks)
+
+```yaml
+target:
+  id: support-agent
+  kind: http-agent
+  provider: http:
+    url: https://internal.example.com/agent/v1
+    method: POST
+  observation:
+    tool_calls: true     # requires the agent to emit tool-call events
+    env_deltas: false
+```
+
+HTTP agents only expose what their own API returns. If the agent does not emit tool-call events, Agentbeat cannot invent them.
+
+### Inspect solvers / Terminal-Bench
+
+```yaml
+target:
+  id: terminal-bench-task
+  kind: coding-agent
+  provider: inspect:terminal-bench
+  observation:
+    trace: true
+    file_operations: true
+    state_deltas: true
+```
+
+Preferred when the scenario needs a real task environment, hidden tests and scorers. The adapter owns workspace setup, service startup, readiness, scoring and teardown. Promptbeat normalises the result back into the common report contract.
+
+## Layered responsibilities
+
+| Layer | Owns |
+|---|---|
+| Promptbeat CLI | Target profile, scenario, seed, report, trace normalisation |
+| Agent app | CLI / SDK lifecycle, policy, model, tools |
+| Environment adapter | Workspace, task setup, service startup, hidden tests, scoring, teardown |
+| Inspect (optional) | Solver execution, sandbox, logs, artifacts |
+| Promptfoo (optional) | Generation, assertions, provider bridge, reporting compatibility |
+
+Do not hide the agent inside the task runtime. Manage it as a first-class app and attach the environment to it.
+
+## When to use which
+
+| Need | Prefer |
+|---|---|
+| Fast black-box check | Promptbeat provider only (no observation) |
+| Coding-agent with real tools | Codex SDK or Claude Code CLI adapter |
+| Benchmark task with hidden tests | Inspect + Terminal-Bench adapter |
+| Enterprise agent with its own trace API | HTTP provider + custom trace hooks |
+| Fully custom runtime | Provider file with your own adapter |
+
+## Custom adapters
+
+A custom adapter is a provider file that implements the observation contract and emits the [trace schema](/agentbeat/observation-model#trace-contract). Minimum surface:
+
+1. Accept a candidate input and run it against the agent.
+2. Stream or batch tool-call, file, env and network events into the common schema.
+3. Return response + trace + optional env delta.
+
+Once the adapter speaks that schema, every existing judge, report and dataset works without changes.
+
+## Preflight for adapters
+
+Before a broad Agentbeat run:
+
+- Adapter is real (not a mock) and can reach the agent
+- Observation blocks match what the adapter actually supports
+- Working directory / sandbox paths resolve
+- Approval policy is reproducible (not "always allow" unless intentional)
+- Trace depth is enough for evidence-grade reports without drowning disk
+
+```bash
+./bin/promptbeat validate --config examples/codex_agent/promptbeat.yaml
+```
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Evidence" icon="file-shield" href="/agentbeat/evidence">
+    Findings that carry the full trace.
+  </Card>
+  <Card title="Case studies" icon="clipboard-list" href="/agentbeat/case-studies">
+    Real incidents that shaped these adapters.
+  </Card>
+</CardGroup>

@@ -1,0 +1,56 @@
+---
+title: 典型 Agent 应用
+description: 具体 Agent target 类别、支持状态和接入方式。
+---
+
+# 典型 Agent 应用
+
+Promptbeat 把“有明确调用契约”的 agent 作为 target：provider、HTTP endpoint、custom provider、CLI command、Inspect solver 或 Target Lab adapter。支持意味着 Promptbeat 能把生成的 case 路由到这个契约，并归一化结果；验证证据单独记录。
+
+Provider file 和可运行模式见 [Agent 配置示例](/cn/targets/agent-configuration-examples)。
+
+## 支持状态
+
+| 状态 | 含义 | 用户可以期待什么 |
+|---|---|---|
+| 现在可运行 | Promptbeat 有已提交示例或保存的端到端报告。 | 复制示例，提供凭据，运行 generate/eval，查看 artifacts。 |
+| 适配器接入模式 | Target 可通过标准 provider 或 adapter contract 接入。 | 提供 endpoint、CLI、workspace 或 custom provider；复用 Promptbeat scenario 和 report。 |
+| Roadmap | 还没有稳定接入契约。 | 不放进支持列表，直到 provider 或 adapter contract 明确。 |
+
+## Coding agents
+
+| Agent app | 状态 | 接入契约 | 适合风险 | 证据 |
+|---|---|---|---|---|
+| Codex SDK | 现在可运行 | `openai:codex-sdk`；provider file + workspace。 | repo injection、terminal injection、secret handling、sandbox boundary、egress。 | Broad Codex report 已保存在 `examples/codex_agent/artifacts`。 |
+| Codex app-server | 适配器接入模式 | `openai:codex-app-server` 或 `openai:codex-desktop`；本地 child process。 | approvals、app-server events、skills/plugins、command/file trajectories。 | Provider 已有文档；Promptbeat report 待补。 |
+| Claude Agent SDK / Claude Code-like workflows | 适配器接入模式 | `anthropic:claude-agent-sdk`；可选 Target Lab CLI container。 | 文件读取、重构、MCP/tool 权限、命令执行。 | Provider 已有文档；Promptbeat report 待补。 |
+| OpenCode SDK | 适配器接入模式 | `opencode:sdk`；provider 启动或连接现有 OpenCode server。 | provider-agnostic coding-agent 对比、skills、tool traces。 | Provider 已有文档；Promptbeat report 待补。 |
+| OpenClaw | 适配器接入模式 | OpenClaw providers，例如 `openclaw:main` 和 `openclaw:agent:main`；需要 gateway URL。 | chat/response safety、WS agent flow、tool use、gateway policy。 | Provider 已有文档；Promptbeat report 待补。 |
+| 企业内部 coding agent | 适配器接入模式 | HTTP provider、JavaScript/Python custom provider、shell provider、Inspect solver 或 Target Lab adapter。 | 私有工具策略、企业审批、repo/workspace 边界。 | 取决于客户 harness 和保存的报告。 |
+
+## 应用型 agents
+
+| Agent 类别 | 状态 | 接入契约 | 示例风险 | 最低证据 |
+|---|---|---|---|---|
+| Browser agent | 适配器接入模式 | 暴露服务时用 HTTP/custom provider；由 Promptbeat 启动浏览器状态时用 Target Lab browser adapter。 | DOM prompt injection、form exfiltration、不安全导航、cookie/session misuse。 | final answer、visited URLs、DOM excerpts、form submissions、downloads。 |
+| Customer support agent | 适配器接入模式 | HTTP provider、OpenAI Agents/ChatKit wrapper，或 support backend custom provider。 | 跨用户访问、退款滥用、PII 泄露、策略覆盖。 | caller id、tenant id、tool calls、返回记录、action audit log。 |
+| Data analysis agent | 适配器接入模式 | JavaScript/Python custom provider、notebook runner、SQL harness 或 Inspect solver。 | 数据行注入、secret table access、不安全 notebook command。 | SQL queries、notebook cells、file reads、charts/artifacts、final answer。 |
+| DevOps agent | 适配器接入模式 | Script/custom provider 或带 dry-run cloud fixtures 的 Target Lab adapter。 | credential discovery、destructive cleanup、privilege escalation、deployment sabotage。 | commands、cloud API calls、diff plan、dry-run output、denied actions。 |
+| Security triage agent | 适配器接入模式 | 连接 SIEM、工单、扫描器或 enrichment API 的 HTTP/custom provider。 | alert suppression、攻击者控制日志注入、错误修复。 | alert input、enrichment calls、ticket changes、suppression decisions。 |
+
+## Target-ready 检查表
+
+一个 target 页面或 provider file 至少要明确这些内容：
+
+```text
+provider or adapter id
+  -> agent 如何启动或被调用
+  -> workspace / service startup / environment variables
+  -> permission model and sandbox
+  -> 本次运行采集哪些 trace fields
+  -> 支持哪些 scenario risk types
+  -> 用哪些 assertions 或 scorer 判定 pass/fail
+  -> report fields 和 artifact paths
+```
+
+这才是 Promptbeat target，而不是一句模糊的“可以接入”。

@@ -1,0 +1,65 @@
+---
+title: 平台是什么
+description: Promptbeat 和 Agentbeat 一起完成"发现 LLM 风险 → 验证 Agent 行为"的完整闭环。
+---
+
+# 从"模型有没有拒答"，到"Agent 实际做了什么"
+
+两个产品，一个闭环。
+
+<Steps>
+  <Step title="安全边界变了">
+    应用从单轮聊天走向能读文件、跑命令、调工具、碰生产数据的 Agent。只看内容安全不够了——模型可以在拒答一句错话的同时，做出一件错事。
+  </Step>
+  <Step title="发现风险">
+    **Promptbeat** 从场景、Seed 和公开数据集出发生成并执行攻击，运行到真实的 LLM、RAG、Agent 目标上，把结果标准化为 PASS / FAIL / REVIEW。
+  </Step>
+  <Step title="验证行为">
+    **Agentbeat** 接入被测 Agent，采集工具调用、文件操作和环境变化，定位是哪一步越了界——而不是只看最后一句回答是否安全。
+  </Step>
+  <Step title="回流复用">
+    有效的 Finding 晋级为版本化的回归数据集。每次模型、Prompt 或策略变更后运行同一组用例，回退问题立刻可见。
+  </Step>
+</Steps>
+
+## 两个产品，一个闭环
+
+<CardGroup cols={2}>
+  <Card title="Promptbeat — 发现风险" icon="wand-sparkles" href="/zh/promptbeat/overview">
+    - 场景驱动的攻击生成
+    - 真实目标执行（LLM、RAG、HTTP Agent、CLI Agent）
+    - 标准化 Judge 判定（PASS / FAIL / REVIEW）
+    - 从晋级 Finding 生成版本化回归数据集
+  </Card>
+  <Card title="Agentbeat — 验证行为" icon="robot" href="/zh/agentbeat/overview">
+    - 面向真实 Agent 运行时的 Trace 评测
+    - 记录工具调用、文件操作、环境变化
+    - 定位越界发生在哪一步
+    - 输出可复现的取证 artifact
+  </Card>
+</CardGroup>
+
+## 共用了什么
+
+两个产品搭在同一套原语上，不用学两遍：
+
+| 共用部分 | 具体内容 |
+|---|---|
+| CLI（`promptbeat …`） | 同一份二进制驱动生成、执行、判定、报告。 |
+| 配置模型 | 相同的 `target / scenario / seed` schema；Agentbeat 额外增加 `forbidden boundary` 和 `observation` 段。 |
+| 数据集 registry | 共享 Seed collection；Agentbeat 消费 Promptbeat 沉淀出来的同一份 registry。 |
+| 报告 schema | Finding、证据、血缘用同一个 schema；Agentbeat 的 Finding 多一段 Trace 信息。 |
+
+## 平台不做什么
+
+这个平台**做评测**：跑攻击、记证据、出报告、沉淀数据集。它**不做**：
+
+- 在请求路径上做运行时拦截
+- 充当 WAF、Guardrail 或内容审核网关
+- 替代高风险 Finding 里必须由人做判断的专家复核
+
+这些能力应该由运行时防护类产品与人工红队来补齐，与本平台互补。
+
+<Card title="产品定位" icon="arrow-right" href="/zh/about/positioning">
+  客户价值、典型场景、以及"不做什么"的完整版本。
+</Card>

@@ -1,0 +1,88 @@
+---
+title: Promptbeat 概览
+description: 场景驱动的攻击生成、真实目标执行、标准化 Judge 判定、版本化回归数据集。
+---
+
+# Promptbeat 概览
+
+Promptbeat 从风险场景生成攻击，在真实的 LLM、RAG、Agent 目标上执行，把结果标准化为 Finding，并把可复现的失败晋级为版本化回归数据集。
+
+## 一屏看完整个循环
+
+<Steps>
+  <Step title="定义目标与场景">
+    描述你在测什么（Target）、关心什么风险（Scenario）、以及必须守住的边界。见 [Scenarios](/zh/promptbeat/scenarios)。
+  </Step>
+  <Step title="导入或生成 Seed">
+    可以从公开数据集、共享社区集合或客户自有样例开始。攻击候选通过生成 Prompt 和 Rewrite 从 Scenario + Seed 产生。见 [Generation](/zh/promptbeat/generation)。
+  </Step>
+  <Step title="在真实目标上执行">
+    每个候选都会实际发送给目标——模型 API、RAG、HTTP Agent、CLI Agent。请求、响应和 metadata 全部留存。见 [Execution](/zh/promptbeat/execution)。
+  </Step>
+  <Step title="用标准 Judge 判定">
+    Judge——内容、工具授权、PII、越狱等——给出 `PASS`、`FAIL` 或 `REVIEW`，并写出判定依据。见 [Judgement](/zh/promptbeat/judgment)。
+  </Step>
+  <Step title="报告与 Finding">
+    结果汇总为 JSON、HTML 和综合 Markdown 报告。每个 Finding 都可复现。见 [Reports](/zh/promptbeat/reports)。
+  </Step>
+  <Step title="数据闭环">
+    可复现的失败晋级为版本化回归集；有信号但表达不足的进入 Rewrite；噪声被丢弃。见 [Dataset loop](/zh/promptbeat/dataset-loop)。
+  </Step>
+</Steps>
+
+## 与 LLM eval 框架的差别
+
+传统 eval 打单条响应的分。Promptbeat 是场景优先、数据集优先的：同一个场景在很多候选上跑；同一个回归集跨模型 / Prompt / 策略变更重复运行；每个 Finding 都带足以行动的证据。
+
+<CardGroup cols={2}>
+  <Card title="场景驱动，不是 Prompt 驱动" icon="map-location">
+    Scenario 同时明确风险和边界。这就是把"模型说了什么"转化成"目标在特定上下文里越过了特定边界"的关键。
+  </Card>
+  <Card title="真实目标，不是 Mock" icon="server">
+    候选实际发送到接近生产的端点。这一步把生成的 Prompt 变成有证据支撑的 Finding。
+  </Card>
+  <Card title="标准化 Judge" icon="scale-balanced">
+    Judge 与风险绑定，PASS / FAIL / REVIEW 跨候选、跨时间可比较。
+  </Card>
+  <Card title="数据血缘" icon="database">
+    每个 Finding 都可复现、都版本化；每个回归集签名且哈希校验。可比较性是一等 artifact。
+  </Card>
+</CardGroup>
+
+## 你会拿到什么
+
+| Artifact | 格式 | 用途 |
+|---|---|---|
+| Finding | JSON + 证据 bundle | 工程修复、事件复盘 |
+| 聚合报告 | HTML、Markdown | 管理层复审、验收 |
+| 模型对比 | HTML、Markdown | 版本或供应商对比 |
+| 回归数据集 | 版本化、哈希签名 | 每次升级持续回归 |
+| 数据血缘 | JSON | 每个 case 的来源审计 |
+
+结构与示例见 [Reports](/zh/promptbeat/reports)。
+
+## 当前支持的目标类型
+
+| 类型 | 接入方式 | 示例 |
+|---|---|---|
+| LLM / 模型 API | OpenAI 兼容的 provider 配置 | 生成用 `openai:openai/gpt-5.5`，target 用 `openai:openai/gpt-5.4` |
+| RAG 端点 | HTTP provider + 请求模板 | 私有知识问答 |
+| HTTP Agent | HTTP provider + 可选的工具 Trace 钩子 | 客服 Agent |
+| Coding / CLI Agent | Codex SDK provider | `openai:codex-sdk` 对接 Codex CLI |
+| 自定义 Runtime | Provider file + 自定义 adapter | Inspect solver、Terminal-Bench task |
+
+想要更深入的覆盖——Trace 采集、环境变化、工具级 Judge——见 [Agentbeat 概览](/zh/agentbeat/overview)。
+
+## 下一步
+
+<CardGroup cols={3}>
+  <Card title="5 分钟快速上手" icon="rocket" href="/zh/promptbeat/quickstart">
+    在 Codex 上端到端跑一遍。
+  </Card>
+  <Card title="场景模型" icon="map-location" href="/zh/promptbeat/scenarios">
+    深入 Target × Scenario × Seed。
+  </Card>
+  <Card title="典型场景" icon="briefcase" href="/zh/use-cases/pre-launch-acceptance">
+    根据交付时机选择合适的用法。
+  </Card>
+</CardGroup>

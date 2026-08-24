@@ -1,0 +1,114 @@
+---
+title: Generation
+description: From seeds and scenarios to attack candidates, with rewrite passes and quality gates.
+---
+
+# Generation
+
+Generation turns seeds and scenarios into candidates. It uses a generator model (the "attacker") to produce varied attack expressions, and it prunes the noise before spending target tokens.
+
+```text
+seeds + scenarios + capability sources
+  → generator model produces candidates
+  → quality gates (schema, dedup, risk match)
+  → candidate set (JSON on disk, inspectable)
+```
+
+## Generator model
+
+The generator is the attacker. It only reads seeds, scenarios and rewrite hints — it never sees the target's responses.
+
+```yaml
+generation:
+  generator_provider: openai:openai/gpt-5.5
+```
+
+Keep the generator versioned separately from the target. Comparing target A against target B when the generator changed underneath is not a comparison.
+
+## Capability sources
+
+A capability source contributes generation logic. Promptbeat is scenario-first, so the scenario decides which sources are used.
+
+| Source | What it contributes | When |
+|---|---|---|
+| **Promptfoo plugins** | Built-in attack strategies (jailbreak, injection, PII, tool authorization) | Default for LLM and RAG targets |
+| **Inspect solvers** | Task-shaped attacks with hidden verification | Benchmark-style targets |
+| **Terminal-Bench tasks** | Coding-agent tasks with hidden test files | Coding / CLI agents |
+| **Custom generator** | Team-specific attack recipes | Recurring business risks |
+| **Dataset subscription** | Rows from a public or private dataset | Common risk baselines |
+
+See [Providers](/providers/overview) for how a capability source is wired to a target.
+
+## Rewrite passes
+
+A single seed rarely produces the strongest attack. Rewrite passes let the generator revisit weak candidates with feedback from the judge — a candidate that got `REVIEW` but the judge flagged phrasing, or a candidate that landed close to a failure but not over the line.
+
+<Steps>
+  <Step title="First pass">
+    Generator produces N candidates from seeds and scenarios.
+  </Step>
+  <Step title="Execute + judge">
+    Candidates run against the target. Each gets `PASS`, `FAIL` or `REVIEW`.
+  </Step>
+  <Step title="Rewrite pass">
+    Candidates with useful signal (near-miss, weak phrasing, partial success) go back with rewrite hints; hopeless candidates are rejected; solid failures promote.
+  </Step>
+  <Step title="Repeat as budgeted">
+    Rewrite passes iterate until a budget or an improvement threshold is reached.
+  </Step>
+</Steps>
+
+## Quality gates
+
+Before candidates enter the run, they pass through gates. Failing candidates get rejected before spending target tokens.
+
+| Gate | What it checks |
+|---|---|
+| Schema validation | Candidate matches the expected payload shape |
+| Risk-type match | Candidate's risk tag matches the scenario's `risk_type` |
+| Deduplication | Semantically identical candidates collapse |
+| Length / content filter | Candidates that would trigger only content filters, not the risk under test, get dropped |
+| Boundary sanity | Candidate targets the declared boundary, not some other capability |
+
+## Counting probes
+
+Promptfoo `--count` may apply per plugin. A scenario with 8 plugins and `--count 16` produces up to 128 probes. Multiply by rewrite passes and target-side reruns and the number gets large quickly.
+
+```bash
+./bin/promptbeat generate \
+  --config examples/codex_agent/promptbeat.yaml \
+  --count 5 \
+  --output examples/codex_agent/artifacts/generated_cases.json
+```
+
+<Info>
+  For broad or budgeted runs, start small (`--count 3` on a subset of scenarios), inspect the candidate JSON, then scale. See [Execution](/promptbeat/execution) for cost-control patterns.
+</Info>
+
+## Datasets as seed pools
+
+Public and private datasets act as pre-loaded seed sources. Common choices:
+
+| Dataset | Risk focus |
+|---|---|
+| HarmBench | harmful content, multi-turn jailbreak |
+| JBB Behaviors | jailbreak behaviors across categories |
+| ALERT | adversarial red-team prompts |
+| SimpleSafetyTests | breadth-first safety coverage |
+| Forbidden Questions | refusal-boundary probing |
+| JADE-DB | jailbreak / harmful-content Chinese seeds |
+| BeaverTails | fine-grained harm categories |
+| SALAD-Bench | safety benchmark across risk families |
+
+Datasets need risk mapping before scenario-level reporting works. See [Risk taxonomy](/datasets/risk-taxonomy) and [Datasets overview](/datasets/overview).
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Execution" icon="server" href="/promptbeat/execution">
+    Real target execution, providers, preflight.
+  </Card>
+  <Card title="Judgement" icon="scale-balanced" href="/promptbeat/judgment">
+    How PASS / FAIL / REVIEW gets written.
+  </Card>
+</CardGroup>

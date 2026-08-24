@@ -6,7 +6,7 @@ It keeps Promptbeat scenarios and generated cases separate from the OpenCode run
 Use with generated cases:
 
 ```bash
-uv run promptbeat eval \
+./bin/promptbeat eval \
   --config artifacts/coding-agent/generate/generated_redteam.yaml \
   --provider-file examples/agent-adapters/opencode/providers.opencode.yaml \
   --output-dir artifacts/opencode/eval

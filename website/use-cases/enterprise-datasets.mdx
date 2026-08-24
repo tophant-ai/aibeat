@@ -1,0 +1,60 @@
+---
+title: Enterprise security datasets
+description: Turn historical issues, high-value attacks and hard cases into a versioned internal baseline.
+---
+
+# Enterprise security datasets
+
+**Trigger words:** "internal standard", "baseline building", "our own red-team bank"
+
+Public collections are a start. The durable asset is a versioned internal dataset that reflects *your* boundaries, incidents and product surface.
+
+## What good internal datasets look like
+
+| Property | Why |
+|---|---|
+| Versioned + hash-signed | Comparability and audit |
+| Risk-mapped | Scenario-level reporting works |
+| Lineage-complete | Seed → generation → finding → promotion is reconstructible |
+| Sensitivity-labelled | Controlled attack content is handled like offensive material |
+| Ownered | Someone maintains promote / rewrite / reject quality |
+
+## Build path
+
+<Steps>
+  <Step title="Import history">
+    Past incidents, pen-test notes, support escalations, known jailbreaks against your stack.
+  </Step>
+  <Step title="Map to risk types and scenarios">
+    Align with the [risk taxonomy](/datasets/risk-taxonomy). Unmapped rows do not support scenario reports.
+  </Step>
+  <Step title="Run and judge">
+    Execute against current targets. Drop noise; keep reproducible FAILs and useful REVIEWs.
+  </Step>
+  <Step title="Promote into `your-org-baseline@0.1.0`">
+    Manifest + seeds.jsonl + validation report, same layout as shipped collections.
+  </Step>
+  <Step title="Subscribe in every project">
+    Point scenarios at the pinned version. Grow the set on every launch and every regression.
+  </Step>
+</Steps>
+
+## How this interacts with the community registry
+
+- Public collections (`jailbreak-baseline`, `agent-safety-baseline`) cover common risks quickly  
+- Internal collections encode business-specific boundaries public sets will never know  
+- Both use the same pull protocol and report schema — see [Dataset loop](/promptbeat/dataset-loop)
+
+## Sensitivity and governance
+
+Internal datasets often contain working attack prompts and sometimes customer-like data. Treat them as controlled:
+
+- Access control on the registry path
+- No unchecked publish to the public community site
+- Redaction rules before any external share of findings derived from them
+
+## Related
+
+- [Dataset loop](/promptbeat/dataset-loop)
+- [Datasets overview](/datasets/overview)
+- [Seed collections (docs stub)](/datasets/collections)

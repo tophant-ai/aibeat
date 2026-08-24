@@ -1,0 +1,88 @@
+---
+title: Promptbeat overview
+description: Scenario-driven attack generation, real target execution, standardized judgement, versioned regression datasets.
+---
+
+# Promptbeat overview
+
+Promptbeat generates attacks from risk scenarios, runs them against real LLM, RAG and agent targets, standardizes the outcome into findings, and promotes reproducible failures into a versioned regression dataset.
+
+## The loop, in one screen
+
+<Steps>
+  <Step title="Define the target and scenarios">
+    Describe what you are testing (target), the risks you care about (scenario), and the boundaries that must hold. See [Scenarios](/promptbeat/scenarios).
+  </Step>
+  <Step title="Bring or generate seeds">
+    Import from a public dataset, use a shared collection, or start from your own examples. Attack candidates come out of scenario + seed via generator prompts and rewrite passes. See [Generation](/promptbeat/generation).
+  </Step>
+  <Step title="Execute on the real target">
+    Every candidate is actually sent to the target — model API, RAG endpoint, HTTP agent, CLI agent. Requests, responses and metadata are recorded. See [Execution](/promptbeat/execution).
+  </Step>
+  <Step title="Judge with a standard rubric">
+    A judge — content, tool-authorization, PII, jailbreak, etc. — writes `PASS`, `FAIL` or `REVIEW` with reasoning. See [Judgement](/promptbeat/judgment).
+  </Step>
+  <Step title="Reports and findings">
+    Results roll up into JSON, HTML and comprehensive Markdown reports. Every finding is reproducible. See [Reports](/promptbeat/reports).
+  </Step>
+  <Step title="Dataset closed loop">
+    Reproducible failures promote into a versioned regression set. Partial signal goes into rewrite; noise gets rejected. See [Dataset loop](/promptbeat/dataset-loop).
+  </Step>
+</Steps>
+
+## What makes it different from LLM eval frameworks
+
+Most evals score a single response. Promptbeat is scenario-first and dataset-first: the same scenario is run across many candidates, the same regression set is re-run across model / prompt / policy changes, and findings carry the evidence needed to act.
+
+<CardGroup cols={2}>
+  <Card title="Scenario-driven, not prompt-driven" icon="map-location">
+    A scenario names the risk *and* the boundary. That's what turns "the model said something" into "the target crossed a specific line in a specific context."
+  </Card>
+  <Card title="Real targets, not mocks" icon="server">
+    Candidates are actually executed against production-shaped endpoints. That's what turns a generated prompt into an evidence-backed finding.
+  </Card>
+  <Card title="Standardized judgement" icon="scale-balanced">
+    PASS / FAIL / REVIEW is written by a judge tied to the risk, so results are comparable across candidates and across time.
+  </Card>
+  <Card title="Dataset lineage" icon="database">
+    Every finding is versioned and reproducible; every regression set is signed and hash-verified. Comparability is a first-class artifact.
+  </Card>
+</CardGroup>
+
+## What you get out
+
+| Artifact | Format | Used for |
+|---|---|---|
+| Findings | JSON + evidence bundle | Engineering fix, incident review |
+| Aggregate report | HTML, Markdown | Executive review, sign-off decisions |
+| Model diff | HTML, Markdown | Comparing versions or vendors |
+| Regression dataset | Versioned, hash-signed | Continuous regression on every upgrade |
+| Dataset lineage | JSON | Auditing where each case came from |
+
+See [Reports](/promptbeat/reports) for structure and examples.
+
+## Supported target classes today
+
+| Class | How it connects | Example |
+|---|---|---|
+| LLM / model API | OpenAI-compatible provider config | `openai:openai/gpt-5.5` generator, `openai:openai/gpt-5.4` target |
+| RAG endpoint | HTTP provider with request template | private knowledge Q&A |
+| HTTP agent | HTTP provider + tool trace hooks (opt-in) | customer support agent |
+| Coding / CLI agent | Codex SDK provider | `openai:codex-sdk` against Codex CLI |
+| Custom runtime | Provider file with your own adapter | Inspect solvers, Terminal-Bench tasks |
+
+For deeper coverage — trace capture, environment deltas, tool-level judgement — see [Agentbeat overview](/agentbeat/overview).
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card title="5-minute quickstart" icon="rocket" href="/promptbeat/quickstart">
+    Run against Codex end-to-end.
+  </Card>
+  <Card title="Scenarios" icon="map-location" href="/promptbeat/scenarios">
+    Target × scenario × seed in depth.
+  </Card>
+  <Card title="Use cases" icon="briefcase" href="/use-cases/pre-launch-acceptance">
+    Match the platform to a delivery moment.
+  </Card>
+</CardGroup>

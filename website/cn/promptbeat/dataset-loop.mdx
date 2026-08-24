@@ -1,0 +1,140 @@
+---
+title: 数据闭环
+description: Promote、Rewrite、Reject —— Promptbeat 的 Finding 如何变成版本化回归基线。
+---
+
+# 数据闭环
+
+一次运行的 Finding 只有一次价值；一个版本化的回归数据集有长期价值。数据闭环把前者变成后者。
+
+```text
+生成候选
+  → 目标执行
+  → Judge（PASS / FAIL / REVIEW）
+  → Promote / Rewrite / Reject
+      ↳ 晋级 Finding → 版本化回归数据集
+      ↳ Rewrite 提示 → 下一轮生成
+      ↳ 丢弃 → 保留血缘、不再往前带
+  → 每次模型 / Prompt / 策略升级时回放
+```
+
+## 三种流向
+
+<CardGroup cols={3}>
+  <Card title="Promote（晋级）" icon="circle-arrow-up">
+    可复现 FAIL、信号明确、越界干净。Finding 进入版本化回归集，每次升级都会重跑。
+  </Card>
+  <Card title="Rewrite（改写）" icon="rotate-right">
+    REVIEW 或表达偏弱的临界 FAIL。还没到进数据集的程度，带着提示回炉打磨。
+  </Card>
+  <Card title="Reject（丢弃）" icon="trash-can">
+    重复、低质量、不反映真实风险。保留在血缘里避免同款重现，但不再往前带。
+  </Card>
+</CardGroup>
+
+## "晋级"具体意味着什么
+
+一个晋级的 Finding 是：
+
+- **版本化**：绑定到 `collection@version`（如 `agent-safety-baseline@0.1.0`）
+- **哈希校验**：payload 的 sha256，能感知漂移
+- **可复现**：配置、Provider、Seed、生成模型版本全记录
+- **有 Judge 依据**：判定和 rubric 都留存，不是"这是一段坏 Prompt"
+- **带 metadata**：Risk 类型、Target 类型、语言、Severity、Owner
+
+这些让数据集跨运行可比较、在事件复盘时站得住脚。
+
+## 数据集的形态
+
+数据集是一个文件树，像一个小 registry。
+
+```text
+registry/seed-registry/v1/
+  index.json                                # 集合索引
+  collections/
+    agent-safety-baseline/
+      0.1.0/
+        manifest.json                       # 来源、许可、审核
+        seeds.jsonl                         # 每行一条 seed
+        VALIDATION_REPORT.json              # 交付了什么，为什么
+    jailbreak-baseline/
+      0.1.0/
+        manifest.json
+        seeds.jsonl
+```
+
+每条 `seeds.jsonl` 记录跟 `finding` 长得一样——因为晋级的 Finding **就是**下一轮生成的 Seed。
+
+## Registry 拉取协议
+
+集合有版本之后就可以拉：
+
+```bash
+promptbeat seed pull agent-safety-baseline@0.1.0 \
+  --registry ./registry/seed-registry/v1 \
+  --output-dir ./.promptbeat/seeds/agent-safety-baseline/0.1.0
+```
+
+```yaml
+seeds:
+  files:
+    - ./.promptbeat/seeds/agent-safety-baseline/0.1.0/seeds.jsonl
+```
+
+<Info>
+  目前只从源代码仓库分发，还没有 hosted registry URL。`--registry` 指向本地 checkout。可浏览的集合索引见[种子社区站](https://docs.promptbeat.ai)。
+</Info>
+
+## 持续回归
+
+每次模型 / Prompt / 策略升级都是悄无声息丢安全的机会。数据闭环把它露出来：
+
+<Steps>
+  <Step title="固定数据集版本">
+    回归用 `collection@version`，不用"最新"。基线下面的数据集变了，就不叫基线。
+  </Step>
+  <Step title="重跑">
+    同一份数据集、同一批 Scenario、新的 target 版本。
+  </Step>
+  <Step title="对比">
+    两次运行 diff。回退问题立刻可见。见 [Reports — Diff](/cn/promptbeat/reports#对比报告)。
+  </Step>
+  <Step title="回流">
+    升级引入的新失败走它们自己的 Promote / Rewrite / Reject。回归集在时间上生长。
+  </Step>
+</Steps>
+
+## 长期回本的数据资产
+
+时间一久，数据集不再是副产物，而是资产：
+
+- 一套回归集同时覆盖模型换代、供应商对比、Prompt 重构
+- 困难 case 越积越多——最容易暴露新失败的 case 会集中在版本化集合里
+- 客户特有的业务边界变成内部集合，跟公开集合并排
+- 血缘让团队解释得清每个 case 从哪来——审计和事件复盘用得上
+
+## 种子集合在哪
+
+平台附带两个共享集合：
+
+<CardGroup cols={2}>
+  <Card title="agent-safety-baseline" icon="robot">
+    Trace 感知的工具型 Agent 安全 Seed，改编自 AgentDojo、InjecAgent、AgentHarm、ToolEmu 和对抗性 case。110 条，en+zh，覆盖 agent / http-agent / coding-agent。
+  </Card>
+  <Card title="jailbreak-baseline" icon="shield-halved">
+    中文越狱与有害内容拒答 Seed，改编自 JailBench、ALERT 对抗性 case 和原创构造。499 条，zh，llm target。
+  </Card>
+</CardGroup>
+
+两个都是 `staging` 状态、`controlled` 敏感级别——里面是可用的攻击 Prompt。下载得到的 `seeds.jsonl` 请当作攻击测试语料处理。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="数据集" icon="database" href="/cn/datasets/overview">
+    完整目录、风险分类、数据集起手评测。
+  </Card>
+  <Card title="典型场景" icon="briefcase" href="/cn/use-cases/post-upgrade-regression">
+    从客户视角看回归故事。
+  </Card>
+</CardGroup>

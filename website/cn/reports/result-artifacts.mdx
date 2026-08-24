@@ -1,0 +1,33 @@
+---
+title: 结果产物
+description: Promptbeat generate、eval 和 report 保存的文件。
+---
+
+# 结果产物
+
+Promptbeat 保留复现实验所需证据。
+
+## Generate
+
+```text
+artifacts/generate/generated_redteam.yaml
+artifacts/generate/<scenario>/promptfoo.redteam.yaml
+```
+
+## Eval
+
+```text
+artifacts/eval/evaluation_result.json
+artifacts/eval/promptfoo_eval_result.json
+artifacts/eval/promptfoo.eval.stdout.log
+artifacts/eval/promptfoo.eval.stderr.log
+```
+
+## Report
+
+```text
+artifacts/eval/report.html
+comprehensive-codex-safety-report.md
+```
+
+Generated artifacts 通常不进 git；只有经过脱敏和确认要公开的 benchmark summary 才应进入 docs 或 website。

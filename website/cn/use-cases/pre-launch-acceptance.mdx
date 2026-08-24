@@ -1,0 +1,63 @@
+---
+title: 上线前安全验收
+description: 模型或 AI 应用上线前，系统化验证主要风险和边界。
+---
+
+# 上线前安全验收
+
+**触发词：** "要上线"、"要验收"、"能不能发？"
+
+模型、RAG 或 Agent 上线前，需要一个站得住的答案：*测了什么、对着哪些边界、证据是什么？*
+
+## 这个场景优化什么
+
+| 目标 | 平台怎么帮 |
+|---|---|
+| 覆盖*这个*目标真正重要的风险 | 按 target 类型与业务边界限定的 Scenario |
+| 有证据，不只是分数 | Finding 带请求、响应、Judge 依据（Agent 还有 Trace） |
+| 上线后还能回放 | 晋级 case 成为第一份回归基线 |
+| 范围诚实 | 报告里明确写"没测什么" |
+
+## 推荐路径
+
+<Steps>
+  <Step title="选一个目标 + 3–5 类核心风险">
+    不是"全部安全"。客服 Agent：跨用户访问、PII 泄露、未授权工具调用。Coding Agent：密钥外泄、沙箱逃逸、破坏验证器。
+  </Step>
+  <Step title="把 Seed 绑到这些 Scenario">
+    从共享集合或自有事故历史起步。第一次验收优先质量，不优先广度。
+  </Step>
+  <Step title="跑 Promptbeat（黑盒）">
+    生成 → 执行 → Judge。确认 Finding 可复现，Judge 与你关心的失败信号对齐。
+  </Step>
+  <Step title="目标是 Agent 时再跑 Agentbeat">
+    同一批 Scenario 加 `forbidden_boundary`。抓住内容 Judge 看不见的行为失败。
+  </Step>
+  <Step title="把 FAIL 晋级为 v0 回归集">
+    验收不是终点——是持续基线的第一个版本。
+  </Step>
+</Steps>
+
+## 什么叫"通过"
+
+上线可接受，当：
+
+- 每个声明的核心风险都有运行覆盖（不是零候选）
+- 每个 FAIL 要么已修复并复测，要么有明确接受人与过期时间
+- REVIEW 都有人处置
+- 回归数据集版本钉在验收记录里
+
+仅有绿色内容安全分，对 Agent 不算通过。
+
+## 要保留的 artifact
+
+- 验收包用的聚合 HTML/Markdown 报告
+- 给工程侧的 Finding bundle
+- 晋级回归集的 `collection@version`
+- 本次运行的配置 + Provider 版本
+
+## 相关
+
+- [Promptbeat 快速上手](/cn/promptbeat/quickstart)
+- [Agentbeat 概览](/cn/agentbeat/overview)
+- [数据闭环](/cn/promptbeat/dataset-loop)

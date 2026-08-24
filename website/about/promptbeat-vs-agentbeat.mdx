@@ -1,0 +1,75 @@
+---
+title: Promptbeat vs Agentbeat
+description: When to use each product, when to use both, and what they share.
+---
+
+# Promptbeat vs Agentbeat
+
+Both products test AI application safety. They answer different questions.
+
+| | Promptbeat | Agentbeat |
+|---|---|---|
+| **Question it answers** | Does the target refuse or leak? | Does the agent's execution stay inside the allowed boundary? |
+| **Target class** | LLM, RAG, HTTP agent, black-box agent | Agent with tool calls, files, env, memory |
+| **What it observes** | Request / response, verdict | Response + tool calls + files + env deltas |
+| **Signals of failure** | Wrong content, leaked secret, unauthorized answer | Wrong action, undeclared side effect, boundary crossed |
+| **Typical evidence** | Prompt, response, judge verdict | Above, plus tool trace, file diff, env dump |
+| **Iteration speed** | Fast — many candidates per minute | Slower — real runtime, real side effects |
+| **Data output** | Attack seeds, judged cases, regression sets | Reproducible agent findings with runtime evidence |
+
+## When to use which
+
+<CardGroup cols={2}>
+  <Card title="Use Promptbeat when" icon="wand-sparkles">
+    - Screening a base model, API or vendor
+    - Evaluating a RAG app before launch
+    - Comparing multiple models on the same scenarios
+    - Building the seed / regression dataset for either product
+    - Testing an agent as a black box, without hooking into its runtime
+  </Card>
+  <Card title="Use Agentbeat when" icon="robot">
+    - Signing off an agent that touches files, tools or production data
+    - Investigating an agent regression where the response looks fine but something went wrong
+    - Producing forensic evidence for a real incident
+    - Testing boundary policies (approval, isolation, tool scope)
+    - Verifying that Promptbeat's black-box findings actually reproduce inside the agent
+  </Card>
+</CardGroup>
+
+## When to use both
+
+The common pattern is **Promptbeat produces, Agentbeat verifies**.
+
+<Steps>
+  <Step title="Promptbeat generates candidates">
+    Attack candidates come out of scenarios, seeds, dataset subscriptions and rewrite passes. Most are already judged against the target's responses.
+  </Step>
+  <Step title="Promoted candidates go into Agentbeat">
+    High-value candidates — the ones that reveal a real risk — become inputs for Agentbeat. Agentbeat runs them inside the actual agent runtime.
+  </Step>
+  <Step title="Agentbeat pinpoints and records">
+    Each finding now has an execution trace: which tool was called, which file was written, what env variable was read. The report shows both the failing response and the failing action.
+  </Step>
+  <Step title="Findings promote to regression dataset">
+    Reproducible findings enter the versioned regression set. Every model, prompt, or policy change re-runs them.
+  </Step>
+</Steps>
+
+## What they share
+
+Both products are built on the same primitives so you don't have to learn or configure two systems.
+
+| Layer | Shared? | Notes |
+|---|---|---|
+| CLI | Yes | `promptbeat validate / generate / run / report` drive both. |
+| Config schema | Mostly | Agentbeat adds `forbidden_boundary` and `observation` blocks on top of the existing `target / scenario / seed`. |
+| Seed / dataset registry | Yes | See the [seed community site](https://docs.promptbeat.ai) for the collection browser. |
+| Judges | Extended | Promptbeat judges look at content; Agentbeat judges also look at trace and env deltas. |
+| Report schema | Extended | Agent findings include a `trace` section and a `env_delta` section. |
+| Providers | Extended | Agentbeat requires an adapter that exposes trace and env, in addition to standard request / response providers. |
+
+## Not a decision tree, a spectrum
+
+Promptbeat starts as a fast, black-box loop. Agentbeat is what you reach for when the black-box picture is not enough — when the failure has to be tied to a specific action inside the agent to be actionable.
+
+You can start with Promptbeat and add Agentbeat later without redoing scenarios, seeds or datasets. The upgrade is additive.

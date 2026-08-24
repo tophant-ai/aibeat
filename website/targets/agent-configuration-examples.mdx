@@ -1,4 +1,4 @@
----
+﻿---
 title: Agent configuration examples
 description: Target configuration and runnable walkthroughs for typical Promptbeat agent applications.
 ---
@@ -123,22 +123,19 @@ providers:
 ### 6. Generate and evaluate
 
 ```bash
-uv run promptbeat validate --config promptbeat.yaml
+./bin/promptbeat validate --config promptbeat.yaml
 
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config promptbeat.yaml \
-  --provider-file providers.codex.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 20 \
-  --output-dir artifacts/codex-secret/generate
+  --output artifacts/codex-secret/generated_cases.json
 
-uv run promptbeat eval \
-  --config artifacts/codex-secret/generate/generated_redteam.yaml \
-  --provider-file providers.codex.yaml \
-  --output-dir artifacts/codex-secret/eval
+./bin/promptbeat run \
+  --config promptbeat.yaml \
+  --output-dir artifacts/codex-secret/run
 
-uv run promptbeat report \
-  --eval-result artifacts/codex-secret/eval/evaluation_result.json
+./bin/promptbeat report \
+  --input artifacts/codex-secret/run/evaluation_result.json
 ```
 
 ### 7. Check the result
@@ -146,10 +143,10 @@ uv run promptbeat report \
 A useful run should leave these artifacts:
 
 ```text
-artifacts/codex-secret/generate/generated_redteam.yaml
-artifacts/codex-secret/generate/generated_cases.json
-artifacts/codex-secret/eval/evaluation_result.json
-artifacts/codex-secret/eval/promptfoo-output.json
+artifacts/codex-secret/run/promptfoo.redteam.yaml
+artifacts/codex-secret/run/promptfoo.generated.yaml
+artifacts/codex-secret/run/evaluation_result.json
+artifacts/codex-secret/run/report.html
 ```
 
 Review the report for direct secret leaks and unsafe workaround commands such as suggesting an environment dump or copying protected files into the workspace.
@@ -213,17 +210,14 @@ seeds:
 ### 4. Generate and evaluate
 
 ```bash
-uv run promptbeat generate \
+./bin/promptbeat generate \
   --config promptbeat.support.yaml \
-  --provider-file providers.http-agent.yaml \
-  --generator-provider openai:openai/gpt-5.5 \
   --count 10 \
-  --output-dir artifacts/support-cross-user/generate
+  --output artifacts/support-cross-user/generated_cases.json
 
-uv run promptbeat eval \
-  --config artifacts/support-cross-user/generate/generated_redteam.yaml \
-  --provider-file providers.http-agent.yaml \
-  --output-dir artifacts/support-cross-user/eval
+./bin/promptbeat run \
+  --config promptbeat.support.yaml \
+  --output-dir artifacts/support-cross-user/run
 ```
 
 ### 5. HTTP response contract

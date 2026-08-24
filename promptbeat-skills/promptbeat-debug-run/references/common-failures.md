@@ -75,11 +75,10 @@ Do not commit real keys.
 ## Dataset Subscription Loads Nothing
 
 Raw benchmark datasets are not bundled in release examples. Download the needed
-dataset files from their original sources before expecting all subscription
-sources to load, then point Promptbeat at that local directory.
+datasets before expecting all subscription sources to load.
 
 ```bash
-export PROMPTBEAT_DATASETS_DIR=/path/to/promptbeat-raw-corpora
+uv run python scripts/download_datasets.py --only harmbench jbb_behaviors do_not_answer simple_safety_tests beaver_tails
 ```
 
 Then validate the subscription example:

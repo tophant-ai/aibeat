@@ -1,0 +1,47 @@
+---
+title: Providers overview
+description: How Promptbeat and Agentbeat connect to LLMs, HTTP agents, Codex, and custom runtimes.
+---
+
+# Providers overview
+
+A **provider** is how the platform talks to a target. Promptbeat uses providers for black-box request/response. Agentbeat adds observation on top of the same provider (or a specialized adapter).
+
+## Catalog
+
+| Kind | Config shape | Typical use | Deeper docs |
+|---|---|---|---|
+| OpenAI-compatible model | `openai:openai/gpt-5.4` | Chat / instruction models | [Agent targets](/targets/agent-targets) |
+| Codex SDK | `openai:codex-sdk` | Codex CLI agent | [Codex SDK](/targets/codex-sdk) |
+| HTTP endpoint | `http:` + request template | RAG, custom HTTP agents | [Agent configuration examples](/targets/agent-configuration-examples) |
+| Provider file | `providers/<name>.yaml` | Custom adapters | [Provider files](/targets/provider-files) |
+| Inspect / Terminal-Bench | `inspect:…` | Benchmark tasks, hidden tests | [Agentbeat adapters](/agentbeat/adapters) |
+
+## Roles vs providers
+
+Do not confuse **provider kind** with **model role**:
+
+| Role | Question | Example |
+|---|---|---|
+| Generator | Who writes attack candidates? | `openai:openai/gpt-5.5` |
+| Target | Who is under test? | `openai:codex-sdk` |
+| Judge | Who scores the run? | Model-graded judge or assertions |
+
+Same OpenAI-compatible provider string can appear as generator *or* target — the role is decided by where it sits in config.
+
+## Agent observation
+
+For behaviour evaluation, enable observation blocks on the target. See:
+
+- [Agentbeat observation model](/agentbeat/observation-model)
+- [Agentbeat adapters](/agentbeat/adapters)
+
+## Typical agent apps
+
+For a map of coding, browser, support, data and DevOps agent classes, see [Typical agent apps](/targets/typical-agent-apps).
+
+## Related
+
+- [Execution](/promptbeat/execution)
+- [Configuration model](/concepts/configuration-model)
+- [Preflight checks](/concepts/preflight-checks)

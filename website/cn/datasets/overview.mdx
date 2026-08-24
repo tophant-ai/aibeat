@@ -1,0 +1,77 @@
+---
+title: Dataset-started Evaluation
+description: 把官方/开源数据集作为 scenario-bound seed pool。
+---
+
+# Dataset-started Evaluation
+
+Dataset 是 seed pool，不是完整评测本身。
+
+```text
+dataset record -> Seed -> Scenario binding -> generated/direct tests -> real target eval -> report
+```
+
+## 流程
+
+1. 下载 raw dataset 到 `datasets/raw`。
+2. 使用或定义 `DatasetSpec`。
+3. 用 `DatasetSeedLoader` 加载 records。
+4. 绑定 scenario risk type。
+5. 生成或直接评测 Promptfoo tests。
+6. 按 dataset、category、risk type、plugin、provider 报告。
+
+## 两种模式
+
+| 模式 | 流程 | 用途 |
+|---|---|---|
+| Direct dataset eval | dataset prompt -> tests -> eval | 快速 smoke / regression |
+| Dataset-steered generation | dataset seed -> plugin examples -> generated probes -> eval | 更强红队探索 |
+
+## 数据集来源
+
+Promptbeat 应明确说明每个数据集从哪里来，以及在评测里如何使用。Dataset 只是起点；scenario mapping 决定它是否适合某个 target。字段映射、就绪等级和初始风险映射见 [数据集目录](/cn/datasets/catalog)。
+
+| Dataset family | 来源 | 典型用途 | Promptbeat 处理方式 |
+|---|---|---|---|
+| HarmBench | [Center for AI Safety HarmBench](https://github.com/centerforaisafety/HarmBench) | 有害行为和拒答 smoke test。 | 直接评测，或作为 harmful-content / tool-misuse 风险的 generation seeds。 |
+| JailbreakBench / JBB Behaviors | [JailbreakBench](https://github.com/JailbreakBench/jailbreakbench) | Jailbreak 行为和鲁棒性检查。 | 用作 jailbreak / policy-bypass 场景 seed pool。 |
+| ALERT | [ALERT benchmark](https://github.com/Babelscape/ALERT) | 多类别安全风险 prompts。 | 映射后用于更广泛安全场景。 |
+| SimpleSafetyTests | [SimpleSafetyTests](https://github.com/bertiev/SimpleSafetyTests) | 小规模直接安全 regression。 | 轻量 smoke test 和 baseline sanity check。 |
+| Forbidden Questions | 公开 forbidden-question 类数据集 | 直接拒答和策略合规检查。 | 混合报告前需要 taxonomy mapping。 |
+| JADE-DB | 中文 jailbreak / safety seed collections | 中文 jailbreak 和 harmful-content 覆盖。 | 适合中文场景和下游 taxonomy mapping。 |
+| BeaverTails | [BeaverTails](https://huggingface.co/datasets/PKU-Alignment/BeaverTails) | harmlessness / harmfulness 偏好数据。 | 过滤并映射分类后作为 seed source。 |
+| SALAD-Bench | [SALAD-Bench](https://github.com/OpenSafetyLab/SALAD-BENCH) | Safety alignment benchmark categories。 | 映射分类后用于 broad safety report。 |
+| 业务/私有 seeds | 内部题库、政策、工单、日志、客服对话 | 企业特定风险。 | 作为 scenario-bound seeds，并使用更严格隐私控制。 |
+
+部分数据集需要 HuggingFace 或 GitHub 下载权限。把数据打包进 examples 前，需要确认 license、再分发规则和使用限制。
+
+## 初始数据集工作流
+
+1. 从 catalog 选择一个 seed source。
+2. 确认 raw file path 和 license/access 限制。
+3. 检查 `DatasetSpec` 字段映射。
+4. 为 target scenario 定义 `DatasetRiskMapping`。
+5. 先跑 small direct slice，再进入 generated probes。
+6. 在每条 seed 和 report row 中保留 source metadata。
+
+## 保留 source metadata
+
+每条 seed 都应该保留足够元数据，方便审计和报告。
+
+```yaml
+metadata:
+  dataset: harmbench
+  dataset_version: local-snapshot-2026-05
+  source_url: https://github.com/centerforaisafety/HarmBench
+  source_category: cyber
+  original_id: hb-001
+  split: test
+```
+
+## 映射到风险分类
+
+```text
+raw category -> DatasetRiskMapping -> Promptbeat risk type -> scenario -> judge
+```
+
+`cyber`、`privacy`、`jailbreak` 这类 dataset category 本身不够。Promptbeat 会根据 target scenario，把它映射到 `harmful_content`、`privacy_pii`、`authorization`、`tool_misuse`、`prompt_injection` 等风险类型。

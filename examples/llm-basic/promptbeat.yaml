@@ -9,14 +9,25 @@ seeds:
   files:
     - seeds.yaml
 
-generation:
-  # Attacker/generator model. Override with --generator-provider or PROMPTBEAT_GENERATOR_PROVIDER.
-  generator_provider: openai:gpt-4o
+providers:
+  generator:
+    provider: "{{ env.ATTACKER_MODEL_NAME }}"
+    config:
+      apiBaseUrl: "{{ env.ATTACKER_BASE_URL }}"
+      apiKey: "{{ env.ATTACKER_API_KEY }}"
+  judge:
+    provider: "{{ env.JUDGE_MODEL_NAME }}"
+    config:
+      apiBaseUrl: "{{ env.JUDGE_BASE_URL }}"
+      apiKey: "{{ env.JUDGE_API_KEY }}"
+  targets:
+    - provider: "{{ env.TARGET_MODEL_NAME }}"
+      config:
+        apiBaseUrl: "{{ env.TARGET_BASE_URL }}"
+        apiKey: "{{ env.TARGET_API_KEY }}"
 
 backend:
   promptfoo:
-    targets:
-      - provider: openai:gpt-4o-mini
     num_tests: 3
     output: artifacts/promptfoo.redteam.yaml
     cases_output: artifacts/generated_cases.json

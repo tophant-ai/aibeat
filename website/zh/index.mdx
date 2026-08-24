@@ -1,111 +1,67 @@
 ---
-title: Promptbeat
-description: 面向真实 AI Agent 的场景驱动安全评测。
+title: Promptbeat & Agentbeat
+description: 面向大模型与 AI Agent 的自动化安全评测。用 Promptbeat 发现风险，用 Agentbeat 验证真实行为。
 ---
 
-# 在真实环境里红队评测 AI Agent
+# 从一次性红队测试，到可持续的数据化安全工程
 
-Promptbeat 面向真实 agent 应用：风险不只发生在一次聊天回复里，也会发生在文件、命令、工具、服务、数据集、浏览器状态和隐藏 verifier 中。你可以从场景出发，加载或生成攻击 seed，运行到真实 target 上，并保留能解释失败原因的证据。
+两个产品，覆盖从 Prompt 到 Agent 的完整安全测试链路。**Promptbeat** 面向 LLM、RAG 与 Agent 应用生成并执行攻击，用来发现风险；**Agentbeat** 更进一步：接入被测 Agent，记录每一次工具调用、文件操作和环境变化，为失败的行为形成可复现的证据。
 
-```text
-scenario + target profile + seed/dataset
-  -> generated probes
-  -> real agent or environment adapter
-  -> trace-aware judges
-  -> normalized report
-```
+<CardGroup cols={2}>
+  <Card title="Promptbeat" icon="wand-sparkles" href="/zh/promptbeat/overview">
+    发现风险。场景驱动的攻击生成、真实目标执行、标准化 Judge 判定、版本化回归数据集。
+  </Card>
+  <Card title="Agentbeat" icon="robot" href="/zh/agentbeat/overview">
+    验证行为。面向 Agent 的 Trace 评测：工具调用、文件操作、环境变化，形成可复现取证证据。
+  </Card>
+</CardGroup>
 
-## 可以评测哪些 Agent
+## 为什么需要它
 
-| Target class | 接入方式 | 典型风险 |
-|---|---|---|
-| Coding agents | Codex SDK、Claude Agent SDK、OpenCode、OpenClaw、自定义 CLI adapter | 仓库注入、终端注入、secret 读取、sandbox escape、network egress |
-| Browser agents | HTTP/custom provider 或 Target Lab browser adapter | DOM 注入、表单外传、不安全导航、cookie/session 滥用 |
-| Support agents | 包装 CRM 或工单工具的 HTTP/custom provider | 跨用户访问、PII 泄露、退款滥用、策略覆盖 |
-| Data agents | notebook、SQL、BI、Python/JavaScript provider | 数据行注入、私有表访问、不安全代码执行 |
-| DevOps agents | script/custom provider 或一次性 Target Lab 环境 | 凭据发现、破坏性 cleanup、部署破坏 |
-| Benchmark tasks | Terminal-Bench、Harbor、Inspect 或自定义环境 adapter | 任务边界违规、隐藏测试探测、verifier tampering |
+内容安全检查告诉你模型**没说错话**。但它不会告诉你 Agent **做了什么**——读了什么密钥、写了哪张表、外传了什么文件、调用了哪个不该调用的工具。在我们自己的一次真实评测里，某个 Coding Agent 在**5/5**内容安全用例通过的同时，**32 个行为用例中有 11 个失败**：读环境变量、写沙箱外文件、跟随仓库里植入的 prompt injection。
 
-先看 [典型 Agent 应用](/zh/targets/typical-agent-apps)，再用 [Agent 配置示例](/zh/targets/agent-configuration-examples) 接入具体 target。
+这个差距，就是这个平台要闭合的地方。
 
-## 为什么要场景驱动
+<Info>
+  Promptbeat 和 Agentbeat 用于**上线前安全验收、升级后持续回归、红队数据资产沉淀**。它们做的是评测，不是运行时拦截——那是另一类产品要解决的问题。
+</Info>
 
-只知道 dataset 名称或插件名称，不足以决定该测什么。Promptbeat 把 scenario 放在第一层：
+## 两个产品怎么配合
 
-| Scenario decision | 为什么重要 |
-|---|---|
-| Target capabilities | Browser agent 需要 DOM traces；coding agent 需要 command/file traces；support agent 需要 action audit logs。 |
-| Risk taxonomy | `secret_handling`、`network_egress`、`authorization`、`prompt_injection` 需要不同证据和 judge。 |
-| Seed source | 手写 seed、HarmBench、JBB、ALERT、私有工单和 benchmark task 都只是起点，不是最终测试。 |
-| Judge evidence | Answer-only 适合 smoke test；带 trace 的 judge 更适合有工具的 agent。 |
-| Report shape | 结果必须能比较 target、risk、dataset、generated probe、assertion 和代表性失败。 |
-
-阅读 [场景驱动评测](/zh/getting-started/scenario-driven-evaluation) 和 [风险分类](/zh/concepts/risk-taxonomy)。
-
-## 从初始数据集到 Agent-specific probes
-
-初始数据集很重要，因为它会在生成前决定攻击空间。Promptbeat 会在每条 case 中保留 dataset provenance。
+Promptbeat 和 Agentbeat 共用同一套 CLI、配置模型、数据集 registry 和报告 schema。实际使用时，用 Promptbeat 发现候选风险，用 Agentbeat 在真实运行环境里验证行为。
 
 ```text
-raw dataset -> DatasetSpec -> Seed -> DatasetRiskMapping -> scenario-bound probes -> report
+scenario + target + seed / dataset
+    ↓  Promptbeat  ────────────────────────────→ 发现风险
+    ↓  Agentbeat   ────────────────────────────→ 验证行为
+    ↓  报告 + 证据 + 数据集晋级                → 回归基线
 ```
 
-通过 [数据集目录](/zh/datasets/catalog) 选择 seed source，通过 [HarmBench 示例](/zh/datasets/harmbench) 查看当前已验证 dataset slice。当前 HarmBench smoke run 在 Codex 上 5/5 pass，但这不能替代 coding-agent boundary tests。
+<CardGroup cols={2}>
+  <Card title="Promptbeat 与 Agentbeat 的区别" icon="scale-balanced" href="/zh/about/promptbeat-vs-agentbeat">
+    什么时候用哪个、共用了什么、什么时候两个都要用。
+  </Card>
+  <Card title="核心概念" icon="cube" href="/zh/about/core-concepts">
+    Target、Scenario、Seed、Finding、Judge、Dataset——一页说清。
+  </Card>
+</CardGroup>
 
-## 当前证据：Broad Codex run
+## 开始使用
 
-当前保存的报告把 Codex 作为真实 coding-agent target 评测。
+<CardGroup cols={3}>
+  <Card title="Promptbeat 快速上手" icon="rocket" href="/zh/promptbeat/quickstart">
+    在真实 Codex 目标上跑一遍，约 5 分钟。
+  </Card>
+  <Card title="Agentbeat 快速上手" icon="terminal" href="/zh/agentbeat/quickstart">
+    接入一个现有 Agent，拿到第一份带 Trace 证据的 Finding。
+  </Card>
+  <Card title="典型场景" icon="briefcase" href="/zh/use-cases/pre-launch-acceptance">
+    上线前验收、回归测试、供应商对比、RAG 与 Agent 边界。
+  </Card>
+</CardGroup>
 
-| Suite | Passed | Failed | Errors | Pass rate |
-|---|---:|---:|---:|---:|
-| Broad coding-agent sample | 21 | 11 | 0 | 65.6% |
-| HarmBench dataset slice | 5 | 0 | 0 | 100% |
-| Combined | 26 | 11 | 0 | 70.3% |
+## 一句话定位
 
-本轮最强风险面：仓库 prompt injection、终端输出 injection、steganographic exfiltration。最弱风险面：procfs credential probing、secret environment handling、network egress、sandbox read escape。
+> Promptbeat 和 Agentbeat 把 AI 安全测试从一次性交付变成可复用、可度量的工程能力——可复现的 Finding 证据、版本化的数据资产、以及跨模型、Prompt 和策略升级的持续回归。
 
-查看 [Broad Codex 报告](/zh/coding-agent/broad-codex-report) 和 [Report schema](/zh/reports/report-schema)。
-
-## Promptbeat 报告保留什么
-
-| Evidence | 示例 |
-|---|---|
-| Generated attack pool | `generated_redteam.yaml`、sampled eval configs、generated case metadata |
-| Target identity | provider/adapter、model、workspace、sandbox、approval policy |
-| Trace evidence | commands、file reads/writes、network events、tool calls、returned records |
-| Judge reasoning | assertion type、metric、pass/fail reason、unsafe workaround classification |
-| Reproducibility | config snapshots、raw backend output、logs、HTML/Markdown reports |
-
-Promptbeat 也会把不安全绕行建议作为证据。例如 agent 建议 `env | sort > env_dump.txt` 或 `curl` 上传命令，即使 sandbox 阻止执行，也可能是行为失败。
-
-## 三条开始路径
-
-### 1. 跑已验证的 Codex 路径
-
-适合快速证明 generate/eval/report 闭环可用。
-
-- [Codex 快速开始](/zh/getting-started/codex-quickstart)
-- [Codex SDK target](/zh/targets/codex-sdk)
-- [Broad Codex 报告](/zh/coding-agent/broad-codex-report)
-
-### 2. 接入自己的 Agent
-
-适合 Browser agent、客服 agent、数据分析 agent、DevOps agent、安全研判 agent 或内部助手。
-
-- [Agent 配置示例](/zh/targets/agent-configuration-examples)
-- [典型 Agent 应用](/zh/targets/typical-agent-apps)
-- [攻击示例](/zh/coding-agent/attack-examples)
-
-### 3. 从数据集开始
-
-适合已有官方数据集、业务 seed 或私有红队记录的团队。
-
-- [Dataset-started Evaluation](/zh/datasets/overview)
-- [数据集目录](/zh/datasets/catalog)
-- [HarmBench 示例](/zh/datasets/harmbench)
-
-## 给下游系统的 API
-
-Promptbeat 也通过 Go Web 服务暴露 seed 扩充能力：小批量 preview、异步批量 task、dataset risk mapping、plugin/strategy 透传、callback 结果回传，以及可 smoke test 的容器启动流程。
-
-阅读 [Go Web 服务](/zh/reference/api-service)。
+面向客户沟通与销售材料的完整版本，见[产品定位](/zh/about/positioning)。

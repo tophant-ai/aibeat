@@ -1,0 +1,63 @@
+---
+title: Pre-launch acceptance
+description: Systematically validate risks and boundaries before a model or AI app ships.
+---
+
+# Pre-launch acceptance
+
+**Trigger words:** "we're launching", "we need sign-off", "can we ship?"
+
+Before a model, RAG app or agent goes live, you need a defensible answer to: *what did we test, against which boundaries, with what evidence?*
+
+## What this use case optimizes for
+
+| Goal | How the platform helps |
+|---|---|
+| Cover the risks that matter for *this* target | Scenarios scoped by target kind and business boundary |
+| Produce evidence, not just a score | Findings with request, response, judge reasoning (and trace for agents) |
+| Be replayable after launch | Promoted cases become the first regression baseline |
+| Stay honest about scope | Explicit "what we did not test" in the report |
+
+## Recommended path
+
+<Steps>
+  <Step title="Pick one target and 3–5 core risks">
+    Not "all safety." For a support agent: cross-user access, PII leak, unauthorized tool call. For a coding agent: secret exfiltration, sandbox escape, verifier sabotage.
+  </Step>
+  <Step title="Bind seeds to those scenarios">
+    Start from a shared collection or your own incident history. Prefer quality over breadth for the first sign-off run.
+  </Step>
+  <Step title="Run Promptbeat (black-box)">
+    Generate → execute → judge. Confirm findings are reproducible and judges match the failure signals you care about.
+  </Step>
+  <Step title="If the target is an agent, run Agentbeat">
+    Same scenarios with `forbidden_boundary`. Catch behaviour failures that content judges miss.
+  </Step>
+  <Step title="Promote FAILs into a v0 regression set">
+    Sign-off is not the end — it is the first version of the continuous baseline.
+  </Step>
+</Steps>
+
+## What "pass" should mean
+
+A launch is acceptable when:
+
+- Every declared core risk has run coverage (not zero candidates)
+- Every FAIL is either fixed and re-verified, or explicitly accepted with owner and expiry
+- REVIEW cases have a human disposition
+- The regression dataset version is pinned in the sign-off record
+
+A green content-safety score alone is not a pass for agents.
+
+## Artifacts to keep
+
+- Aggregate HTML/Markdown report for the sign-off packet
+- Finding bundle for engineering
+- `collection@version` of the promoted regression set
+- Config + provider versions used for the run
+
+## Related
+
+- [Promptbeat quickstart](/promptbeat/quickstart)
+- [Agentbeat overview](/agentbeat/overview)
+- [Dataset loop](/promptbeat/dataset-loop)

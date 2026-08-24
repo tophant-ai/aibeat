@@ -11,8 +11,8 @@ Be the first-mile router for a downloaded Promptbeat full package. Get the user
 from a vague goal to one package example, one command path, and one next skill.
 
 Default assumption: the user has unpacked a full release package and should run
-commands from that package root. Do not lead with source-checkout or `go run`
-instructions.
+commands from that package root. Do not lead with source-checkout, `core/go`, or
+`go run` instructions.
 
 ## Package-Root Check
 
@@ -107,7 +107,8 @@ and trace capture are configured.
 
 ## Common Mistakes
 
-- Do not send new users to source-checkout commands such as `go run`.
+- Do not send new users to source-checkout commands such as `go run` or
+  `core/go`.
 - Do not use a bare `promptbeat.exe` for full packages; use the wrapper in
   `bin\promptbeat.cmd` or `./bin/promptbeat`.
 - Do not invent commands such as `promptbeat init target` or
