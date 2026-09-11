@@ -1,4 +1,4 @@
-// Generic judge-observation utilities, extracted from the Codex app-server
+// LEGACY COMPATIBILITY ONLY. Generic judge-observation utilities, extracted from the Codex app-server
 // adapter (examples/codex_agent/app-server-adapter/adapter.mjs). Signatures
 // and behavior are unchanged from the original implementation.
 
@@ -23,6 +23,9 @@ const judgeVarAllowlist = new Set([
 /**
  * Packages an agent/LLM answer, trace events, runtime events, and
  * allowlisted vars into a judge observation payload.
+ *
+ * @deprecated Export Evidence to Go Core, which owns authoritative Judge
+ * invocation and score aggregation.
  */
 export function buildJudgeObservation({
   targetType = "llm",

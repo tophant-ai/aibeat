@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aibeat.local/schemas/target-evidence-v1.schema.json",
+  "title": "AI Beat Target Evidence",
+  "description": "Collection-only L2 Evidence. EvalRun, state verification, Judge output, and scores are excluded.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "case_id", "assurance_level", "observed_channels", "started_at", "finished_at", "events"],
+  "properties": {
+    "schema_version": { "const": "target-evidence-v1" },
+    "run_id": { "type": "string", "pattern": "^run-[a-z0-9][a-z0-9-]*$", "maxLength": 160 },
+    "case_id": { "type": "string", "pattern": "^case-[a-z0-9][a-z0-9-]*$", "maxLength": 200 },
+    "assurance_level": { "const": "L2" },
+    "observed_channels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["messages", "tools", "files"] },
+      "allOf": [
+        { "contains": { "const": "messages" } },
+        { "contains": { "const": "tools" } }
+      ]
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" },
+    "events": { "type": "array", "minItems": 1, "maxItems": 5000, "items": { "$ref": "#/definitions/event" } }
+  },
+  "definitions": {
+    "attributes": { "type": "object", "additionalProperties": true },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "sequence", "occurred_at", "source", "type", "data"],
+      "properties": {
+        "event_id": { "type": "string", "pattern": "^run-[a-z0-9][a-z0-9-]*:event:[0-9]+$", "maxLength": 192 },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "occurred_at": { "type": "string", "format": "date-time" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "type": { "enum": ["message", "message.delta", "tool.call", "tool.result", "command.result", "file.change", "run.error", "lifecycle"] },
+        "data": { "type": "object" }
+      },
+      "oneOf": [
+        { "properties": { "type": { "const": "message" }, "data": { "$ref": "#/definitions/messageData" } } },
+        { "properties": { "type": { "const": "message.delta" }, "data": { "$ref": "#/definitions/messageDeltaData" } } },
+        { "properties": { "type": { "const": "tool.call" }, "data": { "$ref": "#/definitions/toolCallData" } } },
+        { "properties": { "type": { "const": "tool.result" }, "data": { "$ref": "#/definitions/toolResultData" } } },
+        { "properties": { "type": { "const": "command.result" }, "data": { "$ref": "#/definitions/commandResultData" } } },
+        { "properties": { "type": { "const": "file.change" }, "data": { "$ref": "#/definitions/fileChangeData" } } },
+        { "properties": { "type": { "const": "run.error" }, "data": { "$ref": "#/definitions/errorData" } } },
+        { "properties": { "type": { "const": "lifecycle" }, "data": { "$ref": "#/definitions/lifecycleData" } } }
+      ]
+    },
+    "messageData": {
+      "type": "object", "additionalProperties": false, "required": ["role", "text", "attributes"],
+      "properties": { "role": { "enum": ["system", "user", "assistant", "tool"] }, "text": { "type": "string", "minLength": 1, "maxLength": 32768 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "messageDeltaData": {
+      "type": "object", "additionalProperties": false, "required": ["role", "delta", "attributes"],
+      "properties": { "role": { "enum": ["assistant", "tool"] }, "delta": { "type": "string", "minLength": 1, "maxLength": 32768 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "toolCallData": {
+      "type": "object", "additionalProperties": false, "required": ["call_id", "name", "arguments", "attributes"],
+      "properties": { "call_id": { "type": "string", "minLength": 1, "maxLength": 256 }, "name": { "type": "string", "minLength": 1, "maxLength": 256 }, "arguments": { "type": "object" }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "toolResultData": {
+      "type": "object", "additionalProperties": false, "required": ["call_id", "name", "result", "is_error", "attributes"],
+      "properties": { "call_id": { "type": "string", "minLength": 1, "maxLength": 256 }, "name": { "type": "string", "minLength": 1, "maxLength": 256 }, "result": {}, "is_error": { "type": "boolean" }, "status": { "type": "string", "maxLength": 128 }, "error": {}, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "commandResultData": {
+      "type": "object", "additionalProperties": false, "required": ["command", "exit_code", "output", "attributes"],
+      "properties": { "command": { "type": "string", "minLength": 1, "maxLength": 32768 }, "exit_code": { "type": "integer", "minimum": -9007199254740991, "maximum": 9007199254740991 }, "output": { "type": "string", "maxLength": 32768 }, "status": { "type": "string", "maxLength": 128 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "fileChangeData": {
+      "type": "object", "additionalProperties": false, "required": ["path", "attributes"],
+      "anyOf": [{ "required": ["diff"] }, { "required": ["changes"] }],
+      "properties": { "path": { "type": "string", "minLength": 1, "maxLength": 32768 }, "diff": { "type": "string", "maxLength": 32768 }, "changes": { "type": "array" }, "status": { "type": "string", "maxLength": 128 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "errorData": {
+      "type": "object", "additionalProperties": false, "required": ["message", "attributes"],
+      "properties": { "message": { "type": "string", "minLength": 1, "maxLength": 32768 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    },
+    "lifecycleData": {
+      "type": "object", "additionalProperties": false, "required": ["name", "attributes"],
+      "properties": { "name": { "type": "string", "minLength": 1, "maxLength": 128 }, "status": { "type": "string", "maxLength": 128 }, "attributes": { "$ref": "#/definitions/attributes" } }
+    }
+  }
+}

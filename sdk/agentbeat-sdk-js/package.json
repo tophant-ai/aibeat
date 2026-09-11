@@ -1,18 +1,19 @@
 {
   "name": "agentbeat-sdk",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "SDK for agent developers to report trace_events/tool_call/file_diff/env_change observability data that conforms to the Promptbeat trace-event-v1 schema, and to expose a standard EvalRun HTTP server for their own agent runtimes.",
+  "description": "Collection-only SDK for exporting canonical Agent Evidence to the AI Beat Go Core.",
   "main": "src/index.mjs",
-  "types": "src/index.d.mts",
   "exports": {
-    ".": {
-      "types": "./src/index.d.mts",
-      "import": "./src/index.mjs"
-    }
+    ".": "./src/index.mjs",
+    "./node": "./src/node.mjs",
+    "./adapters/codex-app-server": "./src/adapters/codex-app-server.mjs",
+    "./legacy": "./src/legacy.mjs",
+    "./schemas/target-evidence-v1": "./schemas/target-evidence-v1.schema.json"
   },
   "files": [
     "src",
+    "schemas",
     "README.md"
   ],
   "scripts": {

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentbeat-sdk"
+version = "1.0.0"
+description = "Collection-only AI Beat Evidence SDK for Python Agent Targets"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

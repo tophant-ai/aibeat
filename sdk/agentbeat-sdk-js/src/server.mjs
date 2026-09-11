@@ -1,4 +1,4 @@
-// Generic EvalRun HTTP server skeleton, extracted from the Codex
+// LEGACY COMPATIBILITY ONLY. Generic EvalRun HTTP server skeleton, extracted from the Codex
 // app-server adapter (examples/codex_agent/app-server-adapter/adapter.mjs).
 //
 // The original `createEvalServer` hardcoded a call to
@@ -69,6 +69,10 @@ const DEFAULT_TOKEN_ENV_VAR = "AGENTBEAT_EVAL_TOKEN";
  *
  * options.adapterName is reported in the /health response (defaults to
  * "agentbeat-sdk").
+ *
+ * @deprecated New integrations expose a business API and register a Go Core
+ * Connector. Go Core owns run IDs, orchestration, and scoring. This server is
+ * retained so existing SDK-hosted adapters can migrate without an API break.
  */
 export function createEvalServer(rawOptions = {}) {
   // A default parameter only kicks in for `undefined`, not `null` -- an
@@ -99,7 +103,6 @@ export function createEvalServer(rawOptions = {}) {
   const defaultSource = options.defaultSource || adapterName;
   const protocolVersion = options.protocolVersion;
   const target = options.target;
-  const registration = options.registration;
   if (typeof runTurn !== "function") {
     throw new Error("createEvalServer requires options.runTurn(input) to be a function");
   }
@@ -107,11 +110,7 @@ export function createEvalServer(rawOptions = {}) {
   return http.createServer(async (request, response) => {
     try {
       if (request.method === "GET" && request.url === "/health") {
-        sendJSON(response, 200, {
-          ok: true,
-          adapter: adapterName,
-          ...(registration ? { registration } : {}),
-        });
+        sendJSON(response, 200, { ok: true, adapter: adapterName });
         return;
       }
       const isRunCollection = isEvalRunCollection(request.url || "");

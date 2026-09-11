@@ -1,9 +1,11 @@
-// Generic EvalRun resource helpers, extracted from the Codex app-server
+// LEGACY COMPATIBILITY ONLY. Generic EvalRun resource helpers, extracted from the Codex app-server
 // adapter (examples/codex_agent/app-server-adapter/adapter.mjs). Signatures
 // and behavior are unchanged from the original implementation.
 
 /**
  * Builds the standard EvalRun resource link set for a given run id.
+ *
+ * @deprecated Go Core owns Run ID allocation and EvalRun lifecycle.
  */
 export function buildEvalRunLinks(runID) {
   const encodedID = encodeURIComponent(runID);
@@ -26,6 +28,8 @@ const DEFAULT_TARGET = "agent";
  * agent runtime; callers that need Codex-specific (or other
  * runtime-specific) values should pass `options.protocolVersion` /
  * `options.target` explicitly.
+ *
+ * @deprecated Go Core owns the authoritative EvalRun state and scoring flow.
  */
 export function buildEvalRun(runID, status, metrics = {}, options = {}) {
   const finalStatus = status === "failed" ? "failed" : "succeeded";
@@ -54,6 +58,8 @@ export function buildEvalRun(runID, status, metrics = {}, options = {}) {
  *
  * `protocol_version` defaults to the same protocol-agnostic value as
  * `buildEvalRun`; pass `options.protocolVersion` to override.
+ *
+ * @deprecated Go Core owns authoritative artifact registration.
  */
 export function buildArtifactManifest(runID, traceEvents, runtimeEvents, options = {}) {
   return {

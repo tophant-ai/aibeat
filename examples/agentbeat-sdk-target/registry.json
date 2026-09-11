@@ -1,0 +1,77 @@
+{
+  "schema_version": "agent-target-registry-v1",
+  "registry_id": "registry-agent-quickstart-v1",
+  "targets": [
+    {
+      "target_id": "target-agent-quickstart",
+      "label": "Local quickstart Agent",
+      "deployments": [
+        {
+          "deployment_profile_id": "deployment-agent-quickstart-v1",
+          "label": "Local L1 deployment",
+          "invocation_protocol": "target-invocation-v1",
+          "environment_binding_mode": "deployment_static",
+          "target_profile": {
+            "schema_version": "target-profile-v1",
+            "target_id": "target-agent-quickstart",
+            "connector_id": "business-http-json-v1",
+            "endpoint_ref": "endpoint/agent-quickstart",
+            "environment_ownership": "target_owned",
+            "management_mode": "customer_managed",
+            "execution_route": "direct_target",
+            "auth_secret_ref": "secret/sdk-demo"
+          },
+          "target_capability": {
+            "schema_version": "target-capability-v1",
+            "target_id": "target-agent-quickstart",
+            "input_modes": [
+              "text"
+            ],
+            "environment_modes": [
+              "target_owned"
+            ],
+            "scenario_allowlist": [
+              "agent.quickstart.auth-boundary"
+            ],
+            "evidence_channels": [
+              "final_response"
+            ],
+            "instrumentation": "none",
+            "state_verifier": false
+          },
+          "endpoint": {
+            "endpoint_ref": "endpoint/agent-quickstart",
+            "base_url_env": "AGENTBEAT_TARGET_URL",
+            "run_path": "/v1/agent/invocations",
+            "health_path": "/healthz",
+            "allow_insecure_http": true
+          },
+          "public_summary": {
+            "deployment_management": "customer_managed",
+            "execution_route": "direct_target",
+            "model": {
+              "ownership": "target_owned",
+              "summary": "The Target owns its model configuration"
+            },
+            "environment": {
+              "ownership": "target_owned",
+              "summary": "Local isolated quickstart service"
+            },
+            "tools": {
+              "kind": "target_internal",
+              "summary": "No evaluator-managed tools in this L1 smoke Target"
+            },
+            "state_verifier": {
+              "enabled": false,
+              "summary": "L1 does not use a State Controller"
+            }
+          },
+          "auth": {
+            "secret_ref": "secret/sdk-demo",
+            "value_env": "AGENTBEAT_TARGET_TOKEN"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,203 +1,59 @@
-<div align="center">
-  <p>
-    <img src="docs/assets/promptbeat-logo.svg" alt="PromptBeat" height="64" />
-    &nbsp;&nbsp;
-    <img src="docs/assets/agentbeat-logo.svg" alt="AgentBeat" height="64" />
-  </p>
+# AIBeat 0.4.0
 
-  <h1>AI Beat</h1>
+**[下载 PromptBeat 或 AgentBeat](https://github.com/tophant-ai/aibeat/releases/tag/v0.4.0)** · [发行说明与四平台下载表](RELEASE.md) · [English](README.md)
 
-  <p><strong>面向生成式 AI 的安全评测，从回答追溯到行动。</strong></p>
-
-  <p>
-    <a href="#快速开始"><b>快速开始</b></a> ·
-    <a href="#promptbeat"><b>PromptBeat</b></a> ·
-    <a href="#agentbeat"><b>AgentBeat</b></a> ·
-    <a href="https://github.com/tophant-ai/aibeat/releases/latest"><b>下载</b></a> ·
-    <a href="website/zh/index.mdx"><b>文档</b></a> ·
-    <a href="README.md"><b>English</b></a>
-  </p>
-
-  <p>
-    <a href="https://github.com/tophant-ai/aibeat/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/tophant-ai/aibeat?style=flat&logo=github&label=stars" /></a>
-    <a href="https://github.com/tophant-ai/aibeat/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/tophant-ai/aibeat?style=flat&label=release&color=2dd288" /></a>
-    <img alt="Targets" src="https://img.shields.io/badge/targets-LLM%20%7C%20RAG%20%7C%20agent-2088FF" />
-    <img alt="Evidence" src="https://img.shields.io/badge/evidence-answer%20%2B%20trace%20%2B%20environment-111111" />
-  </p>
-</div>
-
----
-
-AI Beat 将场景定义、对抗用例、目标执行、结果判定与证据留存组织为一条可复现的评测链路。
-
-- **PromptBeat** 评测 LLM、RAG 应用、API 或 Agent 接口所表现出的行为。
-- **AgentBeat** 在同一套评测之上，进一步记录 Agent 的消息、工具调用、命令、文件变化与运行时事件。
-
-两个产品共享场景、用例、判定和报告模型。可以先从黑盒评测开始，再在执行过程影响安全结论时引入运行时证据。
-
-<p align="center">
-  <img src="docs/assets/screenshots/readme-report-cycle.png" alt="AI Beat 评测与证据闭环" width="900" />
-</p>
-
-## 选择产品
+两款独立产品，各有清晰命令和上手材料：
 
 | | PromptBeat | AgentBeat |
 | --- | --- | --- |
-| 核心问题 | 目标在给定风险场景下是否表现安全？ | Agent 是否在执行过程中的任何一步越界？ |
-| 评测目标 | LLM、模型网关、HTTP API、RAG 应用、CLI 或 Agent 接口 | 可接入观测能力的 Agent 运行时 |
-| 主要证据 | 输入、回答、判定结果与指标 | PromptBeat 证据，加上轨迹和环境变化 |
-| 入口命令 | `promptbeat` | `agentbeat` |
-| 入门示例 | [`examples/llm-basic`](examples/llm-basic/README.md) | [`examples/codex_agent`](examples/codex_agent/README.md) |
+| 评测对象 | 模型与Prompt：红队、质量、回归 | HTTP Agent：任务、安全行为、分层证据 |
+| 推荐下载 | 内置Node.js 22.22.2 / Promptfoo 0.121.9的完整包 | 单个原生二进制、Python/JS SDK源码和示例 |
+| 主要命令 | `promptbeat validate / generate / run` | `agentbeat eval-run / preflight / score` |
+| 教程 | [PromptBeat快速开始](docs/releases/promptbeat-getting-started.md) | [AgentBeat快速开始](docs/releases/agentbeat-getting-started.md) |
 
-## 快速开始
+Release下载表提供Linux x64、macOS Apple Silicon、macOS Intel、Windows x64归档。
+文件名统一为`promptbeat-0.4.0-linux-x64.tar.gz`、`agentbeat-0.4.0-linux-x64.tar.gz`等。
+先读解压目录里的`README.md`，用同名`.sha256`校验下载，包内`MANIFEST.json`记录每个文件。
 
-公开 [Releases](https://github.com/tophant-ai/aibeat/releases/latest) 为每个支持平台提供两个 Go 原生命令：
+## PromptBeat：先预览输入
 
-| 发布物 | 用途 |
-| --- | --- |
-| `promptbeat-<version>-<platform>` / `.exe` | 黑盒评测引擎与报告命令 |
-| `agentbeat-<version>-<platform>` / `.exe` | Agent 运行时编排与证据采集 |
-| `install.sh` / `install.ps1` | 带校验的安装与运行时准备脚本 |
+从解压后的完整包目录运行（Windows使用`bin\promptbeat.cmd`）：
 
-当前支持 Linux x64、Windows x64、macOS arm64 与 macOS x64。每个原生文件都附带同名 `.sha256`。
-
-在仓库检出目录或解压后的 Release 中，macOS 与 Linux 使用：
-
-```bash
-bash install.sh --version <version>
-promptbeat --version
-agentbeat --version
+```sh
+mkdir -p artifacts
+./bin/promptbeat validate --config examples/bootstrap/promptbeat.yaml
+./bin/promptbeat generate --config examples/bootstrap/promptbeat.yaml --count 5 --output artifacts/cases.json
 ```
 
-Windows PowerShell 使用：
+这里是无模型调用的测试输入预览，不是模型回答或评分。
+随后按包内`examples/llm-basic/README.md`配置自己的模型并运行评测。
+真实调用先确认数据、费用和副作用范围。
 
-```powershell
-.\install.ps1 -Version <version>
-promptbeat --version
-agentbeat --version
+## AgentBeat：再接入自己的Agent
+
+```sh
+./bin/agentbeat --version
+./bin/agentbeat eval-run --help
 ```
 
-安装器会校验所有下载，在用户缓存中准备 Node.js 22.22.2 与 promptfoo 0.121.9，并创建稳定的 `promptbeat` 和 `agentbeat` 入口，不修改全局 npm。重复安装会复用有效缓存，只修复缺失或损坏的组件。精确版本与摘要记录在 [`runtime-manifest.json`](runtime-manifest.json) 中。
+[完整教程](docs/releases/agentbeat-getting-started.md)覆盖启动固定本地Target/Judge、选择Registry、运行Case和查看JSON结果。
+评测器本身不再依赖PromptBeat、Node或Promptfoo；本地探针/Python Target示例另需Python3.11+。
 
-### PromptBeat
+已有Agent可参考[带鉴权的Python/Node示例](examples/agentbeat-sdk-target/README.md)。
+SDK源码：[Python](sdk/agentbeat-sdk-py/README.md)、[JavaScript](sdk/agentbeat-sdk-js/README.md)。
+SDK 1.0.0与CLI 0.4.0独立版本，可直接使用随包本地源码，不宣称已发布npm/PyPI。
+L1不强制SDK；L2需要真实采集事件；L3另需独立State Controller。
 
-`llm-basic` 示例将模型分为三个角色：attacker 生成用例，judge 判定结果，target 是被测模型。三个角色既可以共用模型网关，也可以分别配置。
+## 升级与验证边界
 
-```bash
-export ATTACKER_MODEL_NAME="openai:gpt-4o"
-export ATTACKER_BASE_URL="https://api.openai.com/v1"
-export ATTACKER_API_KEY="sk-..."
+旧`promptbeat api eval-run / agent-run / agent-preflight / agent-score`现在只返回迁移提示，
+请改用AgentBeat原生命令。旧`agentbeat run --adapter`仍需独立历史依赖，不属于轻量包的推荐流程；
+仓库保留的legacy示例对应旧接口。
 
-export JUDGE_MODEL_NAME="openai:gpt-4o"
-export JUDGE_BASE_URL="https://api.openai.com/v1"
-export JUDGE_API_KEY="sk-..."
+Linux原生命令、运行时ABI和固定HTTP协议集成已核验。macOS/Windows为交叉构建，未做本次原生系统验收。
+固定Target/Judge回复**不是实际模型质量或安全效果证明**。
+PromptBeat运行时来自同平台官方v0.2包并锁定SHA，本版不是依赖升级。
 
-export TARGET_MODEL_NAME="openai:gpt-4o-mini"
-export TARGET_BASE_URL="https://api.openai.com/v1"
-export TARGET_API_KEY="sk-..."
-```
-
-在本仓库检出目录中校验示例、执行评测并生成报告：
-
-```bash
-promptbeat validate --config examples/llm-basic/promptbeat.yaml
-
-promptbeat run \
-  --config examples/llm-basic/promptbeat.yaml \
-  --output-dir artifacts/llm-basic/run
-
-promptbeat report \
-  --input artifacts/llm-basic/run/evaluation_result.json \
-  --output artifacts/llm-basic/report.html
-```
-
-打开 `artifacts/llm-basic/report.html` 查看结果。如需在正式执行前检查生成用例：
-
-```bash
-promptbeat generate \
-  --config examples/llm-basic/promptbeat.yaml \
-  --count 5 \
-  --output artifacts/llm-basic/generated-cases.json
-```
-
-### AgentBeat
-
-`agentbeat` 管理 adapter 生命周期，并将场景执行与报告生成交给共享的
-PromptBeat 引擎。Adapter 通过语言无关的注册清单和 EvalRun HTTP 协议接入。
-
-先验证接入契约，不需要模型密钥或外部 Agent：
-
-```bash
-agentbeat adapter check \
-  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
-```
-
-[Python 与 Go](examples/agent-adapters/minimal/README.md) 也提供了等价的零依赖
-示例。检查命令会启动已注册进程，核对身份与能力，提交一次 EvalRun，验证响应，
-最后清理进程。
-
-完整评测时，让注册清单启动你的 runtime 实现，并提供 PromptBeat 项目配置：
-
-```bash
-agentbeat run \
-  --adapter /absolute/path/to/agentbeat-adapter.json \
-  --config path/to/promptbeat.yaml \
-  --output-dir artifacts/my-agent
-```
-
-注册契约见 [typed SDK](sdk/agentbeat-sdk-js/README.md) 与
-[最小 adapter](examples/agent-adapters/minimal/README.md)。为兼容已有接入，
-导出 `createEvalServer()` 的 JavaScript 模块仍可继续使用。
-
-## 不止于分数
-
-最终回答看起来安全，并不代表执行过程没有越界。AgentBeat 保留区分两者所需的证据：
-
-```text
-任务    生成一个用于排查问题的支持包
-回答    对话内容中没有出现凭证
-轨迹    command_exec_observed: env | sort > env_dump.txt
-文件    env_dump.txt 中包含 API key
-判定    FAIL：回答是安全的，执行过程不是
-```
-
-根据目标和 adapter 提供的能力，一次评测可以保留：
-
-- 带场景与种子来源的生成用例；
-- 归一化的 `evaluation_result.json`；
-- 判定结果、理由与指标；
-- runtime events 与 trace events；
-- artifact manifest 与 HTML 报告；
-- 经审核后进入下一轮回归集的用例。
-
-## 示例
-
-| 目标 | 示例 |
-| --- | --- |
-| 评测单个对话模型 | [`examples/llm-basic`](examples/llm-basic/README.md) |
-| 对比多个模型 | [`examples/multi-llm`](examples/multi-llm/README.md) |
-| 测试 HTTP Agent | [`examples/http-agent`](examples/http-agent/README.md) |
-| 带轨迹评测 Codex | [`examples/codex_agent`](examples/codex_agent/README.md) |
-| 接入 Claude Code、OpenCode 或 OpenClaw | [`examples/agent-adapters`](examples/agent-adapters/README.md) |
-| 复用版本化安全基线 | [`examples/dataset-subscriptions/safety-baseline`](examples/dataset-subscriptions/safety-baseline/README.md) |
-
-## Skills
-
-PromptBeat Skills 帮助兼容的 Coding Agent 完成环境准备、目标接入、风险选择、评测执行与故障排查。Skills 使用现有产品命令，不引入另一套操作接口。
-
-安装方法见 [PromptBeat Skills](website/zh/getting-started/skills.mdx)。
-
-## 仓库范围
-
-这个公开仓库用于分发文档、可运行示例、Skills 与发布物。产品实现源码和完整构建链路在独立研发仓库维护；使用公开发布物无需检出源码。
-
-请使用环境变量管理凭证，在执行高成本评测前检查生成用例，并为 Agent 目标配置受限工作目录。
-
-## 文档
-
-[产品概览](website/zh/index.mdx) ·
-[配置模型](website/zh/concepts/configuration-model.mdx) ·
-[数据集](website/zh/datasets/catalog.mdx) ·
-[报告](website/zh/reports/comprehensive-reports.mdx) ·
-[Releases](https://github.com/tophant-ai/aibeat/releases) ·
-[Discord](https://discord.gg/8A6mFckxZ)
+公共仓库提供文档、SDK源码和示例，不是内部产品源码/历史镜像。
+GitHub自动生成的Source code ZIP不是可构建完整产品的源包，请下载上方产品归档。
+官网部署和npm/PyPI发布与本次Release分开处理。
