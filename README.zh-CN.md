@@ -123,32 +123,31 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` 管理 adapter 生命周期，并将场景执行与报告生成交给共享的
-PromptBeat 引擎。Adapter 通过语言无关的注册清单和 EvalRun HTTP 协议接入。
+`agentbeat` 通过一个小型 HTTP Target 契约评测 Agent，并将场景执行与报告生成交给
+共享的 PromptBeat 引擎。契约说明见
+[AgentBeat adapters 与 SDK](aibeat-site/cn/agentbeat/adapters.mdx)。
 
-先验证接入契约，不需要模型密钥或外部 Agent：
+先验证接入契约，不需要模型密钥或外部 Agent。
+[AgentBeat Eval Preview 快速开始](aibeat-site/cn/agentbeat/quickstart.mdx)
+提供了本地 probe 服务和示例 EvalRun。这些文件来自 preview 下载包，不在本仓库中。
+按快速开始设置环境变量并启动 probe，然后运行：
 
 ```bash
-agentbeat adapter check \
-  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
+agentbeat eval-run < examples/local-probe/eval-run.json > result.json
 ```
 
-[Python 与 Go](examples/agent-adapters/minimal/README.md) 也提供了等价的零依赖
-示例。检查命令会启动已注册进程，核对身份与能力，提交一次 EvalRun，验证响应，
-最后清理进程。
+`eval-run` 可用于 `agentbeat` 正式发布版（已在 0.4.0 上验证）和 preview 构建。
+Target 一侧见 [JavaScript SDK](sdk/agentbeat-sdk-js/README.md)。
 
-完整评测时，让注册清单启动你的 runtime 实现，并提供 PromptBeat 项目配置：
+导出 `createEvalServer()` 的旧版 JavaScript 模块仍通过 `agentbeat run` 运行。
+adapter 是 `.mjs` 模块，不是 JSON 清单：
 
 ```bash
 agentbeat run \
-  --adapter /absolute/path/to/agentbeat-adapter.json \
+  --adapter /absolute/path/to/adapter.mjs \
   --config path/to/promptbeat.yaml \
   --output-dir artifacts/my-agent
 ```
-
-注册契约见 [typed SDK](sdk/agentbeat-sdk-js/README.md) 与
-[最小 adapter](examples/agent-adapters/minimal/README.md)。为兼容已有接入，
-导出 `createEvalServer()` 的 JavaScript 模块仍可继续使用。
 
 ## 不止于分数
 

@@ -137,36 +137,34 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` owns an adapter's lifecycle and delegates scenario execution and
-reporting to the shared PromptBeat engine. Adapters register through a
-language-neutral manifest and EvalRun HTTP protocol.
+`agentbeat` evaluates an agent through a small HTTP Target contract and
+delegates scenario execution and reporting to the shared PromptBeat engine. See
+[AgentBeat adapters and SDKs](aibeat-site/agentbeat/adapters.mdx) for the
+contract.
 
-Try the contract first, without model credentials or an external agent:
+Try the contract first, without model credentials or an external agent. The
+[AgentBeat Eval Preview quickstart](aibeat-site/agentbeat/quickstart.mdx)
+includes a local probe server and a sample EvalRun. These files come from the
+preview download, not from this repository. Set the environment variables
+listed in the quickstart, start the probe, then run:
 
 ```bash
-agentbeat adapter check \
-  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
+agentbeat eval-run < examples/local-probe/eval-run.json > result.json
 ```
 
-Equivalent zero-dependency examples are included for
-[Python and Go](examples/agent-adapters/minimal/README.md). The check starts
-the registered process, verifies its identity and capabilities, submits one
-EvalRun, validates the response, and stops the process.
+`eval-run` is available in the `agentbeat` release builds (checked with
+0.4.0) and in the preview build. For the Target side, see the
+[JavaScript SDK](sdk/agentbeat-sdk-js/README.md).
 
-For a full evaluation, point the manifest at your runtime implementation and
-provide a PromptBeat project config:
+Legacy JavaScript modules exporting `createEvalServer()` still run through
+`agentbeat run`. The adapter is a `.mjs` module, not a JSON manifest:
 
 ```bash
 agentbeat run \
-  --adapter /absolute/path/to/agentbeat-adapter.json \
+  --adapter /absolute/path/to/adapter.mjs \
   --config path/to/promptbeat.yaml \
   --output-dir artifacts/my-agent
 ```
-
-See the [typed SDK](sdk/agentbeat-sdk-js/README.md) and
-[minimal adapters](examples/agent-adapters/minimal/README.md) for the
-registration contract. Legacy JavaScript modules exporting
-`createEvalServer()` remain supported.
 
 ## Evidence, not just a score
 
