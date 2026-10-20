@@ -11,11 +11,11 @@ PromptBeat is an open-source Prompt red-team and evaluation product. It owns see
 
 | Layer | File | Responsibility |
 | --- | --- | --- |
-| CLI router | [`core/go/cmd/promptbeat/main.go`](../../core/go/cmd/promptbeat/main.go) | Dispatches `api`, `generate`, `eval`, `dataset`, `seed`, `report`, `validate`, and related commands |
-| API eval boundary | [`core/go/cmd/promptbeat/api_agent_run.go`](../../core/go/cmd/promptbeat/api_agent_run.go) | Binary entrypoint for the agentbeat product boundary while the CLI split is still pending |
-| Promptfoo backend | [`core/go/internal/backends/promptfoo/`](../../core/go/internal/backends/promptfoo/) | Compiles promptfoo configs, runs promptfoo, and parses results |
-| Dataset build cycle | [`core/go/internal/application/dataset_version.go`](../../core/go/internal/application/dataset_version.go) | Builds dataset versions and promotion/rewrite outputs |
-| Pipeline orchestration | [`core/go/internal/application/run_evaluation.go`](../../core/go/internal/application/run_evaluation.go) | Runs promptbeat evaluation and report generation |
+| CLI router | `core/go/cmd/promptbeat/main.go` | Dispatches `api`, `generate`, `eval`, `dataset`, `seed`, `report`, `validate`, and related commands |
+| API eval boundary | `core/go/cmd/promptbeat/api_agent_run.go` | Binary entrypoint for the agentbeat product boundary while the CLI split is still pending |
+| Promptfoo backend | `core/go/internal/backends/promptfoo/` | Compiles promptfoo configs, runs promptfoo, and parses results |
+| Dataset build cycle | `core/go/internal/application/dataset_version.go` | Builds dataset versions and promotion/rewrite outputs |
+| Pipeline orchestration | `core/go/internal/application/run_evaluation.go` | Runs promptbeat evaluation and report generation |
 
 ## Boundary
 
@@ -33,4 +33,4 @@ PromptBeat is an open-source Prompt red-team and evaluation product. It owns see
 
 - [agentbeat/overview.md](../agentbeat/overview.md)
 - [agentbeat/code-map.md](../agentbeat/code-map.md)
-- [dataset-construction-evaluation-overview.md](../dataset-construction-evaluation-overview.md)
+- `dataset-construction-evaluation-overview.md`
