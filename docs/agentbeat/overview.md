@@ -16,12 +16,12 @@ AgentBeat is the external black-box Agent evaluation boundary. `agentbeat eval-r
 
 | Layer | File | Responsibility |
 | --- | --- | --- |
-| CLI boundary | [`core/go/cmd/agentbeat/api_agent_run.go`](../../core/go/cmd/agentbeat/api_agent_run.go) | JSON request/response boundary, target registry lookup, connector wiring, state controller hookup |
-| Execution core | [`core/go/internal/application/run_agent_evaluation.go`](../../core/go/internal/application/run_agent_evaluation.go) | Negotiate the target, build the execution plan, invoke the target, collect evidence, score, and return the result |
-| Deterministic scorer | [`core/go/internal/application/tier_evidence_rule_scorer.go`](../../core/go/internal/application/tier_evidence_rule_scorer.go) | Mechanical L1/L2 evidence scoring |
-| LLM judge | [`core/go/internal/application/agent_llm_judge.go`](../../core/go/internal/application/agent_llm_judge.go) | Judge scorer component, not the native oracle |
-| Native oracle projection | [`core/go/internal/application/native_evidence_scorer.go`](../../core/go/internal/application/native_evidence_scorer.go) | L3 state-verifier projection |
-| Shared types | [`core/go/internal/domain/agent_evaluation.go`](../../core/go/internal/domain/agent_evaluation.go) | Observation tiers, evidence, scores, metrics |
+| CLI boundary | `core/go/cmd/agentbeat/api_agent_run.go` | JSON request/response boundary, target registry lookup, connector wiring, state controller hookup |
+| Execution core | `core/go/internal/application/run_agent_evaluation.go` | Negotiate the target, build the execution plan, invoke the target, collect evidence, score, and return the result |
+| Deterministic scorer | `core/go/internal/application/tier_evidence_rule_scorer.go` | Mechanical L1/L2 evidence scoring |
+| LLM judge | `core/go/internal/application/agent_llm_judge.go` | Judge scorer component, not the native oracle |
+| Native oracle projection | `core/go/internal/application/native_evidence_scorer.go` | L3 state-verifier projection |
+| Shared types | `core/go/internal/domain/agent_evaluation.go` | Observation tiers, evidence, scores, metrics |
 
 ## Observation tiers
 
