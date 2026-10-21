@@ -56,40 +56,38 @@ with black-box evaluation; add runtime evidence where the execution path matters
 
 ## Quick start
 
-Public [Releases](https://github.com/tophant-ai/aibeat/releases/latest) provide
-two native Go commands for each supported platform:
+Download a package for your platform from the versioned release pages:
 
-| Artifact | Purpose |
-| --- | --- |
-| `promptbeat-<version>-<platform>` / `.exe` | Black-box evaluation engine and report command |
-| `agentbeat-<version>-<platform>` / `.exe` | Agent runtime orchestration and evidence collection |
-| `install.sh` / `install.ps1` | Verified installation and runtime preparation |
+| Product | Release | Package contents |
+| --- | --- | --- |
+| PromptBeat | [v0.4.1](https://github.com/tophant-ai/aibeat/releases/tag/v0.4.1) | CLI, examples, Node.js 22.22.2 and promptfoo 0.121.9 |
+| AgentBeat | [v0.4.0](https://github.com/tophant-ai/aibeat/releases/tag/v0.4.0) | Standalone CLI, examples and SDKs; no Node.js or promptfoo required |
 
-Supported targets are Linux x64, Windows x64, macOS arm64, and macOS x64.
-Every native artifact has an adjacent `.sha256` file.
+Choose `.tar.gz` for Linux x64, macOS arm64 or macOS x64, or `.zip` for
+Windows x64. Each release publishes archive checksums in `SHA256SUMS.txt`,
+not individual `.sha256` files.
 
-From a repository checkout or an unpacked release, install both commands on
-macOS or Linux:
+For example, download, verify and unpack PromptBeat on Linux x64:
 
 ```bash
-bash install.sh --version <version>
+curl -fLO https://github.com/tophant-ai/aibeat/releases/download/v0.4.1/promptbeat-0.4.1-linux-x64.tar.gz &&
+curl -fLO https://github.com/tophant-ai/aibeat/releases/download/v0.4.1/SHA256SUMS.txt &&
+grep 'promptbeat-0.4.1-linux-x64.tar.gz$' SHA256SUMS.txt | sha256sum -c - &&
+tar -xzf promptbeat-0.4.1-linux-x64.tar.gz &&
+export PATH="$PWD/promptbeat-0.4.1-linux-x64/bin:$PATH" &&
 promptbeat --version
-agentbeat --version
 ```
 
-On Windows PowerShell:
+Stop if checksum verification fails. Keep the package directory intact: the
+PromptBeat launcher uses its bundled runtime. The `PATH` setting above lasts
+for the current shell. For other platforms and bundled-example walkthroughs,
+see the [PromptBeat quickstart](aibeat-site/promptbeat/quickstart.mdx) and the
+README inside each downloaded package.
 
-```powershell
-.\install.ps1 -Version <version>
-promptbeat --version
-agentbeat --version
-```
-
-The installers verify every download, prepare Node.js 22.22.2 and promptfoo
-0.121.9 in the user cache, and create stable `promptbeat` and `agentbeat`
-entries. They do not modify the global npm installation. Re-running an installer
-reuses valid cached components and replaces only missing or damaged ones. Exact
-versions and checksums are recorded in [`runtime-manifest.json`](runtime-manifest.json).
+The repository's `install.sh` and `install.ps1` expect the raw-binary and
+adjacent `.sha256` asset layout used by the older `v0.3-agentbeat-preview`
+releases. They do not install the v0.4.x packages and are not included in those
+packages. Use the archives above instead.
 
 ### PromptBeat
 

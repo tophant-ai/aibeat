@@ -52,33 +52,34 @@ AI Beat 将场景定义、对抗用例、目标执行、结果判定与证据留
 
 ## 快速开始
 
-公开 [Releases](https://github.com/tophant-ai/aibeat/releases/latest) 为每个支持平台提供两个 Go 原生命令：
+请从对应版本的发布页面下载适合当前平台的包：
 
-| 发布物 | 用途 |
-| --- | --- |
-| `promptbeat-<version>-<platform>` / `.exe` | 黑盒评测引擎与报告命令 |
-| `agentbeat-<version>-<platform>` / `.exe` | Agent 运行时编排与证据采集 |
-| `install.sh` / `install.ps1` | 带校验的安装与运行时准备脚本 |
+| 产品 | 版本 | 包内容 |
+| --- | --- | --- |
+| PromptBeat | [v0.4.1](https://github.com/tophant-ai/aibeat/releases/tag/v0.4.1) | CLI、示例、Node.js 22.22.2 和 promptfoo 0.121.9 |
+| AgentBeat | [v0.4.0](https://github.com/tophant-ai/aibeat/releases/tag/v0.4.0) | 独立 CLI、示例和 SDK；无需 Node.js 或 promptfoo |
 
-当前支持 Linux x64、Windows x64、macOS arm64 与 macOS x64。每个原生文件都附带同名 `.sha256`。
+Linux x64、macOS arm64 和 macOS x64 使用 `.tar.gz`，Windows x64 使用 `.zip`。
+每个版本在 `SHA256SUMS.txt` 中提供压缩包校验和，而不是单独的 `.sha256` 文件。
 
-在仓库检出目录或解压后的 Release 中，macOS 与 Linux 使用：
+例如，在 Linux x64 上下载、校验并解压 PromptBeat：
 
 ```bash
-bash install.sh --version <version>
+curl -fLO https://github.com/tophant-ai/aibeat/releases/download/v0.4.1/promptbeat-0.4.1-linux-x64.tar.gz &&
+curl -fLO https://github.com/tophant-ai/aibeat/releases/download/v0.4.1/SHA256SUMS.txt &&
+grep 'promptbeat-0.4.1-linux-x64.tar.gz$' SHA256SUMS.txt | sha256sum -c - &&
+tar -xzf promptbeat-0.4.1-linux-x64.tar.gz &&
+export PATH="$PWD/promptbeat-0.4.1-linux-x64/bin:$PATH" &&
 promptbeat --version
-agentbeat --version
 ```
 
-Windows PowerShell 使用：
+校验失败时请停止。请保留完整的包目录，PromptBeat 启动脚本需要使用包内运行时。
+上述 `PATH` 设置仅对当前 shell 有效。其他平台及包内示例的操作步骤见
+[PromptBeat 快速开始](aibeat-site/cn/promptbeat/quickstart.mdx) 和下载包内的 README。
 
-```powershell
-.\install.ps1 -Version <version>
-promptbeat --version
-agentbeat --version
-```
-
-安装器会校验所有下载，在用户缓存中准备 Node.js 22.22.2 与 promptfoo 0.121.9，并创建稳定的 `promptbeat` 和 `agentbeat` 入口，不修改全局 npm。重复安装会复用有效缓存，只修复缺失或损坏的组件。精确版本与摘要记录在 [`runtime-manifest.json`](runtime-manifest.json) 中。
+仓库中的 `install.sh` 和 `install.ps1` 依赖旧版 `v0.3-agentbeat-preview` 发布所使用的
+原始二进制文件及同名 `.sha256` 文件。这两个脚本无法安装 v0.4.x 包，也不包含在这些包中。
+请改用上述压缩包。
 
 ### PromptBeat
 
