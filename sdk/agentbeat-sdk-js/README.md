@@ -11,7 +11,7 @@ state is produced independently by the registered State Controller.
 
 ## Use the bundled 1.0.0 source
 
-AIBeat CLI 0.4.0 bundles this SDK as source; this release does **not** claim an
+AIBeat CLI 0.5.0 bundles this SDK as source; this release does **not** claim an
 npm registry publication. Node 18+ is required for your Target, not the evaluator.
 From the extracted AgentBeat root, the ready-to-run `examples/sdk-target/target.mjs`
 imports `../../sdk/agentbeat-sdk-js/src/node.mjs` directly, with no install step.

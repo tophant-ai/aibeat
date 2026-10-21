@@ -12,8 +12,8 @@ const enRoutes = routes(language("en"));
 const cnRoutes = routes(language("cn"));
 const canonicalCnRoutes = cnRoutes.map((route) => route.replace(/^cn\//, ""));
 
-if (enRoutes.length !== 23 || cnRoutes.length !== 23) {
-  fail(`expected 23 EN and 23 CN routes, got ${enRoutes.length} and ${cnRoutes.length}`);
+if (enRoutes.length !== 26 || cnRoutes.length !== 26) {
+  fail(`expected 26 EN and 26 CN routes, got ${enRoutes.length} and ${cnRoutes.length}`);
 }
 if (new Set(enRoutes).size !== enRoutes.length || new Set(cnRoutes).size !== cnRoutes.length) {
   fail("navigation contains duplicate routes");
@@ -219,8 +219,24 @@ for (const route of enRoutes) {
         fail(`index: ${label} incentive banner must match community-incentive copy and Discord destination`);
       }
       if (!text.includes('https://discord.gg/NXXz8JG74') || text.includes('8A6mFckxZ')) fail(`index: ${label} has an outdated Discord invite`);
+      const tryCta = anchorTags(text).filter(a => attributeValue(a.attributes, 'className') === 'aibeat-home-seeds-recruitment-try');
+      const tryHref = label === 'CN' ? '/cn/try' : '/try';
+      if (tryCta.length !== 1 || attributeValue(tryCta[0].attributes, 'href') !== tryHref) fail(`index: ${label} incentive banner needs one participation-example link to ${tryHref}`);
     }
     if (config.footer?.socials?.discord !== 'https://discord.gg/NXXz8JG74') fail('docs.json: outdated Discord invite');
+  }
+  if (route === "try") {
+    for (const [label, text, wording] of [
+      ['EN', en, ['Seed Community campaign is live', 'October 31', 'Ambassador', 'your own Agent']],
+      ['CN', cn, ['限时种子社区共建活动已开始', '10 月 31 日', 'Ambassador', '你自己的 Agent']],
+    ]) {
+      const btns = anchorTags(text).filter(a => attributeValue(a.attributes, 'className') === 'aibeat-try-incentive-btn');
+      if (btns.length !== 1 || attributeValue(btns[0].attributes, 'href') !== 'https://discord.gg/NXXz8JG74') fail(`try: ${label} incentive card needs one Join Discord button to the current invite`);
+      if (!wording.every(w => text.includes(w))) fail(`try: ${label} incentive card or reference-only note is missing required copy`);
+      const posterSrc = label === 'CN' ? '/images/seeds-campaign-poster-zh.webp' : '/images/seeds-campaign-poster-en.webp';
+      if ((text.match(new RegExp(`src="${posterSrc}"`, 'g')) || []).length !== 2 || !fs.existsSync(path.join(root, posterSrc))) fail(`try: ${label} hover poster (thumbnail + popover) must use its own-language image ${posterSrc}`);
+      if (/不是同一套东西|are different products\. Pick one tab/.test(text)) fail(`try: ${label} still has the removed intro sentence`);
+    }
   }
   if (route === "index" && JSON.stringify(homeStructure(en)) !== JSON.stringify(homeStructure(cn))) {
     fail("index: custom homepage HTML/class structure differs between EN and CN");

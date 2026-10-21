@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "release": {
-    "version": "0.4.0",
+    "version": "0.5.0",
     "releaseBaseUrl": "https://github.com/tophant-ai/aibeat/releases/download",
     "checksumSuffix": ".sha256",
     "products": {

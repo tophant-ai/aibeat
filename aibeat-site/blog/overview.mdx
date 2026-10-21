@@ -1,0 +1,26 @@
+---
+title: AI Beat Blog
+description: Deep dives on agent-specific attacks, evaluation methodology, and how to express them as declarative AI Beat Cases.
+---
+
+The AI Beat blog is where we explain the attacks and evaluation ideas behind the product in depth: how a published attack actually works, how we turn it into a black-box, declarative AI Beat Case, and what the evidence looks like when it runs against a real agent.
+
+Every post is written to be reproducible with the checked-in tooling and to respect a strict rule: we describe mechanisms and show field-level Case examples, never the live payloads, attack goals, or canaries used against a target.
+
+## Agent-specific attacks
+
+<CardGroup cols={2}>
+  <Card title="Foot-in-the-Door (FITD)" icon="door-open" href="/blog/fitd-attack">
+    A gradual tool-abuse attack: lead a ReAct agent through small, agreeable steps until it performs an out-of-policy action. Based on *Breaking ReAct Agents* (arXiv:2410.16950).
+  </Card>
+  <Card title="RAG Poisoning" icon="database" href="/blog/rag-poisoning">
+    Plant a few persuasive documents in a knowledge base so retrieval surfaces them and the agent adopts the attacker's answer. Based on PoisonedRAG (arXiv:2402.07867, USENIX Security 2025).
+  </Card>
+</CardGroup>
+
+## How posts are structured
+
+- **The attack in one paragraph** — what the published technique does and why it works.
+- **As an AI Beat Case** — the declarative fields you set, with a safe, field-level example.
+- **How AI Beat judges it** — the pass/fail contract and, where relevant, the two-gate verdict.
+- **What the evidence shows** — a redacted view of a real run, so you can tell a true success from a blocked attempt.

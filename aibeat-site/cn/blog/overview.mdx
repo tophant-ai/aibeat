@@ -1,0 +1,26 @@
+---
+title: AI Beat 博客
+description: 深入讲解 agent 专属攻击、评测方法，以及如何把它们表达成声明式的 AI Beat Case。
+---
+
+AI Beat 博客用来深入讲解产品背后的攻击与评测思路：一个已发表的攻击到底是怎么生效的、我们如何把它变成黑盒、声明式的 AI Beat Case，以及它在真实 agent 上运行时证据长什么样。
+
+每篇文章都力求能用仓库里已有的工具复现，并严格守住一条红线：我们讲机制、给字段级的 Case 示例，绝不公开针对 target 使用的真实 payload、attack goal 或 canary。
+
+## Agent 专属攻击
+
+<CardGroup cols={2}>
+  <Card title="Foot-in-the-Door（FITD）" icon="door-open" href="/cn/blog/fitd-attack">
+    一种渐进式的工具滥用攻击：用一连串小而无害的步骤把 ReAct agent 一步步带到越界操作。基于 *Breaking ReAct Agents*（arXiv:2410.16950）。
+  </Card>
+  <Card title="RAG 投毒" icon="database" href="/cn/blog/rag-poisoning">
+    往知识库里植入少量有说服力的文档，让 retrieval 把它们召回、agent 采纳攻击者的答案。基于 PoisonedRAG（arXiv:2402.07867，USENIX Security 2025）。
+  </Card>
+</CardGroup>
+
+## 文章结构
+
+- **一段话讲清攻击** —— 这个已发表技术做了什么、为什么生效。
+- **写成 AI Beat Case** —— 你需要设置哪些声明式字段，配一个安全的字段级示例。
+- **AI Beat 如何判定** —— 通过/失败的契约，以及在相关场景下的双门禁裁决。
+- **证据长什么样** —— 一次真实运行的脱敏视图，让你能区分真正的攻击成功与被挡下的尝试。

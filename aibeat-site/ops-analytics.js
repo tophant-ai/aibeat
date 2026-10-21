@@ -24,13 +24,16 @@
   // ---- 冻结事件字典（§4.3）。key = event 名，value = 允许的 placement 枚举 ----
   // placement 未命中枚举时归 "other"，禁止自由文本爆炸。
   const PLACEMENTS = {
-    outbound_discord: ["nav_social", "seeds_cta", "seeds_secondary", "footer", "other"],
+    outbound_discord: ["nav_social", "top_incentive", "try_incentive", "seeds_cta", "seeds_secondary", "contact_pills", "footer", "other"],
     outbound_seeds: ["navbar", "seeds_submit", "seeds_browse", "other"],
-    outbound_github: ["nav_social", "footer", "release_notes", "other"],
+    outbound_github: ["nav_social", "contact_pills", "footer", "release_notes", "other"],
+    outbound_x: ["nav_social", "contact_pills", "footer", "other"],
     download_promptbeat: ["hero", "platform_menu", "other"],
     download_agentbeat: ["hero", "platform_menu", "other"],
     download_skill: ["skills_overview", "other"],
     wecom_open: ["nav_desktop", "nav_mobile", "other"],
+    try_open: ["top_incentive", "seeds_incentive", "other"],
+    poster_view: ["try_incentive", "other"],
   };
 
   const normPlacement = (event, raw) => {
@@ -119,6 +122,16 @@
       return { event: "outbound_github", placement: explicitPlacement || githubPlacement(anchor) };
     }
 
+    // X（原 Twitter）：x.com / twitter.com 主页或推文
+    if (/(^|\/\/)(www\.)?(x|twitter)\.com\//i.test(href) || explicitEvent === "outbound_x") {
+      return { event: "outbound_x", placement: explicitPlacement || socialPlacement(anchor) };
+    }
+
+    // 激励条旁的「活动参与示例」：站内跳 /try，单独计数看激励条带来多少试用（首页顶部为 top_incentive）
+    if (anchor.closest(".aibeat-home-seeds-recruitment-try") || explicitEvent === "try_open") {
+      return { event: "try_open", placement: explicitPlacement || (anchor.closest(".aibeat-home-top-incentive") ? "top_incentive" : "seeds_incentive") };
+    }
+
     return null;
   }
 
@@ -131,9 +144,12 @@
   }
 
   function discordPlacement(anchor) {
+    if (anchor.closest(".aibeat-home-top-incentive")) return "top_incentive";
+    if (anchor.closest(".aibeat-try-incentive")) return "try_incentive";
     if (anchor.closest(".aibeat-home-seeds-recruitment")) return "seeds_cta";
     if (anchor.closest(".aibeat-home-seeds-btn-secondary")) return "seeds_secondary";
     if (anchor.closest(".aibeat-home-social")) return "nav_social";
+    if (anchor.closest(".aibeat-home-contact-pills")) return "contact_pills";
     if (inFooter(anchor)) return "footer";
     return "other";
   }
@@ -145,8 +161,16 @@
     return "other";
   }
 
+  function socialPlacement(anchor) {
+    if (anchor.closest(".aibeat-home-social")) return "nav_social";
+    if (anchor.closest(".aibeat-home-contact-pills")) return "contact_pills";
+    if (inFooter(anchor)) return "footer";
+    return "other";
+  }
+
   function githubPlacement(anchor) {
     if (anchor.closest(".aibeat-home-social")) return "nav_social";
+    if (anchor.closest(".aibeat-home-contact-pills")) return "contact_pills";
     if (inFooter(anchor)) return "footer";
     return "other";
   }
@@ -182,6 +206,17 @@
     report("wecom_open", { placement: normPlacement("wecom_open", placement) });
   }
 
+  // ---- 试用页活动海报：try-incentive.js 在浮窗停留 0.6s（悬停/键盘）或手机端海报露出 1s 后派发，每次打开页面一次 ----
+  const POSTER_METHODS = ["hover", "focus", "inline"];
+  function onPosterView(e) {
+    const raw = e.detail && e.detail.method;
+    report("poster_view", {
+      placement: normPlacement("poster_view", "try_incentive"),
+      method: POSTER_METHODS.includes(raw) ? raw : "other",
+    });
+  }
+
   document.addEventListener("click", onClick, true);
   document.addEventListener("click", onWecom, true);
+  document.addEventListener("aibeat:poster-view", onPosterView);
 })();

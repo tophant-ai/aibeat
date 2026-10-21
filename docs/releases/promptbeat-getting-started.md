@@ -1,4 +1,4 @@
-# PromptBeat 0.4.0 · 开始评测模型与 Prompt
+# PromptBeat 0.5.0 · 开始评测模型与 Prompt
 
 本完整包包含当前Go CLI、Node.js 22.22.2、Promptfoo 0.121.9、示例和Skills。
 运行时保留自此前官方v0.2各平台完整包，来源SHA见MANIFEST.json；CLI、示例、Skills已更新。
@@ -7,7 +7,7 @@
 ## 1. 解压进入包目录
 
 ```sh
-cd promptbeat-0.4.0-linux-x64 # 按平台替换目录名
+cd promptbeat-0.5.0-linux-x64 # 按平台替换目录名
 ./bin/promptbeat --version
 ```
 
@@ -63,4 +63,4 @@ Agent评测已独立到AgentBeat：请使用`agentbeat eval-run / preflight / sc
 不再通过旧`promptbeat api` Agent入口。
 
 本机已验证Linux启动和离线预览；macOS/Windows包为交叉构建，运行时继承同平台旧包，
-本次未在原生系统验收。文件校验值在MANIFEST.json，下载校验值见Release的[SHA256SUMS.txt](https://github.com/tophant-ai/aibeat/releases/download/v0.4.0/SHA256SUMS.txt)。
+本次未在原生系统验收。文件校验值在MANIFEST.json，下载校验值见Release的[SHA256SUMS.txt](https://github.com/tophant-ai/aibeat/releases/download/v0.5.0/SHA256SUMS.txt)。

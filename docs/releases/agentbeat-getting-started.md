@@ -1,11 +1,11 @@
-# AgentBeat 0.4.0 · 开始评测 Agent
+# AgentBeat 0.5.0 · 开始评测 Agent
 
 **只需一个 `bin/agentbeat` 原生二进制**（Windows为`agentbeat.exe`）。
 不需要PromptBeat、Promptfoo或Node。SDK用于接入你自己的Agent，随包以源码形式提供。
 
 ## 1. 解压并确认
 
-进入解压得到的 `agentbeat-0.4.0-<platform>` 目录：
+进入解压得到的 `agentbeat-0.5.0-<platform>` 目录：
 
 ```sh
 ./bin/agentbeat --version
@@ -60,7 +60,7 @@ cmd /c ".\bin\agentbeat.exe eval-run < examples\local-probe\eval-run.json > resu
 打开 [examples/sdk-target/README.md](examples/sdk-target/README.md)，选择Python或Node示例，
 用你自己的Agent替换`invoke`中的固定响应。
 示例使用本地SDK源码，不必从npm/PyPI下载；Python3.11+或Node18+只用于运行Target。
-SDK 1.0.0与CLI 0.4.0是独立版本线。
+SDK 1.0.0与CLI 0.5.0是独立版本线。
 
 准备：
 1. 满足 `POST /v1/agent/invocations` 同步契约的隔离HTTP Agent。
@@ -99,4 +99,4 @@ Workbench的`AIBEAT_GO_CORE_BIN`必须指向新版AgentBeat，与Workbench代码
 旧`agentbeat run --adapter`不属于本轻量包的开箱即用流程，仍需另配历史运行时。
 
 本机已验证Linux命令/固定HTTP契约；macOS/Windows为交叉构建，未在原生系统验收。
-包内`MANIFEST.json`记录文件校验值和构建来源；下载校验值见Release的[SHA256SUMS.txt](https://github.com/tophant-ai/aibeat/releases/download/v0.4.0/SHA256SUMS.txt)。
+包内`MANIFEST.json`记录文件校验值和构建来源；下载校验值见Release的[SHA256SUMS.txt](https://github.com/tophant-ai/aibeat/releases/download/v0.5.0/SHA256SUMS.txt)。

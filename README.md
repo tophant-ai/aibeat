@@ -137,36 +137,46 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` owns an adapter's lifecycle and delegates scenario execution and
-reporting to the shared PromptBeat engine. Adapters register through a
-language-neutral manifest and EvalRun HTTP protocol.
+`agentbeat` evaluates a registered Agent target over a language-neutral HTTP
+contract and scores the collected evidence in the same binary. No PromptBeat
+executable, Node.js, or Promptfoo runtime is needed.
 
-Try the contract first, without model credentials or an external agent:
+| Command | What it does |
+| --- | --- |
+| `agentbeat preflight` | Validates the Case/Target contract and observation tier without calling the target |
+| `agentbeat eval-run` | Invokes the target once, collects evidence, runs the Judge, writes one result |
+| `agentbeat score` | Scores evidence you already have, without rerunning the target |
 
-```bash
-agentbeat adapter check \
-  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
-```
-
-Equivalent zero-dependency examples are included for
-[Python and Go](examples/agent-adapters/minimal/README.md). The check starts
-the registered process, verifies its identity and capabilities, submits one
-EvalRun, validates the response, and stops the process.
-
-For a full evaluation, point the manifest at your runtime implementation and
-provide a PromptBeat project config:
+Try the contract first, without model credentials or an external agent. From
+the extracted `agentbeat` release package, start the local stub Target and
+Judge in one terminal:
 
 ```bash
-agentbeat run \
-  --adapter /absolute/path/to/agentbeat-adapter.json \
-  --config path/to/promptbeat.yaml \
-  --output-dir artifacts/my-agent
+python3 examples/local-probe/serve.py
 ```
 
-See the [typed SDK](sdk/agentbeat-sdk-js/README.md) and
-[minimal adapters](examples/agent-adapters/minimal/README.md) for the
-registration contract. Legacy JavaScript modules exporting
-`createEvalServer()` remain supported.
+Then in a second terminal:
+
+```bash
+export AIBEAT_AGENT_TARGET_REGISTRY="$PWD/examples/local-probe/agent-target-registry.json"
+export AGENTBEAT_TARGET_URL="http://127.0.0.1:39103"
+export AIBEAT_JUDGE_BASE_URL="http://127.0.0.1:39104/v1"
+export AIBEAT_JUDGE_MODEL="local-contract-probe"
+
+./bin/agentbeat eval-run < examples/local-probe/eval-run.json > result.json
+```
+
+`result.json` should report `eval-run-response-v1` with one target call and
+one judge call. Both stubs are fixed responses, so the score is synthetic and
+proves only the wiring. `examples/local-probe/README.md` in the package covers
+Windows and the fields to check.
+
+To evaluate your own agent, implement the target HTTP contract (the package's
+`examples/sdk-target/` has Python and Node.js targets), register it in the
+target registry, and point the Judge variables at a real model. See the
+[typed SDK](sdk/agentbeat-sdk-js/README.md) for the contract. The older
+`agentbeat run --adapter` path is kept only for existing JavaScript adapters
+exporting `createEvalServer()`.
 
 ## Evidence, not just a score
 
@@ -230,4 +240,4 @@ Prefer the docs tree over packing long guides into this README:
 [PromptBeat overview](docs/promptbeat/overview.md) ·
 [Site home](aibeat-site/index.mdx) ·
 [Releases](https://github.com/tophant-ai/aibeat/releases) ·
-[Discord](https://discord.gg/8A6mFckxZ)
+[Discord](https://discord.gg/NXXz8JG74)

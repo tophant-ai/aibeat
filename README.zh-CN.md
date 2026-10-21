@@ -123,32 +123,41 @@ promptbeat generate \
 
 ### AgentBeat
 
-`agentbeat` 管理 adapter 生命周期，并将场景执行与报告生成交给共享的
-PromptBeat 引擎。Adapter 通过语言无关的注册清单和 EvalRun HTTP 协议接入。
+`agentbeat` 通过语言无关的 HTTP 契约评测已注册的 Agent target，并在同一个二进制里
+完成证据评分，不需要 PromptBeat 可执行文件、Node.js 或 Promptfoo。
 
-先验证接入契约，不需要模型密钥或外部 Agent：
+| 命令 | 作用 |
+| --- | --- |
+| `agentbeat preflight` | 校验 Case/Target 契约与观测等级，不调用 target |
+| `agentbeat eval-run` | 调用一次 target，收集证据并调用 Judge，输出一份结果 |
+| `agentbeat score` | 对已有证据评分，不重新运行 target |
 
-```bash
-agentbeat adapter check \
-  --adapter examples/agent-adapters/minimal/typescript/agentbeat-adapter.json
-```
-
-[Python 与 Go](examples/agent-adapters/minimal/README.md) 也提供了等价的零依赖
-示例。检查命令会启动已注册进程，核对身份与能力，提交一次 EvalRun，验证响应，
-最后清理进程。
-
-完整评测时，让注册清单启动你的 runtime 实现，并提供 PromptBeat 项目配置：
+先验证接入契约，不需要模型密钥或外部 Agent。在解压后的 `agentbeat` 发行包根目录，
+第一个终端启动本地桩 Target 与 Judge：
 
 ```bash
-agentbeat run \
-  --adapter /absolute/path/to/agentbeat-adapter.json \
-  --config path/to/promptbeat.yaml \
-  --output-dir artifacts/my-agent
+python3 examples/local-probe/serve.py
 ```
 
-注册契约见 [typed SDK](sdk/agentbeat-sdk-js/README.md) 与
-[最小 adapter](examples/agent-adapters/minimal/README.md)。为兼容已有接入，
-导出 `createEvalServer()` 的 JavaScript 模块仍可继续使用。
+第二个终端：
+
+```bash
+export AIBEAT_AGENT_TARGET_REGISTRY="$PWD/examples/local-probe/agent-target-registry.json"
+export AGENTBEAT_TARGET_URL="http://127.0.0.1:39103"
+export AIBEAT_JUDGE_BASE_URL="http://127.0.0.1:39104/v1"
+export AIBEAT_JUDGE_MODEL="local-contract-probe"
+
+./bin/agentbeat eval-run < examples/local-probe/eval-run.json > result.json
+```
+
+`result.json` 应为 `eval-run-response-v1`，target 与 judge 各调用一次。两个桩都是固定
+响应，分数只证明链路接通，不代表模型能力。Windows 用法与需要核对的字段见包内
+`examples/local-probe/README.md`。
+
+接入自己的 Agent 时，实现 target HTTP 契约（包内 `examples/sdk-target/` 提供 Python 与
+Node.js 示例），在 target registry 中注册，并把 Judge 变量指向真实模型。契约细节见
+[typed SDK](sdk/agentbeat-sdk-js/README.md)。旧的 `agentbeat run --adapter` 仅为导出
+`createEvalServer()` 的已有 JavaScript adapter 保留。
 
 ## 不止于分数
 
@@ -207,4 +216,4 @@ PromptBeat Skills 帮助兼容的 Coding Agent 完成环境准备、目标接入
 [PromptBeat 概览](docs/promptbeat/overview.md) ·
 [站点首页](aibeat-site/cn/index.mdx) ·
 [Releases](https://github.com/tophant-ai/aibeat/releases) ·
-[Discord](https://discord.gg/8A6mFckxZ)
+[Discord](https://discord.gg/NXXz8JG74)

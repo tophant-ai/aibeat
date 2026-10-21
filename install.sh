@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROMPTBEAT_VERSION="${AIBEAT_VERSION:-0.4.0}"
+PROMPTBEAT_VERSION="${AIBEAT_VERSION:-0.5.0}"
 NODE_VERSION="22.22.2"
 PROMPTFOO_VERSION="0.121.9"
 RELEASE_BASE="${AIBEAT_RELEASE_BASE:-https://github.com/tophant-ai/aibeat/releases/download}"
@@ -21,7 +21,7 @@ Install PromptBeat and its pinned runtime.
 
 Usage: bash install.sh [options]
 
-  --version VERSION    AI Beat release version (default: 0.4.0)
+  --version VERSION    AI Beat release version (default: 0.5.0)
   --install-dir DIR    Product files (default: ~/.local/share/aibeat)
   --bin-dir DIR        Command entry point (default: ~/.local/bin)
   --cache-dir DIR      Downloaded runtime cache (default: ~/.cache/aibeat)

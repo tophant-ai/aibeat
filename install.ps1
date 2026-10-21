@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$Version = $(if ($env:AIBEAT_VERSION) { $env:AIBEAT_VERSION } else { "0.4.0" }),
+    [string]$Version = $(if ($env:AIBEAT_VERSION) { $env:AIBEAT_VERSION } else { "0.5.0" }),
     [string]$InstallDir = $(if ($env:AIBEAT_INSTALL_DIR) { $env:AIBEAT_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA "aibeat" }),
     [string]$BinDir = $(if ($env:AIBEAT_BIN_DIR) { $env:AIBEAT_BIN_DIR } else { Join-Path $env:LOCALAPPDATA "aibeat\bin" }),
     [string]$CacheDir = $(if ($env:AIBEAT_CACHE_DIR) { $env:AIBEAT_CACHE_DIR } else { Join-Path $env:LOCALAPPDATA "aibeat\cache" }),

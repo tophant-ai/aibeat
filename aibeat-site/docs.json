@@ -32,6 +32,7 @@
       { "label": "PromptBeat", "href": "/promptbeat/overview" },
       { "label": "AgentBeat", "href": "/agentbeat/overview" },
       { "label": "Use cases", "href": "/use-cases/overview" },
+      { "label": "Blog", "href": "/blog/overview" },
       { "label": "Seeds Community", "href": "https://seeds.aibeat.ai" },
       { "label": "中文", "href": "/cn" }
     ],
@@ -88,6 +89,14 @@
             "pages": ["use-cases/overview"]
           },
           {
+            "group": "Blog",
+            "pages": [
+              "blog/overview",
+              "blog/fitd-attack",
+              "blog/rag-poisoning"
+            ]
+          },
+          {
             "group": "Reference",
             "pages": ["reference/cli"]
           }
@@ -98,6 +107,7 @@
             { "label": "PromptBeat", "href": "/promptbeat/overview" },
             { "label": "AgentBeat", "href": "/agentbeat/overview" },
             { "label": "Use cases", "href": "/use-cases/overview" },
+            { "label": "Blog", "href": "/blog/overview" },
             { "label": "Seeds Community", "href": "https://seeds.aibeat.ai" },
             { "label": "中文", "href": "/cn" }
           ],
@@ -152,6 +162,14 @@
             "pages": ["cn/use-cases/overview"]
           },
           {
+            "group": "博客",
+            "pages": [
+              "cn/blog/overview",
+              "cn/blog/fitd-attack",
+              "cn/blog/rag-poisoning"
+            ]
+          },
+          {
             "group": "参考",
             "pages": ["cn/reference/cli"]
           }
@@ -162,6 +180,7 @@
             { "label": "PromptBeat", "href": "/cn/promptbeat/overview" },
             { "label": "AgentBeat", "href": "/cn/agentbeat/overview" },
             { "label": "使用场景", "href": "/cn/use-cases/overview" },
+            { "label": "博客", "href": "/cn/blog/overview" },
             { "label": "种子社区", "href": "https://seeds.aibeat.ai" },
             { "label": "English", "href": "/" }
           ],
