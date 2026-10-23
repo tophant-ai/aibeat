@@ -57,6 +57,20 @@ Its generation stage runs the backend's red-team generator with the compiled con
 | Generator Provider | Model used by external-backend red-team generation |
 | Backend options | Number of tests, output paths, concurrency, delay, language |
 
+## How Seeds are matched to Scenarios
+
+`promptbeat generate` builds Cases only from Seeds whose `risk_type` equals the `risk_type` of at least one Scenario. The match is an exact, case-sensitive string comparison, so `t-001` does not match `T-001` or `t-001x`. A Seed that matches no Scenario produces no Case.
+
+<Warning>
+  An unmatched Seed is skipped silently. `promptbeat validate` still passes, `promptbeat generate` prints no warning, and the `Seeds:` count in the summary includes it. If `Cases:` is lower than you expect, compare each Seed's `risk_type` with your Scenarios.
+</Warning>
+
+To list the Seeds that were actually used, read `seed_id` from the output file:
+
+```bash
+jq -r '.[].seed_id' artifacts/cases.json
+```
+
 ## Keep artifacts reviewable
 
 - Use stable Scenario and Seed IDs.

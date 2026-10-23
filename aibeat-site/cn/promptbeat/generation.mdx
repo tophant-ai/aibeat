@@ -57,6 +57,20 @@ promptbeat run \
 | Generator Provider | 外部后端红队生成使用的模型 |
 | Backend 选项 | 测试数量、输出路径、并发、delay、语言 |
 
+## Seed 与 Scenario 的匹配
+
+`promptbeat generate` 只使用 `risk_type` 与至少一个 Scenario 的 `risk_type` 相同的 Seed 来构建 Case。比较是区分大小写的精确匹配，因此 `t-001` 不会匹配 `T-001` 或 `t-001x`。没有匹配 Scenario 的 Seed 不会生成任何 Case。
+
+<Warning>
+  未匹配的 Seed 会被静默跳过。`promptbeat validate` 仍然通过，`promptbeat generate` 不会给出警告，摘要中的 `Seeds:` 数量也包含该 Seed。如果 `Cases:` 少于预期，请逐个核对 Seed 与 Scenario 的 `risk_type`。
+</Warning>
+
+要查看实际被使用的 Seed，读取输出文件中的 `seed_id`：
+
+```bash
+jq -r '.[].seed_id' artifacts/cases.json
+```
+
 ## 保持产物可审查
 
 - 使用稳定的 Scenario 与 Seed ID。
